@@ -1,8 +1,51 @@
 package com.roi.entity;
-import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "Teacher")
 public class Teacher {
+    @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @Column(name = "idTeacher", nullable = false)
+    private Integer id;
+
+    @Column(name = "Login", nullable = false)
+    private Integer login;
+
+    @Column(name = "Password", nullable = false)
+    private String password;
+
+    @Column(name = "TeacherName", nullable = false)
+    private String name;
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "Subject")
+    private Set<Subject> subjects;
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+    public Integer getId() {
+        return id;
+    }
+    public String getPassword() {
+        return password;
+    }
+    public void setPassword(String password) {
+        this.password = password;
+    }
+    public Integer getLogin() {
+        return login;
+    }
+    public void setLogin(Integer login) {
+        this.login = login;
+    }
+
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
 }

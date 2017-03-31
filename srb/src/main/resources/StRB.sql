@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS `StRB`.`Student` (
   `idStudent` INT NOT NULL AUTO_INCREMENT,
   `StudentName` VARCHAR(120) NOT NULL,
   `Login` INT NOT NULL,
-  `Password` VARCHAR(45) NULL,
+  `Password` VARCHAR(45) NOT NULL,
   `Years_idYears` INT NOT NULL,
   PRIMARY KEY (`idStudent`),
   INDEX `fk_Student_Years1_idx` (`Years_idYears` ASC),
@@ -53,7 +53,7 @@ CREATE TABLE IF NOT EXISTS `StRB`.`Teacher` (
   `idTeacher` INT NOT NULL AUTO_INCREMENT,
   `TeacherName` VARCHAR(120) NOT NULL,
   `Login` INT NOT NULL,
-  `Password` VARCHAR(45) NULL,
+  `Password` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`idTeacher`))
 ENGINE = InnoDB;
 
@@ -64,7 +64,7 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `StRB`.`Admin` (
   `idAdmin` INT NOT NULL AUTO_INCREMENT,
   `Login` INT NOT NULL,
-  `Password` VARCHAR(45) NULL,
+  `Password` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`idAdmin`))
 ENGINE = InnoDB;
 
