@@ -24,7 +24,7 @@ public class Student {
     @JoinColumn(name = "idYears", nullable = false)
     private Year year;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "Subject")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "Mark")
     private Set<Mark> marks;
 
     public void setId(Integer id) {
