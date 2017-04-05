@@ -2,7 +2,6 @@ package com.roi.entity;
 
 
 import javax.persistence.*;
-import java.util.Set;
 
 @Entity
 @Table(name = "Subject")
@@ -15,16 +14,15 @@ public class Subject {
     @Column(name = "SubjectName", nullable = false)
     private String name;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "idTeacher", nullable = false)
     private Teacher teacher;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "idYears", nullable = false)
     private Year year;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "Mark")
-    private Set<Mark> marks;
+    public Subject(){}
 
     public String getName() {
         return name;

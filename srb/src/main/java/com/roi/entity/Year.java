@@ -1,7 +1,7 @@
 package com.roi.entity;
 
 import javax.persistence.*;
-import java.util.Set;
+
 
 @Entity
 @Table(name = "Year")
@@ -14,11 +14,7 @@ public class Year {
     @Column(name = "Year", nullable = false)
     private Integer year;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "Subject")
-    private Set<Subject> subjects;
-
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "Subject")
-    private Set<Student> students;
+    public Year(){}
 
     public void setId(Integer id) {
         this.id = id;

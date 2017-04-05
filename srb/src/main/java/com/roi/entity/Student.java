@@ -1,7 +1,7 @@
 package com.roi.entity;
 
 import javax.persistence.*;
-import java.util.Set;
+
 
 @Entity
 @Table(name = "Student")
@@ -20,12 +20,18 @@ public class Student {
     @Column(name = "StudentName", nullable = false)
     private String name;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "idYears", nullable = false)
     private Year year;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "Mark")
-    private Set<Mark> marks;
+   public Student(){}
+
+    Student(Integer login, String password, String name, Year year){
+        this.login=login;
+        this.password=password;
+        this.name=name;
+        this.year=year;
+    }
 
     public void setId(Integer id) {
         this.id = id;

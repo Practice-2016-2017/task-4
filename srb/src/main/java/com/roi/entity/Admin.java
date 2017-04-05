@@ -1,6 +1,6 @@
 package com.roi.entity;
 import javax.persistence.*;
-import javax.persistence.criteria.CriteriaBuilder;
+
 
 @Entity
 @Table(name = "Admin")
@@ -16,6 +16,11 @@ public class Admin {
     @Column(name = "Password", nullable = false)
     private String password;
 
+    public  Admin(Integer login, String password){
+        this.login=login;
+        this.password=password;
+    }
+    public Admin(){}
     public void setId(Integer id) {
         this.id = id;
     }

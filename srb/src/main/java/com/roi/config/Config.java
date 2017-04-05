@@ -1,50 +1,80 @@
 package com.roi.config;
+
+import java.util.Properties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.orm.jpa.JpaTransactionManager;
-import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
-
-import javax.persistence.EntityManagerFactory;
-import javax.sql.DataSource;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 
 @Configuration
-@ComponentScan("com.roi")
-@PropertySource("classpath:app.properties")
 @EnableJpaRepositories("com.roi.repository")
+@EnableTransactionManagement
 public class Config {
 
+    private EmbeddedDatabase ed;
+
     @Bean
-    public DataSource dataSource(){
-        return new EmbeddedDatabaseBuilder().setType(EmbeddedDatabaseType.H2).addScript("StRB.sql").build();
+    public EmbeddedDatabase hsqlInMemory() {
+
+        if (this.ed == null) {
+            EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
+            this.ed = builder.setType(EmbeddedDatabaseType.HSQL).build();
+        }
+
+        return this.ed;
+
     }
 
     @Bean
-    public JpaVendorAdapter jpaVendorAdapter () {
-        return  new HibernateJpaVendorAdapter();
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+
+        LocalContainerEntityManagerFactoryBean lcemfb
+                = new LocalContainerEntityManagerFactoryBean();
+
+        lcemfb.setDataSource(this.hsqlInMemory());
+        lcemfb.setPackagesToScan(new String[]{"com.roi.entity"});
+
+
+        HibernateJpaVendorAdapter va = new HibernateJpaVendorAdapter();
+        lcemfb.setJpaVendorAdapter(va);
+
+        Properties ps = new Properties();
+        ps.put("hibernate.dialect", "org.hibernate.dialect.HSQLDialect");
+        ps.put("hibernate.hbm2ddl.auto", "create");
+        lcemfb.setJpaProperties(ps);
+
+        lcemfb.afterPropertiesSet();
+
+        return lcemfb;
+
     }
 
     @Bean
-    public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource ds, JpaVendorAdapter ja) {
-        LocalContainerEntityManagerFactoryBean emf = new LocalContainerEntityManagerFactoryBean();
-        emf.setDataSource(ds);
-        emf.setJpaVendorAdapter(ja);
-        emf.setPackagesToScan(new String[]{"com.roi.entity"});
-        return emf;
+    public PlatformTransactionManager transactionManager() {
+
+        JpaTransactionManager tm = new JpaTransactionManager();
+
+        tm.setEntityManagerFactory(
+                this.entityManagerFactory().getObject());
+
+        return tm;
+
     }
 
     @Bean
-    public PlatformTransactionManager transactionManager (EntityManagerFactory emf){
-        JpaTransactionManager transactionManager = new JpaTransactionManager();
-        transactionManager.setEntityManagerFactory(emf);
-        return transactionManager;
+    public PersistenceExceptionTranslationPostProcessor exceptionTranslation() {
+        return new PersistenceExceptionTranslationPostProcessor();
     }
+
+
+
 }
