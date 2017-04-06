@@ -18,12 +18,12 @@ public class Mark {
     private Date date;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinColumn(name = "idStudent", nullable = false)
+    @JoinColumn(name = "Student_idStudent", nullable = false)
     private Student student;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinColumn(name = "idTeacher", nullable = false)
-    private Teacher teacher;
+    @JoinColumn(name = "Subject_idSubject", nullable = false)
+    private Subject subject;
 
     public Mark (){}
 

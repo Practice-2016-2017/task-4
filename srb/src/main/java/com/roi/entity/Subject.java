@@ -15,11 +15,11 @@ public class Subject {
     private String name;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinColumn(name = "idTeacher", nullable = false)
+    @JoinColumn(name = "Teacher_idTeacher", nullable = false)
     private Teacher teacher;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinColumn(name = "idYears", nullable = false)
+    @JoinColumn(name = "Years_idYears", nullable = false)
     private Year year;
 
     public Subject(){}

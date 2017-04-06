@@ -11,7 +11,7 @@ public class Student {
     @Column(name = "idStudent", nullable = false)
     private Integer id;
 
-    @Column(name = "Login", nullable = false)
+    @Column(name = "Login", nullable = false, unique = true )
     private Integer login;
 
     @Column(name = "Password", nullable = false)
@@ -21,7 +21,7 @@ public class Student {
     private String name;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinColumn(name = "idYears", nullable = false)
+    @JoinColumn(name = "Years_idYears", nullable = false)
     private Year year;
 
    public Student(){}

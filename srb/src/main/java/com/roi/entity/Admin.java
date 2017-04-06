@@ -10,7 +10,7 @@ public class Admin {
     @Column(name = "idAdmin", nullable = false)
     private Integer id;
 
-    @Column(name = "Login", nullable = false)
+    @Column(name = "Login", nullable = false, unique = true)
     private Integer login;
 
     @Column(name = "Password", nullable = false)
