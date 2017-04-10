@@ -1,6 +1,7 @@
 package com.roi.config;
 
-import com.mchange.v2.c3p0.ComboPooledDataSource;
+
+import org.apache.commons.dbcp2.BasicDataSource;
 import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -9,6 +10,8 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -20,7 +23,6 @@ import java.util.Properties;
 
 @Configuration
 @EnableTransactionManagement
-@ComponentScan("com.roi")
 @PropertySource("classpath:app.properties")
 @EnableJpaRepositories("com.roi.repository")
 public class Config {
@@ -40,17 +42,11 @@ public class Config {
     @Bean
     public DataSource dataSource() {
         try {
-        ComboPooledDataSource ds = new ComboPooledDataSource();
-        ds.setDriverClass(env.getRequiredProperty(PROP_DATABASE_DRIVER));
-        ds.setJdbcUrl(env.getRequiredProperty( PROP_DATABASE_URL));
-        ds.setUser(env.getRequiredProperty(PROP_DATABASE_USERNAME));
-        ds.setPassword(env.getRequiredProperty(PROP_DATABASE_PASSWORD));
-        ds.setAcquireIncrement(5);
-        ds.setIdleConnectionTestPeriod(60);
-        ds.setMaxPoolSize(100);
-        ds.setMaxStatements(50);
-        ds.setMinPoolSize(10);
-        return  ds;
+            BasicDataSource ds = new BasicDataSource();
+            ds.setUrl(env.getRequiredProperty( PROP_DATABASE_URL));
+            ds.setUsername(env.getRequiredProperty(PROP_DATABASE_USERNAME));
+            ds.setPassword(env.getRequiredProperty(PROP_DATABASE_PASSWORD));
+            return  ds;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -66,16 +62,6 @@ public class Config {
         entityManagerFactoryBean.setJpaProperties(getHibernateProperties());
 
         return entityManagerFactoryBean;
-    }
-
-    @Bean
-    public LocalSessionFactoryBean sessionFactory() {
-        LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
-        sessionFactory.setDataSource(dataSource());
-        sessionFactory.setPackagesToScan(env.getRequiredProperty(PROP_ENTITYMANAGER_PACKAGES_TO_SCAN));
-        sessionFactory.setHibernateProperties(getHibernateProperties());
-
-        return sessionFactory;
     }
 
     @Bean
