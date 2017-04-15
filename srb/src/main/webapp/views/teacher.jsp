@@ -33,7 +33,22 @@
 <div class="container">
     <div class="jumbotron" style="margin-top: 20px;">
         <h2>Здравствуйте, ${fullName}!</h2>
+        <table >
+            <tr>
+                <th>Subject</th>
+                <th>Year</th>
 
+            </tr>
+
+            <c:forEach var="subject" items="${allSubjects}">
+                <tr>
+                    <td><c:out value="${subject.name}" /></td>
+
+                    <td><c:out value="${subject.year()}" /></td>
+
+                </tr>
+            </c:forEach>
+        </table>
 
         <p>Ваш логин: <sec:authentication property="principal.username" /></p>
         <p><a class="btn btn-lg btn-danger" href="<c:url value="/logout" />" role="button">Выйти</a></p>

@@ -1,13 +1,7 @@
 package com.roi.service;
 
-import com.roi.entity.Admin;
-import com.roi.entity.Mark;
-import com.roi.entity.Student;
-import com.roi.entity.Teacher;
-import com.roi.repository.AdminRepository;
-import com.roi.repository.MarkRepository;
-import com.roi.repository.StudentRepository;
-import com.roi.repository.TeacherRepository;
+import com.roi.entity.*;
+import com.roi.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,18 +21,23 @@ public class UserService {
     private TeacherRepository teacherRepository;
 
     @Autowired
+    private SubjectRepository subjectRepository;
+
+    @Autowired
     private MarkRepository markRepository;
 
-    public List<Student> findAll () {return studentRepository.findAll();}
+    public List<Student> findAllStudents() {return studentRepository.findAll();}
 
-    public List<Mark> getMarks (Student student) {return markRepository.findByStudent(student);}
+    public List<Mark> getStudentMarks(Student student) {return markRepository.findByStudent(student);}
+    public List<Subject> getTeacherSubjects (Teacher teacher) {return subjectRepository.findByTeacher(teacher);}
 
-    public Student findByNameStudent(String name) {
+    public Student findByLoginStudent(String name) {
         Integer login=Integer.parseInt(name.replaceAll("st",""));
         return studentRepository.findByLogin(login);}
 
-    public Teacher findByNameTeacher(String name) {
+    public Teacher findByLoginTeacher(String name) {
         Integer login=Integer.parseInt(name.replaceAll("te",""));
         return teacherRepository.findByLogin(login);}
+
 
 }

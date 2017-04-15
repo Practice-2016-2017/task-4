@@ -30,4 +30,8 @@ public class Subject {
     public void setName(String name) {
         this.name = name;
     }
+
+    public String year() {
+        return year.getYear().toString();
+    }
 }

@@ -2,6 +2,7 @@ package com.roi.controller;
 
 
 import com.roi.entity.Mark;
+import com.roi.entity.Subject;
 import com.roi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,38 +24,34 @@ public class UserController {
      @RequestMapping(value = {"/student"}, method = RequestMethod.GET)
      public ModelAndView studentPage(Principal principal) {
         ModelAndView model = new ModelAndView();
+
         String name = principal.getName();
-        String userName=userService.findByNameStudent(name).getName();
+        List<Mark> marks=userService.getStudentMarks(userService.findByLoginStudent(name));
+        Map<String,Object> allObjectMark = new HashMap<String,Object>();
+        allObjectMark.put("allMarks", marks);
+        model.addAllObjects(allObjectMark);
+
+        String userName=userService.findByLoginStudent(name).getName();
         model.addObject("fullName", userName);
         model.setViewName("student");
         return model;
     }
 
-    @RequestMapping(value = {"/teacher"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/teacher"})
     public ModelAndView teacherPage(Principal principal) {
         ModelAndView model = new ModelAndView();
+
         String name = principal.getName();
-        String userName=userService.findByNameTeacher(name).getName();
+        List<Subject> subjects=userService.getTeacherSubjects(userService.findByLoginTeacher(name));
+        Map<String,Object> allObjectSubject = new HashMap<String,Object>();
+        allObjectSubject.put("allSubjects", subjects);
+        model.addAllObjects(allObjectSubject);
+
+        String userName=userService.findByLoginTeacher(name).getName();
         model.addObject("fullName", userName);
+
         model.setViewName("teacher");
         return model;
-    }
-    @RequestMapping(value = {"/student/marks"}, method = RequestMethod.GET)
-    public ModelAndView marksPage(Principal principal) {
-        ModelAndView model = new ModelAndView();
-        String name = principal.getName();
-        List<Mark> marks=userService.getMarks(userService.findByNameStudent(name));
-        Map<String,Object> allObjectMark = new HashMap<String,Object>();
-        allObjectMark.put("allMarks", marks);
-        model.addAllObjects(allObjectMark);
-        model.setViewName("marks");
-        return model;
-    }
-    @RequestMapping(value = {"/admin"}, method = RequestMethod.GET)
-    public ModelAndView adminPage(Principal principal) {
-        ModelAndView model = new ModelAndView();
+     }
 
-        model.setViewName("admin");
-        return model;
-    }
 }

@@ -27,8 +27,26 @@
 <body>
 <div class="container">
     <div class="jumbotron" style="margin-top: 20px;">
-        <h2>Здравствуйте, ${fullName}!</h2>
-        <div> <h2>Get <a href="marks">marks</a> </h2></div>
+        <h1>Здравствуйте, ${fullName}!</h1>
+        <h1>Marks</h1>
+        <table >
+            <tr>
+                <th>Mark</th>
+                <th>Date</th>
+                <th>Subject</th>
+            </tr>
+
+            <c:forEach var="mark" items="${allMarks}">
+                <tr>
+                    <td><c:out value="${mark.mark}" /></td>
+
+                    <td><c:out value="${mark.date}" /></td>
+
+                    <td><c:out value="${mark.subject()}" /></td>
+                </tr>
+            </c:forEach>
+        </table>
+
         <p>Ваш логин: <sec:authentication property="principal.username" /></p>
         <p><a class="btn btn-lg btn-danger" href="<c:url value="/logout" />" role="button">Выйти</a></p>
 
