@@ -25,7 +25,7 @@ import java.util.Properties;
 @EnableTransactionManagement
 @PropertySource("classpath:app.properties")
 @EnableJpaRepositories("com.roi.repository")
-public class Config {
+public class DataConfig {
 
     private static final String PROP_DATABASE_DRIVER = "db.driver";
     private static final String PROP_DATABASE_PASSWORD = "db.password";
