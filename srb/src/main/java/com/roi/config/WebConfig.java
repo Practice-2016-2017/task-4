@@ -13,7 +13,7 @@ import org.springframework.web.servlet.view.UrlBasedViewResolver;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan({"com.roi.controller", "com.roi.config"} )
+@ComponentScan({"com.roi"} )
 public class WebConfig extends WebMvcConfigurerAdapter {
 
 

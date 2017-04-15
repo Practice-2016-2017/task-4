@@ -39,14 +39,14 @@
         </sec:authorize>
         <sec:authorize access="isAuthenticated()">
             <c:if test="${pageContext.request.isUserInRole('ROLE_ADMIN')}">
-                <div>Get <a href="admin">admin</a> resource.</div>
+                <div><h2>Get <a href="admin">admin</a> resource.</h2></div>
             </c:if>
             <c:if test="${pageContext.request.isUserInRole('ROLE_TEACHER')}">
-                <div>Get <a href="teacher">teacher</a> resource.</div>
+                <div><h2>Get <a href="teacher">teacher</a> resource.</h2></div>
             </c:if>
 
             <c:if test="${pageContext.request.isUserInRole('ROLE_STUDENT')}">
-                <div>Get <a href="student">student</a> resource.</div>
+                <div> <h2>Get <a href="student">student</a> resource.</h2></div>
             </c:if>
 
             <p>Ваш логин: <sec:authentication property="principal.username" /></p>

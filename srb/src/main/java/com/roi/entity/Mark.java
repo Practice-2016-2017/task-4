@@ -17,11 +17,11 @@ public class Mark {
     @Column(name = "Date", nullable = false)
     private Date date;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "Student_idStudent", nullable = false)
     private Student student;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "Subject_idSubject", nullable = false)
     private Subject subject;
 
@@ -49,4 +49,9 @@ public class Mark {
     public Date getDate() {
         return date;
     }
+
+    public String subject() {
+        return subject.getName();
+    }
+
 }

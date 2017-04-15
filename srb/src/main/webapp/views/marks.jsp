@@ -10,13 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Teacher</title>
-
-    <link href="<c:url value="/views/css/bootstrap.css" />" rel="stylesheet">
-
-    <!-- Custom styles for this template -->
-    <link href="<c:url value="/views/css/jumbotron-narrow.css" />" rel="stylesheet">
-
+    <title>Marks</title>
     <!-- Bootstrap core CSS -->
     <link href="<c:url value="/views/css/bootstrap.css" />" rel="stylesheet">
 
@@ -32,8 +26,24 @@
 <body>
 <div class="container">
     <div class="jumbotron" style="margin-top: 20px;">
-        <h2>Здравствуйте, ${fullName}!</h2>
+        <h1>Marks</h1>
+        <table >
+            <tr>
+                <th>Mark</th>
+                <th>Date</th>
+                <th>Subject</th>
+            </tr>
 
+            <c:forEach var="mark" items="${allMarks}">
+                <tr>
+                    <td><c:out value="${mark.mark}" /></td>
+
+                    <td><c:out value="${mark.date}" /></td>
+
+                    <td><c:out value="${mark.subject()}" /></td>
+                </tr>
+            </c:forEach>
+        </table>
 
         <p>Ваш логин: <sec:authentication property="principal.username" /></p>
         <p><a class="btn btn-lg btn-danger" href="<c:url value="/logout" />" role="button">Выйти</a></p>

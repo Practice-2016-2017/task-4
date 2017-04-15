@@ -21,7 +21,7 @@ public class Student {
     @Column(name = "StudentName", nullable = false)
     private String name;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "Years_idYears", nullable = false)
     private Year year;
 
