@@ -33,7 +33,7 @@
 <body>
 <div class="container">
     <div class="jumbotron" style="margin-top: 20px;">
-        <h2> ${Subject}</h2>
+        <h2> ${Subject}, year ${yearOfSubject}</h2>
         <table >
             <tr>
                 <th>Date</th>

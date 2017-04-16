@@ -56,6 +56,9 @@ public class TeacherController {
             String nameOfSubject = subjectRepository.findOne(subjectId).getName();
             model.addObject("Subject", nameOfSubject);
 
+            String yearOfSubject = subjectRepository.findOne(subjectId).year();
+            model.addObject("yearOfSubject", yearOfSubject);
+
             List<Mark> markList = userService.getSubjectMarks(subjectRepository.findOne(subjectId));
             Map<String, Object> allObjectMark = new HashMap<String, Object>();
             allObjectMark.put("allMarks", markList);
