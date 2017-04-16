@@ -28,7 +28,11 @@ public class UserService {
 
     public List<Student> findAllStudents() {return studentRepository.findAll();}
 
+
     public List<Mark> getStudentMarks(Student student) {return markRepository.findByStudent(student);}
+
+    public List<Mark> getSubjectMarks(Subject subject) {return markRepository.findBySubject(subject);}
+
     public List<Subject> getTeacherSubjects (Teacher teacher) {return subjectRepository.findByTeacher(teacher);}
 
     public Student findByLoginStudent(String name) {

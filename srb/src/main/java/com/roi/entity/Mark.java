@@ -54,4 +54,8 @@ public class Mark {
         return subject.getName();
     }
 
+    public String student() {
+        return student.getName();
+    }
+
 }

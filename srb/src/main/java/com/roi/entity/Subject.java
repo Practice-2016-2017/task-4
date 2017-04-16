@@ -2,6 +2,7 @@ package com.roi.entity;
 
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "Subject")
@@ -23,7 +24,12 @@ public class Subject {
     private Year year;
 
     public Subject(){}
-
+    public void setId(Integer id) {
+        this.id = id;
+    }
+    public Integer getId() {
+        return id;
+    }
     public String getName() {
         return name;
     }
@@ -34,4 +40,5 @@ public class Subject {
     public String year() {
         return year.getYear().toString();
     }
+
 }

@@ -11,7 +11,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Teacher</title>
+    <title>Marks</title>
 
     <link href="<c:url value="/views/css/bootstrap.css" />" rel="stylesheet">
 
@@ -33,21 +33,20 @@
 <body>
 <div class="container">
     <div class="jumbotron" style="margin-top: 20px;">
-        <h2>Здравствуйте, ${fullName}!</h2>
+        <h2> ${Subject}</h2>
         <table >
             <tr>
-                <th>Subject</th>
-                <th>Year</th>
+                <th>Date</th>
+                <th>Student</th>
+                <th>Mark</th>
 
             </tr>
 
-            <c:forEach var="subject" items="${allSubjects}">
+            <c:forEach var="mark" items="${allMarks}">
                 <tr>
-                    <td><c:out value="${subject.name}" /></td>
-
-                    <td><c:out value="${subject.year()}" /></td>
-
-                    <td>  <a href="<spring:url value="/teacher/${user}/${subject.id}" />">оценки</a> </td>
+                    <td><c:out value="${mark.date}" /></td>
+                    <td><c:out value="${mark.student()}" /></td>
+                    <td><c:out value="${mark.mark}" /></td>
                 </tr>
             </c:forEach>
         </table>

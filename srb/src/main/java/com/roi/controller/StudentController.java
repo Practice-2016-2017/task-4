@@ -1,8 +1,7 @@
 package com.roi.controller;
 
-
 import com.roi.entity.Mark;
-import com.roi.entity.Subject;
+import com.roi.repository.SubjectRepository;
 import com.roi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,14 +14,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 @Controller
-public class UserController {
-     @Autowired
-     private UserService userService;
+public class StudentController {
+    @Autowired
+    private UserService userService;
 
-     @RequestMapping(value = {"/student"}, method = RequestMethod.GET)
-     public ModelAndView studentPage(Principal principal) {
+    @Autowired
+    private SubjectRepository subjectRepository;
+
+    @RequestMapping(value = {"/student"}, method = RequestMethod.GET)
+    public ModelAndView studentPage(Principal principal) {
         ModelAndView model = new ModelAndView();
 
         String name = principal.getName();
@@ -36,22 +37,4 @@ public class UserController {
         model.setViewName("student");
         return model;
     }
-
-    @RequestMapping(value = {"/teacher"})
-    public ModelAndView teacherPage(Principal principal) {
-        ModelAndView model = new ModelAndView();
-
-        String name = principal.getName();
-        List<Subject> subjects=userService.getTeacherSubjects(userService.findByLoginTeacher(name));
-        Map<String,Object> allObjectSubject = new HashMap<String,Object>();
-        allObjectSubject.put("allSubjects", subjects);
-        model.addAllObjects(allObjectSubject);
-
-        String userName=userService.findByLoginTeacher(name).getName();
-        model.addObject("fullName", userName);
-
-        model.setViewName("teacher");
-        return model;
-     }
-
 }

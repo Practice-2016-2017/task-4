@@ -10,7 +10,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
-    <base href="${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}/student/" />
     <title>Student</title>
     <!-- Bootstrap core CSS -->
     <link href="<c:url value="/views/css/bootstrap.css" />" rel="stylesheet">
@@ -27,22 +26,22 @@
 <body>
 <div class="container">
     <div class="jumbotron" style="margin-top: 20px;">
-        <h1>Здравствуйте, ${fullName}!</h1>
-        <h1>Marks</h1>
+        <h2>Здравствуйте, ${fullName}!</h2>
+        <h2>Marks</h2>
         <table >
             <tr>
-                <th>Mark</th>
                 <th>Date</th>
                 <th>Subject</th>
+                <th>Mark</th>
             </tr>
 
             <c:forEach var="mark" items="${allMarks}">
                 <tr>
-                    <td><c:out value="${mark.mark}" /></td>
+
 
                     <td><c:out value="${mark.date}" /></td>
-
                     <td><c:out value="${mark.subject()}" /></td>
+                    <td><c:out value="${mark.mark}" /></td>
                 </tr>
             </c:forEach>
         </table>
