@@ -12,7 +12,7 @@ public class Year {
     private Integer id;
 
     @Column(name = "Year", nullable = false)
-    private Integer year;
+    private Integer name;
 
     public Year(){}
 
@@ -23,10 +23,10 @@ public class Year {
         return id;
     }
 
-    public void setYear(Integer year) {
-        this.year = year;
+    public void setName(Integer name) {
+        this.name = name;
     }
-    public Integer getYear() {
-        return year;
+    public Integer getName() {
+        return name;
     }
 }

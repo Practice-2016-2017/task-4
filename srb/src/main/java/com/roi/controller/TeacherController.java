@@ -2,15 +2,15 @@ package com.roi.controller;
 
 import com.roi.entity.Mark;
 import com.roi.entity.Subject;
+import com.roi.entity.Year;
 import com.roi.repository.SubjectRepository;
+import com.roi.repository.YearRepository;
 import com.roi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.security.Principal;
@@ -27,6 +27,9 @@ public class TeacherController {
     @Autowired
     private SubjectRepository subjectRepository;
 
+    @Autowired
+    private YearRepository yearRepository;
+
     @RequestMapping(value = {"/teacher"})
     public ModelAndView teacherPage(Principal principal) {
         ModelAndView model = new ModelAndView();
@@ -36,6 +39,7 @@ public class TeacherController {
         Map<String,Object> allObjectSubject = new HashMap<String,Object>();
         allObjectSubject.put("allSubjects", subjects);
         model.addAllObjects(allObjectSubject);
+
         model.addObject("user",principal.getName());
         String userName=userService.findByLoginTeacher(name).getName();
         model.addObject("fullName", userName);
@@ -45,7 +49,8 @@ public class TeacherController {
     }
 
     @RequestMapping(value = {"/teacher/{id}/{subjectId}"})
-    public ModelAndView markPage(@PathVariable String id,@PathVariable Integer subjectId, Principal principal) {
+    public ModelAndView markPage(@PathVariable String id,
+                                 @PathVariable Integer subjectId, Principal principal) {
         if(id.equals(principal.getName())) {
             ModelAndView model = new ModelAndView();
             String nameOfSubject = subjectRepository.findOne(subjectId).getName();
@@ -64,5 +69,12 @@ public class TeacherController {
         }
     }
 
-
+    @RequestMapping(value = {"/add-subject"}, method = RequestMethod.GET)
+    public String addSubjectPage(Principal principal,@RequestParam("subject") String nameOfSubject,
+                                       @RequestParam("year") String nameYear  ) {
+            Year year=yearRepository.findByName(Integer.parseInt(nameYear));
+            Subject subject =new Subject(nameOfSubject,userService.findByLoginTeacher(principal.getName()),year);
+            subjectRepository.save(subject);
+            return "redirect:/teacher";
+    }
 }

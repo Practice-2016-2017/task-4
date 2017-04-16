@@ -17,11 +17,11 @@ public class Mark {
     @Column(name = "Date", nullable = false)
     private Date date;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "Student_idStudent", nullable = false)
     private Student student;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "Subject_idSubject", nullable = false)
     private Subject subject;
 
