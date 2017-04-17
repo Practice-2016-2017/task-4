@@ -23,6 +23,9 @@ public class UserService {
     private TeacherRepository teacherRepository;
 
     @Autowired
+    private YearRepository yearRepository;
+
+    @Autowired
     private SubjectRepository subjectRepository;
 
     @Autowired
@@ -30,7 +33,7 @@ public class UserService {
 
     public List<Student> findAllStudents() {return studentRepository.findAll();}
 
-
+    public List<Student> getYearStudents (Year year) {return studentRepository.findByYear(year);}
     public List<Mark> getStudentMarks(Student student) {return markRepository.findByStudent(student);}
 
     public List<Mark> getSubjectMarks(Subject subject) {return markRepository.findBySubject(subject);}

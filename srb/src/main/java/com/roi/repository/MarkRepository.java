@@ -10,4 +10,5 @@ public interface MarkRepository extends JpaRepository<Mark, Integer> {
     List<Mark> findByStudent(Student student);
 
     List<Mark> findBySubject (Subject subject);
+
 }

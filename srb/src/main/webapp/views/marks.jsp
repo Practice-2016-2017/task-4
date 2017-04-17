@@ -4,6 +4,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <html>
 <head>
     <meta charset="utf-8">
@@ -45,11 +46,46 @@
             <c:forEach var="mark" items="${allMarks}">
                 <tr>
                     <td><c:out value="${mark.date}" /></td>
-                    <td><c:out value="${mark.student()}" /></td>
-                    <td><c:out value="${mark.mark}" /></td>
+                    <td><c:out value="${mark.studentName()}" /></td>
+                    <td><c:out value="${mark.value}" /></td>
                 </tr>
             </c:forEach>
         </table>
+
+        <form:form action="add-mark" method="get" >
+            <input type="hidden" name="subject" value="${Subject}" />
+            <input type="hidden" name="year" value="${yearOfSubject}" />
+            <table>
+                <tbody>
+                <tr>
+                    <td><input type="date" name="date" /></td>
+                </tr>
+                <tr>
+                    <td>
+                        <select name="studentName">
+                        <option disabled>Students</option>
+                        <c:forEach items="${allYearStudents}" var="student">
+                            <option  value="${student.name}" >${student.name} </option>
+                        </c:forEach>
+                    </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td> <select name="mark">
+                        <option  value="2" >2 </option>
+                        <option  value="3" >3 </option>
+                        <option  value="4" >4 </option>
+                        <option  value="5" >5 </option>
+                    </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><input type="submit" value="Add" /></td>
+                    <td></td>
+                </tr>
+                </tbody>
+            </table>
+        </form:form>
 
         <p>Ваш логин: <sec:authentication property="principal.username" /></p>
         <p><a class="btn btn-lg btn-danger" href="<c:url value="/logout" />" role="button">Выйти</a></p>

@@ -50,7 +50,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
         http.authorizeRequests()
-                .antMatchers("/student/**").access("hasRole('ROLE_STUDENT')")
+                .antMatchers("/studentName/**").access("hasRole('ROLE_STUDENT')")
                 .antMatchers("/teacher/**").access("hasRole('ROLE_TEACHER')")
                 .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')");
         http.csrf()

@@ -57,10 +57,15 @@
             <table>
                 <tbody>
                 <tr>
-                    <td><input type="text" name="subject" placeholder="Subject" /></td>
+                    <td><input type="text" name="subjectName" placeholder="Subject" /></td>
                 </tr>
                 <tr>
-                    <td><input type="text" name="year" placeholder="Year" /></td>
+                    <td> <select name="year">
+                        <option  value="1" >1 </option>
+                        <option  value="2" >2 </option>
+                        <option  value="3" >3 </option>
+                        <option  value="4" >4 </option>
+                    </select></td>
                 </tr>
                 <tr>
                     <td><input type="submit" value="Add" /></td>

@@ -35,13 +35,13 @@
                 <th>Mark</th>
             </tr>
 
-            <c:forEach var="mark" items="${allMarks}">
+            <c:forEach var="value" items="${allMarks}">
                 <tr>
 
 
-                    <td><c:out value="${mark.date}" /></td>
-                    <td><c:out value="${mark.subject()}" /></td>
-                    <td><c:out value="${mark.mark}" /></td>
+                    <td><c:out value="${value.date}" /></td>
+                    <td><c:out value="${value.subjectName()}" /></td>
+                    <td><c:out value="${value.value}" /></td>
                 </tr>
             </c:forEach>
         </table>

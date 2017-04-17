@@ -12,7 +12,7 @@ public class Mark {
     private Integer id;
 
     @Column(name = "Mark", nullable = false)
-    private Integer mark;
+    private Integer value;
 
     @Column(name = "Date", nullable = false)
     private Date date;
@@ -26,13 +26,18 @@ public class Mark {
     private Subject subject;
 
     public Mark (){}
-
-    public void setMark(Integer mark) {
-        this.mark = mark;
+    public Mark (Integer value, Date date, Student student, Subject subject){
+        this.value = value;
+        this.date=date;
+        this.student=student;
+        this.subject=subject;
+    }
+    public void setValue(Integer value) {
+        this.value = value;
     }
 
-    public Integer getMark() {
-        return mark;
+    public Integer getValue() {
+        return value;
     }
 
     public void setId(Integer id) {
@@ -50,11 +55,11 @@ public class Mark {
         return date;
     }
 
-    public String subject() {
+    public String subjectName() {
         return subject.getName();
     }
 
-    public String student() {
+    public String studentName() {
         return student.getName();
     }
 
