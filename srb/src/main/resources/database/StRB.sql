@@ -79,7 +79,7 @@ CREATE TABLE IF NOT EXISTS `StRB`.`Subject` (
   `idSubject` INT NOT NULL AUTO_INCREMENT,
   `SubjectName` VARCHAR(45) NOT NULL,
   `Years_idYears` INT NOT NULL,
-  `Teacher_idTeacher` INT NOT NULL,
+  `Teacher_idTeacher` INT,
   PRIMARY KEY (`idSubject`),
   INDEX `fk_Subject_Years1_idx` (`Years_idYears` ASC),
   INDEX `fk_Subject_Teacher1_idx` (`Teacher_idTeacher` ASC),

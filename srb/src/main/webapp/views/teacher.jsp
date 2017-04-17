@@ -48,12 +48,12 @@
 
                     <td><c:out value="${subject.year()}" /></td>
 
-                    <td>  <a href="<spring:url value="/teacher/${user}/${subject.id}" />">оценки</a> </td>
+                    <td>  <a href="<spring:url value="${pageContext.request.userPrincipal.name}/${subject.id}" />">оценки</a> </td>
                 </tr>
             </c:forEach>
         </table>
 
-        <form:form action="add-subject" method="get" >
+        <form:form action="${pageContext.request.contextPath}/teacher/${pageContext.request.userPrincipal.name}/add-subject" method="get" >
             <table>
                 <tbody>
                 <tr>

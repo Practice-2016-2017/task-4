@@ -7,5 +7,5 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  * Created by Polina on 16.04.2017.
  */
 @ResponseStatus(HttpStatus.FORBIDDEN)
-public class ForbiddenException extends RuntimeException {
+class ForbiddenException extends RuntimeException {
 }

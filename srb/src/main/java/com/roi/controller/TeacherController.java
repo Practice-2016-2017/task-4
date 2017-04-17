@@ -8,6 +8,7 @@ import com.roi.repository.YearRepository;
 import com.roi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -25,7 +26,9 @@ import java.util.Map;
 
 
 @Controller
+@RequestMapping(value = {"/teacher"})
 public class TeacherController {
+
     @Autowired
     private UserService userService;
 
@@ -41,85 +44,103 @@ public class TeacherController {
     @Autowired
     private MarkRepository markRepository;
 
-    @RequestMapping(value = {"/teacher"})
-    public ModelAndView teacherPage(Principal principal) {
-        ModelAndView model = new ModelAndView();
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private java.util.Date dateUtil;
 
-        String name = principal.getName();
-        Teacher teacher=userService.findByLoginTeacher(name);
-        List<Subject> subjects=userService.getTeacherSubjects(teacher);
-        Map<String,Object> allObjectSubject = new HashMap<String,Object>();
-        allObjectSubject.put("allSubjects", subjects);
-        model.addAllObjects(allObjectSubject);
+    @RequestMapping(value = {"/{login}"})
+    public ModelAndView teacherPage(@PathVariable String login, Principal principal) {
+        if (login.equals(principal.getName())) {
 
-        model.addObject("user",principal.getName());
-        String userName=userService.findByLoginTeacher(name).getName();
-        model.addObject("fullName", userName);
+            ModelAndView model = new ModelAndView();
+            String name = principal.getName();
+            Teacher teacher = userService.findByLoginTeacher(name);
+            List<Subject> subjects = userService.getTeacherSubjects(teacher);
+            Map<String, Object> allObjectSubject = new HashMap<String, Object>();
+            allObjectSubject.put("allSubjects", subjects);
+            model.addAllObjects(allObjectSubject);
 
-        model.setViewName("teacher");
-        return model;
+            model.addObject("user", principal.getName());
+            String userName = userService.findByLoginTeacher(name).getName();
+            model.addObject("fullName", userName);
+
+            model.setViewName("teacher");
+            return model;
+        } else {
+            throw new ForbiddenException();
+        }
+
     }
 
-    @RequestMapping(value = {"/teacher/{id}/{subjectId}"})
-    public ModelAndView markPage(@PathVariable String id,
-                                 @PathVariable Integer subjectId, Principal principal) {
-        if(id.equals(principal.getName())) {
+    @RequestMapping(value = {"/{login}/{subjectId}"})
+    public ModelAndView markPage(Principal principal,
+                                 @PathVariable String login,
+                                 @PathVariable Integer subjectId) {
+        if (login.equals(principal.getName())) {
             ModelAndView model = new ModelAndView();
-            String nameOfSubject = subjectRepository.findOne(subjectId).getName();
-            model.addObject("Subject", nameOfSubject);
+            Subject subject = subjectRepository.findOne(subjectId);
+            model.addObject("Subject", subject);
+            String yearOfSubject = subject.year();
 
-            String yearOfSubject = subjectRepository.findOne(subjectId).year();
-            model.addObject("yearOfSubject", yearOfSubject);
-
-            Year year=yearRepository.findByName(Integer.parseInt(yearOfSubject));
-            List<Student> studentList=userService.getYearStudents(year);
+            Year year = yearRepository.findByName(Integer.parseInt(yearOfSubject));
+            List<Student> studentList = userService.getYearStudents(year);
             Map<String, Object> allStudents = new HashMap<String, Object>();
             allStudents.put("allYearStudents", studentList);
             model.addAllObjects(allStudents);
 
-            Subject subject=subjectRepository.findOne(subjectId);
+
             List<Mark> markList = userService.getSubjectMarks(subject);
             Map<String, Object> allSubjectMark = new HashMap<String, Object>();
             allSubjectMark.put("allMarks", markList);
             model.addAllObjects(allSubjectMark);
             model.setViewName("marks");
             return model;
-        }
-        else {
-            ForbiddenException ex=new ForbiddenException();
-            throw ex;
+        } else {
+            throw new ForbiddenException();
         }
     }
 
-    @RequestMapping(value = {"/add-mark"}, method = RequestMethod.GET)
-    public String addMark(@RequestParam("date") String dateStr,
+    @RequestMapping(value = {"/{login}/{subjectId}/add-mark"}, method = RequestMethod.GET)
+    public String addMark(Principal principal,
+                          @PathVariable String login,
+                          @PathVariable Integer subjectId,
+                          @RequestParam("date") String dateStr,
                           @RequestParam("studentName") String studentName,
-                          @RequestParam("mark") String markValue,
-                          @RequestParam("subject") String subjectName,
-                          @RequestParam("year") String yearStr ) {
-        try {SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
-            java.util.Date dateUtil = format.parse(dateStr);
-            Date dateSQL=new Date(dateUtil.getTime());
-            Year year=yearRepository.findByName(Integer.parseInt(yearStr));
-            Student student=studentRepository.findByName(studentName);
-            Subject subject=subjectRepository.findByNameAndYear(subjectName,year);
-            Mark mark =new Mark(Integer.parseInt(markValue), dateSQL,student,subject);
-            markRepository.save(mark);
-            } catch (java.text.ParseException e){
-            e.printStackTrace();
-        }return "redirect:/teacher/{id}/{subjectId}";
+                          @RequestParam("mark") String markValueStr) {
+        if (login.equals(principal.getName())) {
+            try {
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                dateUtil = format.parse(dateStr);
+                Date dateSQL = new Date(dateUtil.getTime());
+                Subject subject = subjectRepository.findOne(subjectId);
+
+                Integer markValue = Integer.parseInt(markValueStr);
+                Student student = studentRepository.findByName(studentName);
+
+                Mark mark = new Mark(markValue, dateSQL, student, subject);
+                markRepository.save(mark);
+            } catch (java.text.ParseException e) {
+                e.printStackTrace();
+            }
+            return "redirect:/teacher/{login}/{subjectId}";
+        } else {
+            throw new ForbiddenException();
+        }
     }
 
 
-    @RequestMapping(value = {"/add-subject"}, method = RequestMethod.GET)
-    public String addSubject(Principal principal,@RequestParam("subjectName") String nameOfSubject,
-                                 @RequestParam("year") String nameYear  ) {
-        Year year=yearRepository.findByName(Integer.parseInt(nameYear));
-        Teacher teacher=userService.findByLoginTeacher(principal.getName());
-        Subject subject =new Subject(nameOfSubject,teacher,year);
-        subjectRepository.save(subject);
-        return "redirect:/teacher";
+    @RequestMapping(value = {"/{login}/add-subject"}, method = RequestMethod.GET)
+    public String addSubject(Principal principal,
+                             @PathVariable String login,
+                             @RequestParam("subjectName") String nameOfSubject,
+                             @RequestParam("year") String nameYear) {
+        if (login.equals(principal.getName())) {
+            Year year = yearRepository.findByName(Integer.parseInt(nameYear));
+            Teacher teacher = userService.findByLoginTeacher(principal.getName());
+            Subject subject = new Subject(nameOfSubject, teacher, year);
+            subjectRepository.save(subject);
+            return "redirect:/teacher/{login}";
+        } else {
+            throw new ForbiddenException();
+        }
     }
-
-
 }

@@ -1,6 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -39,14 +40,14 @@
         </sec:authorize>
         <sec:authorize access="isAuthenticated()">
             <c:if test="${pageContext.request.isUserInRole('ROLE_ADMIN')}">
-                <div><h2>Get <a href="admin">admin</a> resource.</h2></div>
+                <div> <h2> Get  <a href="<spring:url value="admin" />">admin</a> resourse </h2> </div>
             </c:if>
             <c:if test="${pageContext.request.isUserInRole('ROLE_TEACHER')}">
-                <div><h2>Get <a href="teacher">teacher</a> resource.</h2></div>
+                <div> <h2> Get  <a href="<spring:url value="teacher/${pageContext.request.userPrincipal.name}" />">teacher</a> resourse</h2> </div>
             </c:if>
 
             <c:if test="${pageContext.request.isUserInRole('ROLE_STUDENT')}">
-                <div> <h2>Get <a href="student">student</a> resource.</h2></div>
+                <div> <h2> Get  <a href="<spring:url value="student/${pageContext.request.userPrincipal.name}" />">student</a> resourse</h2> </div>
             </c:if>
 
             <p>Ваш логин: <sec:authentication property="principal.username" /></p>

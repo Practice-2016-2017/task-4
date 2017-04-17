@@ -34,7 +34,7 @@
 <body>
 <div class="container">
     <div class="jumbotron" style="margin-top: 20px;">
-        <h2> ${Subject}, year ${yearOfSubject}</h2>
+        <h2> ${Subject.name}, year ${Subject.year()}</h2>
         <table >
             <tr>
                 <th>Date</th>
@@ -52,9 +52,8 @@
             </c:forEach>
         </table>
 
-        <form:form action="add-mark" method="get" >
-            <input type="hidden" name="subject" value="${Subject}" />
-            <input type="hidden" name="year" value="${yearOfSubject}" />
+        <form:form action="${pageContext.request.contextPath}/teacher/${pageContext.request.userPrincipal.name}/${Subject.id}/add-mark" method="get" >
+
             <table>
                 <tbody>
                 <tr>
@@ -63,7 +62,6 @@
                 <tr>
                     <td>
                         <select name="studentName">
-                        <option disabled>Students</option>
                         <c:forEach items="${allYearStudents}" var="student">
                             <option  value="${student.name}" >${student.name} </option>
                         </c:forEach>

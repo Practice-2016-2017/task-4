@@ -5,6 +5,7 @@ import com.roi.repository.SubjectRepository;
 import com.roi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
+@RequestMapping(value = {"/student"})
 public class StudentController {
     @Autowired
     private UserService userService;
@@ -22,8 +24,9 @@ public class StudentController {
     @Autowired
     private SubjectRepository subjectRepository;
 
-    @RequestMapping(value = {"/student"}, method = RequestMethod.GET)
-    public ModelAndView studentPage(Principal principal) {
+    @RequestMapping(value = {"/{login}"}, method = RequestMethod.GET)
+    public ModelAndView studentPage(Principal principal, @PathVariable String login) {
+        if(login.equals(principal.getName())) {
         ModelAndView model = new ModelAndView();
 
         String name = principal.getName();
@@ -36,5 +39,8 @@ public class StudentController {
         model.addObject("fullName", userName);
         model.setViewName("student");
         return model;
+        } else {
+            throw new ForbiddenException();
+        }
     }
 }
