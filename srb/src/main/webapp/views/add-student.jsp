@@ -4,6 +4,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <html>
 <head>
     <meta charset="utf-8">
@@ -27,13 +28,39 @@
 <body>
 <div class="container">
     <div class="jumbotron" style="margin-top: 20px;">
-    <h1>Hello admin!</h1>
 
-        <a href="<spring:url value="${pageContext.request.userPrincipal.name}/admin/studentsList" />">Список студентов</a>
-        <a href="<spring:url value="${pageContext.request.userPrincipal.name}/admin/teachersList" />">Список студентов</a>
+        <form:form action="${pageContext.request.contextPath}/admin/studentsList/addStudent" method="post" >
+            <h2>${message}</h2>
+            <table>
+                <tbody>
+                <tr>
+                    <td><input type="text" name="studentName" placeholder="Имя" /></td>
+                </tr>
+
+                <tr>
+                    <td><input type="number" name="login" placeholder="Login" /></td>
+                </tr>
+
+                <tr>
+                    <td><input type="text" name="password" placeholder="Password" /></td>
+                </tr>
+                <tr>
+                    <td> <select name="year">
+                        <option  value="1" >1 </option>
+                        <option  value="2" >2 </option>
+                        <option  value="3" >3 </option>
+                        <option  value="4" >4 </option>
+                    </select></td>
+                </tr>
+                <tr>
+                    <td><input type="submit" value="Add" /></td>
+                    <td></td>
+                </tr>
+                </tbody>
+            </table>
+        </form:form>
+
         <p>Ваш логин: <sec:authentication property="principal.username" /></p>
-
-
         <p><a class="btn btn-lg btn-danger" href="<c:url value="/logout" />" role="button">Выйти</a></p>
 
     </div>

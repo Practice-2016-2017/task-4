@@ -25,9 +25,12 @@ public class Student {
     @JoinColumn(name = "Years_idYears", nullable = false)
     private Year year;
 
-   public Student(){}
+    public String year() {
+        return year.getName().toString();
+    }
+    public Student(){}
 
-    Student(Integer login, String password, String name, Year year){
+    public Student(Integer login, String password, String name, Year year){
         this.login=login;
         this.password=password;
         this.name=name;

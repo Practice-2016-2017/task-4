@@ -27,13 +27,27 @@
 <body>
 <div class="container">
     <div class="jumbotron" style="margin-top: 20px;">
-    <h1>Hello admin!</h1>
 
-        <a href="<spring:url value="${pageContext.request.userPrincipal.name}/admin/studentsList" />">Список студентов</a>
-        <a href="<spring:url value="${pageContext.request.userPrincipal.name}/admin/teachersList" />">Список студентов</a>
+        <table >
+            <tr>
+                <th>Student</th>
+                <th>Year</th>
+
+            </tr>
+
+            <c:forEach var="student" items="${allStudents}">
+                <tr>
+                    <td><c:out value="${student.name}" /></td>
+
+                    <td><c:out value="${student.year()}" /></td>
+
+                    <td>  <a href="<spring:url value="${pageContext.request.userPrincipal.name}/${student.id}" />">Редактировать</a> </td>
+                </tr>
+            </c:forEach>
+        </table>
+        <a href="<spring:url value="${pageContext.request.userPrincipal.name}/admin/studentsList/addStudent" />">Добавить студента</a>
+
         <p>Ваш логин: <sec:authentication property="principal.username" /></p>
-
-
         <p><a class="btn btn-lg btn-danger" href="<c:url value="/logout" />" role="button">Выйти</a></p>
 
     </div>
