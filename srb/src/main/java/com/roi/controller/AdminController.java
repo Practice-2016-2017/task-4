@@ -38,12 +38,25 @@ public class AdminController {
         model.setViewName("admin");
         return model;
     }
+
+    @RequestMapping(value = {"/admin/studentsList"}, method = RequestMethod.GET)
+    public ModelAndView studentsListPage() {
+        ModelAndView model = new ModelAndView();
+        List<Student> students =studentRepository.findAll();
+        Map<String, Object> allObjectStudent = new HashMap<String, Object>();
+        allObjectStudent.put("allStudents", students);
+        model.addAllObjects(allObjectStudent);
+        model.setViewName("students-list");
+        return model;
+    }
+
     @RequestMapping(value = {"/admin/studentsList/addStudent"}, method = RequestMethod.GET)
     public ModelAndView addStudentPage() {
         ModelAndView model = new ModelAndView();
         model.setViewName("add-student");
         return model;
     }
+
 
     @RequestMapping(value = {"/admin/studentsList/addStudent"}, method = RequestMethod.POST)
     public ModelAndView addingStudent(@RequestParam("studentName") String name,
@@ -62,16 +75,37 @@ public class AdminController {
     }
 
 
-    @RequestMapping(value = {"/admin/studentsList"}, method = RequestMethod.GET)
-    public ModelAndView studentsListPage() {
+    @RequestMapping(value = {"/admin/studentsList/edit/{id}"}, method = RequestMethod.GET)
+    public ModelAndView editStudentPage(@PathVariable Integer id) {
         ModelAndView model = new ModelAndView();
-        List<Student> students =studentRepository.findAll();
-        Map<String, Object> allObjectStudent = new HashMap<String, Object>();
-        allObjectStudent.put("allStudents", students);
-        model.addAllObjects(allObjectStudent);
-        model.setViewName("students-list");
+        Student student=studentRepository.findOne(id);
+        model.addObject("id",id);
+        model.addObject("studentName",student.getName());
+        model.addObject("login",student.getLogin());
+        model.addObject("password", student.getPassword());
+        model.addObject("year",student.year());
+        model.setViewName("edit-student");
         return model;
     }
+
+    @RequestMapping(value = {"/admin/studentsList/edit/{id}"}, method = RequestMethod.POST)
+    public String editStudent(@PathVariable Integer id,
+                                    @RequestParam("studentName") String name,
+                                    @RequestParam("login") String loginStr,
+                                    @RequestParam("password") String password,
+                                    @RequestParam("year") String yearName )throws Exception {
+        Integer login=Integer.parseInt(loginStr);
+        Year year=yearRepository.findByName(Integer.parseInt(yearName));
+        Student student=studentRepository.findOne(id);
+        student.setLogin(login);
+        student.setName(name);
+        student.setPassword(password);
+        student.setYear(year);
+        studentRepository.save(student);
+        return "redirect:/admin/studentsList";
+    }
+
+
 
     @RequestMapping(value = {"/admin/teachersList"}, method = RequestMethod.GET)
     public ModelAndView teachersListPage() {
@@ -87,11 +121,12 @@ public class AdminController {
     @RequestMapping(value = {"/admin/teachersList/addTeacher"}, method = RequestMethod.GET)
     public ModelAndView addTeacherPage() {
         ModelAndView model = new ModelAndView();
+
         model.setViewName("add-teacher");
         return model;
     }
 
-    @RequestMapping(value = {"/admin/teachersList/addStudent"}, method = RequestMethod.POST)
+    @RequestMapping(value = {"/admin/teachersList/addTeacher"}, method = RequestMethod.POST)
     public ModelAndView addingTeacher(@RequestParam("teacherName") String name,
                                       @RequestParam("login") String loginStr,
                                       @RequestParam("password") String password
@@ -103,5 +138,31 @@ public class AdminController {
         String message = "Преподаватель добавлен";
         model.addObject("message", message);
         return model;
+    }
+
+    @RequestMapping(value = {"/admin/teachersList/edit/{id}"}, method = RequestMethod.GET)
+    public ModelAndView editTeacherPage(@PathVariable Integer id) {
+        ModelAndView model = new ModelAndView();
+        Teacher teacher=teacherRepository.findOne(id);
+        model.addObject("id",id);
+        model.addObject("teacherName",teacher.getName());
+        model.addObject("login",teacher.getLogin());
+        model.addObject("password", teacher.getPassword());
+        model.setViewName("edit-teacher");
+        return model;
+    }
+
+    @RequestMapping(value = {"/admin/teachersList/edit/{id}"}, method = RequestMethod.POST)
+    public String editTeacher(@PathVariable Integer id,
+                                    @RequestParam("teacherName") String name,
+                                    @RequestParam("login") String loginStr,
+                                    @RequestParam("password") String password)throws Exception {
+        Integer login=Integer.parseInt(loginStr);
+        Teacher teacher=teacherRepository.findOne(id);
+        teacher.setLogin(login);
+        teacher.setName(name);
+        teacher.setPassword(password);
+        teacherRepository.save(teacher);
+        return "redirect:/admin/teachersList";
     }
 }

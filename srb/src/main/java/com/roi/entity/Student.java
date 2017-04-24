@@ -37,18 +37,21 @@ public class Student {
         this.year=year;
     }
 
+
     public void setId(Integer id) {
         this.id = id;
     }
     public Integer getId() {
         return id;
     }
+
     public String getPassword() {
         return password;
     }
     public void setPassword(String password) {
         this.password = password;
     }
+
     public Integer getLogin() {
         return login;
     }
@@ -56,6 +59,9 @@ public class Student {
         this.login = login;
     }
 
+    public void setYear(Year year) {
+        this.year=year;
+    }
     public String getName() {
         return name;
     }

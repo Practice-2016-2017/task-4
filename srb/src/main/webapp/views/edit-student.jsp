@@ -4,6 +4,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <html>
 <head>
     <meta charset="utf-8">
@@ -11,7 +12,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Список преподавателей</title>
+    <title>Редактировать студента</title>
     <!-- Bootstrap core CSS -->
     <link href="<c:url value="/views/css/bootstrap.css" />" rel="stylesheet">
 
@@ -27,23 +28,38 @@
 <body>
 <div class="container">
     <div class="jumbotron" style="margin-top: 20px;">
-        <h2>Список преподавателей</h2>
-        <table >
-            <tr>
-                <th>Преподаватель</th>
-            </tr>
 
-            <c:forEach var="teacher" items="${allTeachers}">
+        <form:form action="${pageContext.request.contextPath}/admin/studentsList/edit/${id}" method="post" >
+
+            <table>
+                <tbody>
                 <tr>
-                    <td><c:out value="${teacher.name}" /></td>
-
-                    <td>  <a href="<spring:url value="/admin/teachersList/edit/${teacher.id}" />">Редактировать</a> </td>
+                    <td><input type="text" name="studentName" value="${studentName}" placeholder="Имя" required /></td>
                 </tr>
-            </c:forEach>
-        </table>
 
+                <tr>
+                    <td><input type="number" name="login" value="${login}" placeholder="Login" required/></td>
+                </tr>
 
-        <a href="<spring:url value="/admin/teachersList/addTeacher" />">Добавить учителя</a>
+                <tr>
+                    <td><input type="text" name="password" value="${password}" placeholder="Password" required/></td>
+                </tr>
+                <tr>
+                    <td> <select name="year" >
+                        <option value="${year}"selected>${year}</option>
+                        <option  value="1"  >1 </option>
+                        <option  value="2" >2 </option>
+                        <option  value="3" >3 </option>
+                        <option  value="4" >4 </option>
+                    </select></td>
+                </tr>
+                <tr>
+                    <td><input type="submit" value="Подтвердить" /></td>
+                    <td></td>
+                </tr>
+                </tbody>
+            </table>
+        </form:form>
 
         <p>Ваш логин: <sec:authentication property="principal.username" /></p>
         <p><a class="btn btn-lg btn-danger" href="<c:url value="/logout" />" role="button">Выйти</a></p>

@@ -27,7 +27,7 @@
 <body>
 <div class="container">
     <div class="jumbotron" style="margin-top: 20px;">
-
+        <h2>Список студентов</h2>
         <table >
             <tr>
                 <th>Студент</th>
@@ -41,7 +41,7 @@
 
                     <td><c:out value="${student.year()}" /></td>
 
-                    <td>  <a href="<spring:url value="${student.id}" />">Редактировать</a> </td>
+                    <td>  <a href="<spring:url value="/admin/studentsList/edit/${student.id}" />">Редактировать</a> </td>
                 </tr>
             </c:forEach>
         </table>
