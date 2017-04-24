@@ -1,12 +1,7 @@
 package com.roi.config;
 
 
-import com.roi.entity.Admin;
-import com.roi.entity.Student;
-import com.roi.entity.Teacher;
-import com.roi.repository.AdminRepository;
-import com.roi.repository.StudentRepository;
-import com.roi.repository.TeacherRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,35 +10,33 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.*;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
+
+
+import javax.sql.DataSource;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(securedEnabled = true)
+@EnableGlobalMethodSecurity(securedEnabled=true, prePostEnabled=true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    @Autowired
-    private AdminRepository adminRepository;
 
     @Autowired
-    private StudentRepository studentRepository;
-
-    @Autowired
-    private TeacherRepository teacherRepository;
+    private DataSource dataSource;
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        for(Admin a: adminRepository.findAll()) {
-            auth.inMemoryAuthentication().withUser("ad"+a.getLogin().toString()).password(a.getPassword()).roles("ADMIN");
 
-        }
+        auth.jdbcAuthentication().dataSource(dataSource).usersByUsernameQuery(
+                "select concat('ad',Login) as username, Password as password, true as enabled from Admin where concat('ad',Login) = ?")
+                .authoritiesByUsernameQuery("select concat('ad',Login) as username, 'ROLE_ADMIN' from Admin where concat('ad',Login) = ?");
 
-        for(Student s: studentRepository.findAll()) {
-            auth.inMemoryAuthentication().withUser("st"+s.getLogin().toString()).password(s.getPassword()).roles("STUDENT");
-        }
 
-        for(Teacher t: teacherRepository.findAll()) {
-            auth.inMemoryAuthentication().withUser("te"+t.getLogin().toString()).password(t.getPassword()).roles("TEACHER");
-        }
+        auth.jdbcAuthentication().dataSource(dataSource).usersByUsernameQuery(
+                "select concat('te',Login) as username, Password as password, true as enabled from Teacher where concat('te',Login) = ?")
+                .authoritiesByUsernameQuery("select concat('te',Login) as username, 'ROLE_TEACHER' from Teacher where concat('te',Login) = ?");
+
+        auth.jdbcAuthentication().dataSource(dataSource).usersByUsernameQuery(
+                "select concat('st',Login) as username, Password as password, true as enabled from Student where concat('st',Login) = ?")
+                .authoritiesByUsernameQuery("select concat('st',Login) as username, 'ROLE_STUDENT' from Student where concat('st',Login) = ?");
     }
 
     @Override
@@ -52,7 +45,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers("/studentName/**").access("hasRole('ROLE_STUDENT')")
                 .antMatchers("/teacher/**").access("hasRole('ROLE_TEACHER')")
-                .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')");
+                .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
+                .anyRequest().authenticated();
         http.csrf()
                 .disable()
                 .authorizeRequests()

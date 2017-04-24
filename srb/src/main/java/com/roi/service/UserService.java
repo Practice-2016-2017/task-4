@@ -3,6 +3,10 @@ package com.roi.service;
 import com.roi.entity.*;
 import com.roi.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,6 +51,5 @@ public class UserService {
     public Teacher findByLoginTeacher(String name) {
         Integer login=Integer.parseInt(name.replaceAll("te",""));
         return teacherRepository.findByLogin(login);}
-
 
 }

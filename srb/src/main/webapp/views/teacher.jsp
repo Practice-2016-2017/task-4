@@ -12,7 +12,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Teacher</title>
+    <title>Преподаватель</title>
 
     <link href="<c:url value="/views/css/bootstrap.css" />" rel="stylesheet">
 
@@ -37,8 +37,8 @@
         <h2>Здравствуйте, ${fullName}!</h2>
         <table >
             <tr>
-                <th>Subject</th>
-                <th>Year</th>
+                <th>Предмет</th>
+                <th>Курс</th>
 
             </tr>
 
@@ -57,7 +57,7 @@
             <table>
                 <tbody>
                 <tr>
-                    <td><input type="text" name="subjectName" placeholder="Subject" /></td>
+                    <td><input type="text" name="subjectName" placeholder="Предмет" /></td>
                 </tr>
                 <tr>
                     <td> <select name="year">
@@ -68,7 +68,7 @@
                     </select></td>
                 </tr>
                 <tr>
-                    <td><input type="submit" value="Add" /></td>
+                    <td><input type="submit" value="Добавить" /></td>
                     <td></td>
                 </tr>
                 </tbody>

@@ -11,7 +11,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Admin</title>
+    <title>Список студентов</title>
     <!-- Bootstrap core CSS -->
     <link href="<c:url value="/views/css/bootstrap.css" />" rel="stylesheet">
 
@@ -30,8 +30,8 @@
 
         <table >
             <tr>
-                <th>Student</th>
-                <th>Year</th>
+                <th>Студент</th>
+                <th>Курс</th>
 
             </tr>
 
@@ -41,11 +41,11 @@
 
                     <td><c:out value="${student.year()}" /></td>
 
-                    <td>  <a href="<spring:url value="${pageContext.request.userPrincipal.name}/${student.id}" />">Редактировать</a> </td>
+                    <td>  <a href="<spring:url value="${student.id}" />">Редактировать</a> </td>
                 </tr>
             </c:forEach>
         </table>
-        <a href="<spring:url value="${pageContext.request.userPrincipal.name}/admin/studentsList/addStudent" />">Добавить студента</a>
+        <a href="<spring:url value="/admin/studentsList/addStudent" />">Добавить студента</a>
 
         <p>Ваш логин: <sec:authentication property="principal.username" /></p>
         <p><a class="btn btn-lg btn-danger" href="<c:url value="/logout" />" role="button">Выйти</a></p>

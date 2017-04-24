@@ -12,7 +12,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Admin</title>
+    <title>Добавить студента</title>
     <!-- Bootstrap core CSS -->
     <link href="<c:url value="/views/css/bootstrap.css" />" rel="stylesheet">
 
@@ -53,7 +53,7 @@
                     </select></td>
                 </tr>
                 <tr>
-                    <td><input type="submit" value="Add" /></td>
+                    <td><input type="submit" value="Добавить" /></td>
                     <td></td>
                 </tr>
                 </tbody>

@@ -22,6 +22,12 @@ public class Teacher {
 
     public Teacher(){}
 
+    public Teacher(Integer login, String password, String name){
+        this.login=login;
+        this.password=password;
+        this.name=name;
+    }
+
     public void setId(Integer id) {
         this.id = id;
     }

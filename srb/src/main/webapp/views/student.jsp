@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Student</title>
+    <title>Студент</title>
     <!-- Bootstrap core CSS -->
     <link href="<c:url value="/views/css/bootstrap.css" />" rel="stylesheet">
 
@@ -27,12 +27,12 @@
 <div class="container">
     <div class="jumbotron" style="margin-top: 20px;">
         <h2>Здравствуйте, ${fullName}!</h2>
-        <h2>Marks</h2>
+        <h2>Оценки</h2>
         <table >
             <tr>
-                <th>Date</th>
-                <th>Subject</th>
-                <th>Mark</th>
+                <th>Дата</th>
+                <th>Предмет</th>
+                <th>Оценка</th>
             </tr>
 
             <c:forEach var="value" items="${allMarks}">

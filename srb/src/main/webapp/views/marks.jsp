@@ -12,7 +12,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Marks</title>
+    <title>Оценки</title>
 
     <link href="<c:url value="/views/css/bootstrap.css" />" rel="stylesheet">
 
@@ -34,12 +34,12 @@
 <body>
 <div class="container">
     <div class="jumbotron" style="margin-top: 20px;">
-        <h2> ${Subject.name}, year ${Subject.year()}</h2>
+        <h2> ${Subject.name}, курс ${Subject.year()}</h2>
         <table >
             <tr>
-                <th>Date</th>
-                <th>Student</th>
-                <th>Mark</th>
+                <th>Дата</th>
+                <th>Студент</th>
+                <th>Оценка</th>
 
             </tr>
 
@@ -78,7 +78,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td><input type="submit" value="Add" /></td>
+                    <td><input type="submit" value="Добавить" /></td>
                     <td></td>
                 </tr>
                 </tbody>

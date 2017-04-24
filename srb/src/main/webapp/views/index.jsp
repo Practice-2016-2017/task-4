@@ -14,7 +14,7 @@
     <base href="${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}/" />
 
 
-    <title>Spring Security</title>
+    <title>Зачетная книжка студента</title>
 
     <!-- Bootstrap core CSS -->
     <link href="<c:url value="/views/css/bootstrap.css" />" rel="stylesheet">
@@ -34,7 +34,7 @@
 <div class="container">
 
     <div class="jumbotron" style="margin-top: 20px;">
-        <h1>Student record book</h1>
+        <h1>Зачетная книжка студента</h1>
         <sec:authorize access="!isAuthenticated()">
             <p><a class="btn btn-lg btn-success" href="<c:url value="/login" />" role="button">Войти</a></p>
         </sec:authorize>

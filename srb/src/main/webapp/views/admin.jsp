@@ -27,10 +27,10 @@
 <body>
 <div class="container">
     <div class="jumbotron" style="margin-top: 20px;">
-    <h1>Hello admin!</h1>
+    <h1>Здравствуйте, администратор!</h1>
 
-        <a href="<spring:url value="${pageContext.request.userPrincipal.name}/admin/studentsList" />">Список студентов</a>
-        <a href="<spring:url value="${pageContext.request.userPrincipal.name}/admin/teachersList" />">Список студентов</a>
+        <p> <a href="<spring:url value="/admin/studentsList" />">Список студентов</a></p>
+        <p> <a href="<spring:url value="/admin/teachersList" />">Список преподавателей</a></p>
         <p>Ваш логин: <sec:authentication property="principal.username" /></p>
 
 

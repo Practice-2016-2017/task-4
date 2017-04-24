@@ -1,5 +1,6 @@
 package com.roi.controller;
 
+
 import com.roi.entity.Student;
 import com.roi.entity.Teacher;
 import com.roi.entity.Year;
@@ -14,8 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-
-import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,12 +49,13 @@ public class AdminController {
     public ModelAndView addingStudent(@RequestParam("studentName") String name,
                                       @RequestParam("login") String loginStr,
                                       @RequestParam("password") String password,
-                                      @RequestParam("year") String yearName ) {
+                                      @RequestParam("year") String yearName )throws Exception {
         ModelAndView model = new ModelAndView("add-student");
         Integer login=Integer.parseInt(loginStr);
         Year year=yearRepository.findByName(Integer.parseInt(yearName));
         Student student=new Student(login,password,name,year);
         studentRepository.save(student);
+
         String message = "Студент добавлен";
         model.addObject("message", message);
         return model;
@@ -81,6 +81,27 @@ public class AdminController {
         allObjectTeacher.put("allTeachers", teachers);
         model.addAllObjects(allObjectTeacher);
         model.setViewName("teachers-list");
+        return model;
+    }
+
+    @RequestMapping(value = {"/admin/teachersList/addTeacher"}, method = RequestMethod.GET)
+    public ModelAndView addTeacherPage() {
+        ModelAndView model = new ModelAndView();
+        model.setViewName("add-teacher");
+        return model;
+    }
+
+    @RequestMapping(value = {"/admin/teachersList/addStudent"}, method = RequestMethod.POST)
+    public ModelAndView addingTeacher(@RequestParam("teacherName") String name,
+                                      @RequestParam("login") String loginStr,
+                                      @RequestParam("password") String password
+                                      )throws Exception {
+        ModelAndView model = new ModelAndView("add-teacher");
+        Integer login=Integer.parseInt(loginStr);
+        Teacher teacher=new Teacher(login,password,name);
+        teacherRepository.save(teacher);
+        String message = "Преподаватель добавлен";
+        model.addObject("message", message);
         return model;
     }
 }
