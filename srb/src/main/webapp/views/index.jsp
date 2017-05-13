@@ -47,7 +47,7 @@
             </c:if>
 
             <c:if test="${pageContext.request.isUserInRole('ROLE_STUDENT')}">
-                <div> <h2> Get  <a href="<spring:url value="student/${pageContext.request.userPrincipal.name}" />">student</a> resourse</h2> </div>
+                <div> <h2> Get  <a href="<spring:url value="student" />">student</a> resourse</h2> </div>
             </c:if>
 
             <p>Ваш логин: <sec:authentication property="principal.username" /></p>

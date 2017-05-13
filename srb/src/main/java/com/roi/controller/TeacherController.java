@@ -121,21 +121,4 @@ public class TeacherController {
             throw new ForbiddenException();
         }
     }
-
-
-    @RequestMapping(value = {"/{login}/add-subject"}, method = RequestMethod.GET)
-    public String addSubject(Principal principal,
-                             @PathVariable String login,
-                             @RequestParam("subjectName") String nameOfSubject,
-                             @RequestParam("year") String nameYear) {
-        if (login.equals(principal.getName())) {
-            Year year = yearRepository.findByName(Integer.parseInt(nameYear));
-            Teacher teacher = userService.findByLoginTeacher(principal.getName());
-            Subject subject = new Subject(nameOfSubject, teacher, year);
-            subjectRepository.save(subject);
-            return "redirect:/teacher/{login}";
-        } else {
-            throw new ForbiddenException();
-        }
-    }
 }

@@ -3,8 +3,6 @@
          pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <html>
 <head>
     <meta charset="utf-8">
@@ -12,13 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Преподаватель</title>
-
-    <link href="<c:url value="/views/css/bootstrap.css" />" rel="stylesheet">
-
-    <!-- Custom styles for this template -->
-    <link href="<c:url value="/views/css/jumbotron-narrow.css" />" rel="stylesheet">
-
+    <title>Студент</title>
     <!-- Bootstrap core CSS -->
     <link href="<c:url value="/views/css/bootstrap.css" />" rel="stylesheet">
 
@@ -34,21 +26,19 @@
 <body>
 <div class="container">
     <div class="jumbotron" style="margin-top: 20px;">
-        <h2>Здравствуйте, ${fullName}!</h2>
+        <h2>Оценки курс ${year}</h2>
         <table >
             <tr>
+                <th>Дата</th>
                 <th>Предмет</th>
-                <th>Курс</th>
-
+                <th>Оценка</th>
             </tr>
 
-            <c:forEach var="subject" items="${allSubjects}">
+            <c:forEach var="value" items="${allMarks}">
                 <tr>
-                    <td><c:out value="${subject.name}" /></td>
-
-                    <td><c:out value="${subject.year()}" /></td>
-
-                    <td>  <a href="<spring:url value="${pageContext.request.userPrincipal.name}/${subject.id}" />">оценки</a> </td>
+                    <td><c:out value="${value.date}" /></td>
+                    <td><c:out value="${value.subjectName()}" /></td>
+                    <td><c:out value="${value.value}" /></td>
                 </tr>
             </c:forEach>
         </table>

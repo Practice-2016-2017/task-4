@@ -55,6 +55,10 @@ public class Mark {
         return date;
     }
 
+    public Subject getSubject(){
+     return this.subject;
+    }
+
     public String subjectName() {
         return subject.getName();
     }

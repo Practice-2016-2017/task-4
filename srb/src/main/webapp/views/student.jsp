@@ -3,6 +3,7 @@
          pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <html>
 <head>
     <meta charset="utf-8">
@@ -28,24 +29,12 @@
     <div class="jumbotron" style="margin-top: 20px;">
         <h2>Здравствуйте, ${fullName}!</h2>
         <h2>Оценки</h2>
-        <table >
-            <tr>
-                <th>Дата</th>
-                <th>Предмет</th>
-                <th>Оценка</th>
-            </tr>
 
-            <c:forEach var="value" items="${allMarks}">
-                <tr>
+        <c:forEach var="i" begin="1" end="${year}">
 
+               <a href="<spring:url value="/student/marks/${i}" />">Курс ${i}</a>
 
-                    <td><c:out value="${value.date}" /></td>
-                    <td><c:out value="${value.subjectName()}" /></td>
-                    <td><c:out value="${value.value}" /></td>
-                </tr>
-            </c:forEach>
-        </table>
-
+        </c:forEach>
         <p>Ваш логин: <sec:authentication property="principal.username" /></p>
         <p><a class="btn btn-lg btn-danger" href="<c:url value="/logout" />" role="button">Выйти</a></p>
 
