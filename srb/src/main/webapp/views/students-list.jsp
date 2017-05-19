@@ -42,6 +42,8 @@
                     <td><c:out value="${student.year()}" /></td>
 
                     <td>  <a href="<spring:url value="/admin/studentsList/edit/${student.id}" />">Редактировать</a> </td>
+
+                    <td>  <a href="<spring:url value="/admin/studentsList/delete/${student.id}" />">Удалить</a> </td>
                 </tr>
             </c:forEach>
         </table>

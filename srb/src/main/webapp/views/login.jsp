@@ -31,7 +31,7 @@
 <div class="container" style="width: 300px;">
     <c:url value="/login" var="loginUrl" />
     <form action="${loginUrl}" method="post">
-        <h2 class="form-signin-heading">Please sign in</h2>
+        <h2 class="form-signin-heading">Пожалуйста, войдите</h2>
         <input type="text" class="form-control" name="username" placeholder="Логин" >
         <input type="password" class="form-control" name="password" placeholder="Пароль" >
         <button class="btn btn-lg btn-primary btn-block" type="submit">Войти</button>

@@ -2,11 +2,10 @@ package com.roi.controller;
 
 
 import com.roi.entity.Student;
+import com.roi.entity.Subject;
 import com.roi.entity.Teacher;
 import com.roi.entity.Year;
-import com.roi.repository.StudentRepository;
-import com.roi.repository.TeacherRepository;
-import com.roi.repository.YearRepository;
+import com.roi.repository.*;
 import com.roi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,16 +20,21 @@ import java.util.Map;
 
 @Controller
 public class AdminController {
-    @Autowired
-    private UserService userService;
 
     @Autowired
     private StudentRepository studentRepository;
 
     @Autowired
     private TeacherRepository teacherRepository;
+
     @Autowired
     private YearRepository yearRepository;
+
+    @Autowired
+    private MarkRepository markRepository;
+
+    @Autowired
+    private SubjectRepository subjectRepository;
 
     @RequestMapping(value = {"/admin"}, method = RequestMethod.GET)
     public ModelAndView adminPage() {
@@ -62,7 +66,7 @@ public class AdminController {
     public ModelAndView addingStudent(@RequestParam("studentName") String name,
                                       @RequestParam("login") String loginStr,
                                       @RequestParam("password") String password,
-                                      @RequestParam("year") String yearName )throws Exception {
+                                      @RequestParam("year") String yearName ) {
         ModelAndView model = new ModelAndView("add-student");
         Integer login=Integer.parseInt(loginStr);
         Year year=yearRepository.findByName(Integer.parseInt(yearName));
@@ -93,7 +97,7 @@ public class AdminController {
                                     @RequestParam("studentName") String name,
                                     @RequestParam("login") String loginStr,
                                     @RequestParam("password") String password,
-                                    @RequestParam("year") String yearName )throws Exception {
+                                    @RequestParam("year") String yearName ){
         Integer login=Integer.parseInt(loginStr);
         Year year=yearRepository.findByName(Integer.parseInt(yearName));
         Student student=studentRepository.findOne(id);
@@ -105,6 +109,28 @@ public class AdminController {
         return "redirect:/admin/studentsList";
     }
 
+    @RequestMapping(value = {"/admin/studentsList/delete/{id}"}, method = RequestMethod.GET)
+    public ModelAndView deleteStudentPage(@PathVariable Integer id) {
+        ModelAndView model = new ModelAndView();
+        Student student=studentRepository.findOne(id);
+        model.addObject("id",id);
+        model.addObject("studentName",student.getName());
+        model.addObject("login",student.getLogin());
+        model.addObject("password", student.getPassword());
+        model.addObject("year",student.year());
+        model.setViewName("delete-student");
+        return model;
+    }
+
+
+
+    @RequestMapping(value = {"/admin/studentsList/delete/{id}"}, method = RequestMethod.POST)
+    public String deleteStudent(@PathVariable Integer id){
+        Student student=studentRepository.findOne(id);
+        markRepository.removeByStudent(student);
+        studentRepository.removeById(id);
+        return "redirect:/admin/studentsList";
+    }
 
 
     @RequestMapping(value = {"/admin/teachersList"}, method = RequestMethod.GET)
@@ -130,7 +156,7 @@ public class AdminController {
     public ModelAndView addingTeacher(@RequestParam("teacherName") String name,
                                       @RequestParam("login") String loginStr,
                                       @RequestParam("password") String password
-                                      )throws Exception {
+                                      ){
         ModelAndView model = new ModelAndView("add-teacher");
         Integer login=Integer.parseInt(loginStr);
         Teacher teacher=new Teacher(login,password,name);
@@ -156,7 +182,7 @@ public class AdminController {
     public String editTeacher(@PathVariable Integer id,
                                     @RequestParam("teacherName") String name,
                                     @RequestParam("login") String loginStr,
-                                    @RequestParam("password") String password)throws Exception {
+                                    @RequestParam("password") String password) {
         Integer login=Integer.parseInt(loginStr);
         Teacher teacher=teacherRepository.findOne(id);
         teacher.setLogin(login);
@@ -165,4 +191,30 @@ public class AdminController {
         teacherRepository.save(teacher);
         return "redirect:/admin/teachersList";
     }
+
+    @RequestMapping(value = {"/admin/teachersList/delete/{id}"}, method = RequestMethod.GET)
+    public ModelAndView deleteTeacherPage(@PathVariable Integer id) {
+        ModelAndView model = new ModelAndView();
+        Teacher teacher=teacherRepository.findOne(id);
+        model.addObject("id",id);
+        model.addObject("teacherName",teacher.getName());
+        model.addObject("login",teacher.getLogin());
+        model.addObject("password", teacher.getPassword());
+        model.setViewName("delete-teacher");
+        return model;
+    }
+
+    @RequestMapping(value = {"/admin/teachersList/delete/{id}"}, method = RequestMethod.POST)
+    public String deleteTeacher(@PathVariable Integer id){
+        Teacher teacher=teacherRepository.findById(id);
+        List<Subject> subjectList=subjectRepository.findByTeacher(teacher);
+
+        for(Subject s: subjectList){
+            s.setTeacher(null);
+            subjectRepository.save(s);
+        }
+        teacherRepository.removeById(id);
+        return "redirect:/admin/studentsList";
+    }
+
 }

@@ -28,6 +28,10 @@
 <body>
 <div class="container">
     <div class="jumbotron" style="margin-top: 20px;">
+        <form:form action="${pageContext.request.contextPath}/admin/teachersList/delete/${id}" method="post" >
+            <input type="submit" value="Удалить студента" />
+        </form:form>
+
 
         <form:form action="${pageContext.request.contextPath}/admin/teachersList/edit/${id}" method="post" >
 
@@ -44,13 +48,9 @@
                 <tr>
                     <td><input type="text" name="password" value="${password}" placeholder="Password" required/></td>
                 </tr>
-
-                <tr>
-                    <td><input type="submit" value="Подтвердить" /></td>
-                    <td></td>
-                </tr>
                 </tbody>
             </table>
+            <input type="submit" value="Подтвердить" />
         </form:form>
 
         <p>Ваш логин: <sec:authentication property="principal.username" /></p>

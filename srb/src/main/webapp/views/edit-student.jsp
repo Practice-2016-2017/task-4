@@ -28,6 +28,9 @@
 <body>
 <div class="container">
     <div class="jumbotron" style="margin-top: 20px;">
+      <form:form action="${pageContext.request.contextPath}/admin/studentsList/delete/${id}" method="post" >
+          <input type="submit" value="Удалить студента" />
+      </form:form>
 
         <form:form action="${pageContext.request.contextPath}/admin/studentsList/edit/${id}" method="post" >
 
@@ -47,18 +50,24 @@
                 <tr>
                     <td> <select name="year" >
                         <option value="${year}"selected>${year}</option>
+                        <c:if test = "${year} !=1}">
                         <option  value="1"  >1 </option>
-                        <option  value="2" >2 </option>
-                        <option  value="3" >3 </option>
-                        <option  value="4" >4 </option>
+                        </c:if>
+                        <c:if test = "${year} !=2}">
+                            <option  value="2"  >2 </option>
+                        </c:if>
+                        <c:if test = "${year} !=3}">
+                            <option  value="3"  >3 </option>
+                        </c:if>
+                        <c:if test = "${year} !=4}">
+                            <option  value="4"  >4 </option>
+                        </c:if>
                     </select></td>
-                </tr>
-                <tr>
-                    <td><input type="submit" value="Подтвердить" /></td>
-                    <td></td>
                 </tr>
                 </tbody>
             </table>
+
+         <input type="submit" value="Подтвердить" />
         </form:form>
 
         <p>Ваш логин: <sec:authentication property="principal.username" /></p>

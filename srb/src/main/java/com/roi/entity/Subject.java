@@ -15,7 +15,7 @@ public class Subject {
     private String name;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade =CascadeType.MERGE)
-    @JoinColumn(name = "Teacher_idTeacher", nullable = false)
+    @JoinColumn(name = "Teacher_idTeacher", nullable = true)
     private Teacher teacher;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
@@ -41,6 +41,12 @@ public class Subject {
     }
     public void setName(String name) {
         this.name = name;
+    }
+    public Teacher getTeacher(){
+        return this.teacher;
+    }
+    public  void setTeacher(Teacher teacher){
+        this.teacher=teacher;
     }
 
     public String year() {
