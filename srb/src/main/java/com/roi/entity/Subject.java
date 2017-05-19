@@ -36,12 +36,14 @@ public class Subject {
     public Integer getId() {
         return id;
     }
+
     public String getName() {
         return name;
     }
     public void setName(String name) {
         this.name = name;
     }
+
     public Teacher getTeacher(){
         return this.teacher;
     }
@@ -49,8 +51,14 @@ public class Subject {
         this.teacher=teacher;
     }
 
-    public String year() {
-        return year.getName().toString();
+    public Year getYear(){
+     return this.year;
     }
+
+    public void setYear(Year year){
+        this.year=year;
+    }
+
+
 
 }

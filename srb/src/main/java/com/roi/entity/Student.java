@@ -60,14 +60,10 @@ public class Student {
     public void setYear(Year year) {
         this.year=year;
     }
-
     public Year getYear() {
         return this.year;
     }
 
-    public String year() {
-        return year.getName().toString();
-    }
     public String getName() {
         return name;
     }

@@ -74,7 +74,7 @@ public class TeacherController {
             ModelAndView model = new ModelAndView();
             Subject subject = subjectRepository.findOne(subjectId);
             model.addObject("Subject", subject);
-            String yearOfSubject = subject.year();
+            String yearOfSubject = subject.getYear().getName().toString();
 
             Year year = yearRepository.findByName(Integer.parseInt(yearOfSubject));
             List<Student> studentList = userService.getYearStudents(year);

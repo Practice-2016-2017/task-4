@@ -27,27 +27,36 @@
 <body>
 <div class="container">
     <div class="jumbotron" style="margin-top: 20px;">
-        <h2>Список студентов</h2>
+        <h2>Список предметов</h2>
         <table >
             <tr>
-                <th>Студент</th>
+                <th>Предмет</th>
                 <th>Курс</th>
+                <th>Преподаватель</th>
 
             </tr>
 
-            <c:forEach var="student" items="${allStudents}">
+            <c:forEach var="subject" items="${allSubjects}">
                 <tr>
-                    <td><c:out value="${student.name}" /></td>
+                    <td><c:out value="${subject.name}" /></td>
 
-                    <td><c:out value="${student.year.name}" /></td>
+                    <td><c:out value="${subject.year.name}" /></td>
 
-                    <td>  <a href="<spring:url value="/admin/studentsList/edit/${student.id}" />">Редактировать</a> </td>
+                    <c:if test = "${subject.teacher !=null}">
+                    <td><c:out value="${subject.teacher.name}" /></td>
+                    </c:if>
 
-                    <td>  <a href="<spring:url value="/admin/studentsList/delete/${student.id}" />">Удалить</a> </td>
+                    <c:if test = "${subject.teacher ==null}">
+                        <td><c:out value="Отсутствует" /></td>
+                    </c:if>
+
+                    <td>  <a href="<spring:url value="/admin/subjectsList/edit/${subject.id}" />">Редактировать</a> </td>
+
+                    <td>  <a href="<spring:url value="/admin/subjectsList/delete/${subject.id}" />">Удалить</a> </td>
                 </tr>
             </c:forEach>
         </table>
-        <a href="<spring:url value="/admin/studentsList/addStudent" />">Добавить студента</a>
+        <a href="<spring:url value="/admin/subjectsList/addSubject" />">Добавить предмет</a>
 
         <p>Ваш логин: <sec:authentication property="principal.username" /></p>
         <p><a class="btn btn-lg btn-danger" href="<c:url value="/logout" />" role="button">Выйти</a></p>

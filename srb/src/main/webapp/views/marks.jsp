@@ -34,7 +34,7 @@
 <body>
 <div class="container">
     <div class="jumbotron" style="margin-top: 20px;">
-        <h2> ${Subject.name}, курс ${Subject.year()}</h2>
+        <h2> ${Subject.name}, курс ${Subject.year.name}</h2>
         <table >
             <tr>
                 <th>Дата</th>

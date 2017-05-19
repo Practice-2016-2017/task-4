@@ -87,7 +87,7 @@ public class AdminController {
         model.addObject("studentName",student.getName());
         model.addObject("login",student.getLogin());
         model.addObject("password", student.getPassword());
-        model.addObject("year",student.year());
+        model.addObject("year",student.getYear().getName().toString());
         model.setViewName("edit-student");
         return model;
     }
@@ -117,7 +117,7 @@ public class AdminController {
         model.addObject("studentName",student.getName());
         model.addObject("login",student.getLogin());
         model.addObject("password", student.getPassword());
-        model.addObject("year",student.year());
+        model.addObject("year",student.getYear().getName().toString());
         model.setViewName("delete-student");
         return model;
     }
@@ -216,5 +216,62 @@ public class AdminController {
         teacherRepository.removeById(id);
         return "redirect:/admin/studentsList";
     }
+
+
+    @RequestMapping(value = {"/admin/subjectsList"}, method = RequestMethod.GET)
+    public ModelAndView subjectsListPage() {
+        ModelAndView model = new ModelAndView();
+        List<Subject> subjects =subjectRepository.findAll();
+        Map<String, Object> allObjectSubjects = new HashMap<String, Object>();
+        allObjectSubjects.put("allSubjects", subjects);
+        model.addAllObjects(allObjectSubjects);
+        model.setViewName("subjects-list");
+        return model;
+    }
+
+    @RequestMapping(value = {"/admin/subjectsList/edit/{id}"}, method = RequestMethod.GET)
+    public ModelAndView editSubjectPage(@PathVariable Integer id) {
+        ModelAndView model = new ModelAndView();
+        Subject subject=subjectRepository.findOne(id);
+        model.addObject("id",id);
+        model.addObject("subjectName",subject.getName());
+        model.addObject("year",subject.getYear().getName());
+        model.addObject("teacher",subject.getTeacher());
+
+        List<Teacher> teachers =teacherRepository.findAll();
+        Map<String, Object> allObjectTeacher = new HashMap<String, Object>();
+        allObjectTeacher.put("allTeachers", teachers);
+        model.addAllObjects(allObjectTeacher);
+
+        model.setViewName("edit-subject");
+        return model;
+    }
+
+    @RequestMapping(value = {"/admin/subjectsList/edit/{id}"}, method = RequestMethod.POST)
+    public String editSubject(@PathVariable Integer id,
+                              @RequestParam("subjectName") String name,
+                              @RequestParam("year") String yearName,
+                              @RequestParam("teacher") String idStr){
+
+        Subject subject=subjectRepository.findOne(id);
+        Year year=yearRepository.findByName(Integer.parseInt(yearName));
+
+        Integer idTeacher=Integer.parseInt(idStr);
+        if(idTeacher!=-1) {
+            Teacher teacher = teacherRepository.findById(idTeacher);
+            subject.setTeacher(teacher);
+        }
+        else {
+            subject.setTeacher(null);
+        }
+
+        subject.setName(name);
+        subject.setYear(year);
+
+        subjectRepository.save(subject);
+        return "redirect:/admin/subjectsList";
+    }
+
+
 
 }

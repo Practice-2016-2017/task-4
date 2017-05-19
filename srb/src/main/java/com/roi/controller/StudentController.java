@@ -50,7 +50,7 @@ public class StudentController {
 
         for(Mark mark:marks){
          Subject subject=mark.getSubject();
-         if (subject.year().equals(year.toString())){
+         if (subject.getYear().getName().toString().equals(year.toString())){
              marksYear.add(mark);
          }
         }
