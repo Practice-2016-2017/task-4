@@ -12,7 +12,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Добавить преподавателя</title>
+    <title>Добавить предмет</title>
     <!-- Bootstrap core CSS -->
     <link href="<c:url value="/views/css/bootstrap.css" />" rel="stylesheet">
 
@@ -29,20 +29,34 @@
 <div class="container">
     <div class="jumbotron" style="margin-top: 20px;">
 
-        <form:form action="${pageContext.request.contextPath}/admin/teachersList/addTeacher" method="post" >
+        <form:form action="${pageContext.request.contextPath}/admin/subjectsList/addSubject" method="post" >
             <h2>${message}</h2>
+
             <table>
                 <tbody>
                 <tr>
-                    <td><input type="text" name="teacherName" placeholder="Имя" /></td>
+                    <td><input type="text" name="subjectName" placeholder="Имя" /></td>
                 </tr>
 
                 <tr>
-                    <td><input type="number" name="login" placeholder="Login" /></td>
+                    <td> <select name="year">
+                        <option  value="1" >1 </option>
+                        <option  value="2" >2 </option>
+                        <option  value="3" >3 </option>
+                        <option  value="4" >4 </option>
+                    </select></td>
                 </tr>
 
                 <tr>
-                    <td><input type="text" name="password" placeholder="Password" /></td>
+                    <td> <select name="teacher" >
+
+                        <c:forEach var="t" items="${allTeachers}">
+                                <option  value="${t.id}"  > ${t.name} </option>
+                        </c:forEach>
+
+                        <option  value="-1"  > Отсутствует </option>
+
+                    </select></td>
                 </tr>
 
                 </tbody>
@@ -56,6 +70,3 @@
 
     </div>
 </div>
-
-</body>
-</html>

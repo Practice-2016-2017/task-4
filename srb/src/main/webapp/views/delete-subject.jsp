@@ -12,7 +12,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Добавить преподавателя</title>
+    <title>Удалить студента</title>
     <!-- Bootstrap core CSS -->
     <link href="<c:url value="/views/css/bootstrap.css" />" rel="stylesheet">
 
@@ -28,29 +28,22 @@
 <body>
 <div class="container">
     <div class="jumbotron" style="margin-top: 20px;">
+        <h2 >Вы уверены?</h2>
 
-        <form:form action="${pageContext.request.contextPath}/admin/teachersList/addTeacher" method="post" >
-            <h2>${message}</h2>
-            <table>
-                <tbody>
-                <tr>
-                    <td><input type="text" name="teacherName" placeholder="Имя" /></td>
-                </tr>
+        <p>Предмет: ${subjectName}</p>
+        <p>Курс: ${year} </p>
 
-                <tr>
-                    <td><input type="number" name="login" placeholder="Login" /></td>
-                </tr>
+        <c:if test = "${teacher !=null}">
+            <p>Преподаватель: ${teacher.name} </p>
+        </c:if>
 
-                <tr>
-                    <td><input type="text" name="password" placeholder="Password" /></td>
-                </tr>
+        <c:if test = "${teacher ==null}">
+            <p>Преподаватель: Отсутствует </p>
+        </c:if>
 
-                </tbody>
-            </table>
-
-            <input type="submit" value="Добавить" />
+        <form:form action="${pageContext.request.contextPath}/admin/studentsList/delete/${id}" method="post" >
+            <input type="submit" value="Удалить предмет" />
         </form:form>
-
         <p>Ваш логин: <sec:authentication property="principal.username" /></p>
         <p><a class="btn btn-lg btn-danger" href="<c:url value="/logout" />" role="button">Выйти</a></p>
 

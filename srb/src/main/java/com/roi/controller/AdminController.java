@@ -1,10 +1,7 @@
 package com.roi.controller;
 
 
-import com.roi.entity.Student;
-import com.roi.entity.Subject;
-import com.roi.entity.Teacher;
-import com.roi.entity.Year;
+import com.roi.entity.*;
 import com.roi.repository.*;
 import com.roi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +33,7 @@ public class AdminController {
     @Autowired
     private SubjectRepository subjectRepository;
 
+    //Страница админа
     @RequestMapping(value = {"/admin"}, method = RequestMethod.GET)
     public ModelAndView adminPage() {
         ModelAndView model = new ModelAndView();
@@ -43,6 +41,7 @@ public class AdminController {
         return model;
     }
 
+    //Список студентов
     @RequestMapping(value = {"/admin/studentsList"}, method = RequestMethod.GET)
     public ModelAndView studentsListPage() {
         ModelAndView model = new ModelAndView();
@@ -53,6 +52,8 @@ public class AdminController {
         model.setViewName("students-list");
         return model;
     }
+
+    //Добавление студента
 
     @RequestMapping(value = {"/admin/studentsList/addStudent"}, method = RequestMethod.GET)
     public ModelAndView addStudentPage() {
@@ -78,6 +79,7 @@ public class AdminController {
         return model;
     }
 
+    //Редактирование студента
 
     @RequestMapping(value = {"/admin/studentsList/edit/{id}"}, method = RequestMethod.GET)
     public ModelAndView editStudentPage(@PathVariable Integer id) {
@@ -109,6 +111,9 @@ public class AdminController {
         return "redirect:/admin/studentsList";
     }
 
+
+    //Удаление студента
+
     @RequestMapping(value = {"/admin/studentsList/delete/{id}"}, method = RequestMethod.GET)
     public ModelAndView deleteStudentPage(@PathVariable Integer id) {
         ModelAndView model = new ModelAndView();
@@ -133,6 +138,7 @@ public class AdminController {
     }
 
 
+    //Список преподавателей
     @RequestMapping(value = {"/admin/teachersList"}, method = RequestMethod.GET)
     public ModelAndView teachersListPage() {
         ModelAndView model = new ModelAndView();
@@ -143,6 +149,8 @@ public class AdminController {
         model.setViewName("teachers-list");
         return model;
     }
+
+    //Добавление преподавателя
 
     @RequestMapping(value = {"/admin/teachersList/addTeacher"}, method = RequestMethod.GET)
     public ModelAndView addTeacherPage() {
@@ -165,6 +173,8 @@ public class AdminController {
         model.addObject("message", message);
         return model;
     }
+
+    //Редактирование преподавателя
 
     @RequestMapping(value = {"/admin/teachersList/edit/{id}"}, method = RequestMethod.GET)
     public ModelAndView editTeacherPage(@PathVariable Integer id) {
@@ -192,6 +202,8 @@ public class AdminController {
         return "redirect:/admin/teachersList";
     }
 
+    //Удаление преподавателя
+
     @RequestMapping(value = {"/admin/teachersList/delete/{id}"}, method = RequestMethod.GET)
     public ModelAndView deleteTeacherPage(@PathVariable Integer id) {
         ModelAndView model = new ModelAndView();
@@ -217,7 +229,7 @@ public class AdminController {
         return "redirect:/admin/studentsList";
     }
 
-
+    //Список предметов
     @RequestMapping(value = {"/admin/subjectsList"}, method = RequestMethod.GET)
     public ModelAndView subjectsListPage() {
         ModelAndView model = new ModelAndView();
@@ -228,6 +240,8 @@ public class AdminController {
         model.setViewName("subjects-list");
         return model;
     }
+
+    //Редактирование предмета
 
     @RequestMapping(value = {"/admin/subjectsList/edit/{id}"}, method = RequestMethod.GET)
     public ModelAndView editSubjectPage(@PathVariable Integer id) {
@@ -272,6 +286,59 @@ public class AdminController {
         return "redirect:/admin/subjectsList";
     }
 
+    //Добавление предмета
 
+    @RequestMapping(value = {"/admin/subjectsList/addSubject"}, method = RequestMethod.GET)
+    public ModelAndView addSubjectPage() {
+        ModelAndView model = new ModelAndView();
+
+        List<Teacher> teachers =teacherRepository.findAll();
+        Map<String, Object> allObjectTeacher = new HashMap<String, Object>();
+        allObjectTeacher.put("allTeachers", teachers);
+        model.addAllObjects(allObjectTeacher);
+
+        model.setViewName("add-subject");
+        return model;
+    }
+
+    @RequestMapping(value = {"/admin/subjectsList/addSubject"}, method = RequestMethod.POST)
+    public ModelAndView addingSubject(@RequestParam("subjectName") String name,
+                                      @RequestParam("year") String yearName,
+                                      @RequestParam("teacher") String idTeacherStr ) {
+        ModelAndView model = new ModelAndView("add-subject");
+        Year year=yearRepository.findByName(Integer.parseInt(yearName));
+        Integer idTeacher=Integer.parseInt(idTeacherStr);
+        Teacher teacher=null;
+        if(idTeacher!=-1){
+            teacher=teacherRepository.findById(idTeacher);
+        }
+        Subject subject=new Subject(name,teacher,year);
+        subjectRepository.save(subject);
+        String message = "Предмет добавлен";
+        model.addObject("message", message);
+        return model;
+    }
+
+    //Удаление предмета
+
+    @RequestMapping(value = {"/admin/subjectsList/delete/{id}"}, method = RequestMethod.GET)
+    public ModelAndView deleteSubjectPage(@PathVariable Integer id) {
+        ModelAndView model = new ModelAndView();
+        Subject subject=subjectRepository.findOne(id);
+        model.addObject("id",id);
+        model.addObject("subjectName",subject.getName());
+        model.addObject("year", subject.getYear());
+        model.addObject("teacher", subject.getTeacher());
+        model.setViewName("delete-subject");
+        return model;
+    }
+
+    @RequestMapping(value = {"/admin/subjectsList/delete/{id}"}, method = RequestMethod.POST)
+    public String deleteSubject(@PathVariable Integer id){
+        Subject subject=subjectRepository.findOne(id);
+        markRepository.removeBySubject(subject);
+        subjectRepository.removeById(id);
+        return "redirect:/admin/subjectsList";
+    }
 
 }

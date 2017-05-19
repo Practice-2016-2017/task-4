@@ -52,12 +52,10 @@
                         <option  value="4" >4 </option>
                     </select></td>
                 </tr>
-                <tr>
-                    <td><input type="submit" value="Добавить" /></td>
-                    <td></td>
-                </tr>
+
                 </tbody>
             </table>
+            <input type="submit" value="Добавить" />
         </form:form>
 
         <p>Ваш логин: <sec:authentication property="principal.username" /></p>
