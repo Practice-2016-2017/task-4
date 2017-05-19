@@ -28,10 +28,6 @@
 <body>
 <div class="container">
     <div class="jumbotron" style="margin-top: 20px;">
-        <form:form action="${pageContext.request.contextPath}/admin/teachersList/delete/${id}" method="post" >
-            <input type="submit" value="Удалить студента" />
-        </form:form>
-
 
         <form:form action="${pageContext.request.contextPath}/admin/teachersList/edit/${id}" method="post" >
 

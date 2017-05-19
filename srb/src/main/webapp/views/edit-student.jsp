@@ -28,9 +28,6 @@
 <body>
 <div class="container">
     <div class="jumbotron" style="margin-top: 20px;">
-      <form:form action="${pageContext.request.contextPath}/admin/studentsList/delete/${id}" method="post" >
-          <input type="submit" value="Удалить студента" />
-      </form:form>
 
         <form:form action="${pageContext.request.contextPath}/admin/studentsList/edit/${id}" method="post" >
 
@@ -50,16 +47,20 @@
                 <tr>
                     <td> <select name="year" >
                         <option value="${year}"selected>${year}</option>
-                        <c:if test = "${year} !=1}">
+
+                        <c:if test = "${year !=1}">
                         <option  value="1"  >1 </option>
                         </c:if>
-                        <c:if test = "${year} !=2}">
+
+                        <c:if test = "${year !=2}">
                             <option  value="2"  >2 </option>
                         </c:if>
-                        <c:if test = "${year} !=3}">
+
+                        <c:if test = "${year !=3}">
                             <option  value="3"  >3 </option>
                         </c:if>
-                        <c:if test = "${year} !=4}">
+
+                        <c:if test = "${year !=4}">
                             <option  value="4"  >4 </option>
                         </c:if>
                     </select></td>
