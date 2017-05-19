@@ -122,7 +122,7 @@ public class AdminController {
         model.addObject("studentName",student.getName());
         model.addObject("login",student.getLogin());
         model.addObject("password", student.getPassword());
-        model.addObject("year",student.getYear().getName().toString());
+        model.addObject("year",student.getYear());
         model.setViewName("delete-student");
         return model;
     }

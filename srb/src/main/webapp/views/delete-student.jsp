@@ -33,7 +33,7 @@
         <p>Имя: ${studentName}</p>
         <p>Логин: ${login} </p>
         <p>Пароль: ${password} </p>
-        <p>Курс: ${year} </p>
+        <p>Курс: ${year.name} </p>
 
         <form:form action="${pageContext.request.contextPath}/admin/studentsList/delete/${id}" method="post" >
             <input type="submit" value="Удалить студента" />
