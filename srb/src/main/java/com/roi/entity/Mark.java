@@ -55,8 +55,15 @@ public class Mark {
         return date;
     }
 
+    public void setStudent(Student student){
+        this.student=student;
+    }
     public Subject getSubject(){
      return this.subject;
+    }
+
+    public Student getStudent(){
+        return this.student;
     }
 
     public String subjectName() {

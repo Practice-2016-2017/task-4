@@ -12,7 +12,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Оценки</title>
+    <title>Изменить оценку</title>
 
     <link href="<c:url value="/views/css/bootstrap.css" />" rel="stylesheet">
 
@@ -34,51 +34,54 @@
 <body>
 <div class="container">
     <div class="jumbotron" style="margin-top: 20px;">
-        <h2> ${Subject.name}, курс ${Subject.year.name}</h2>
-        <table >
-            <tr>
-                <th>Дата</th>
-                <th>Студент</th>
-                <th>Оценка</th>
+        <h3>Изменение оценки: ${subject.name}, курс ${subject.year.name}</h3>
 
-            </tr>
-
-            <c:forEach var="mark" items="${allMarks}">
-                <tr>
-                    <td><c:out value="${mark.date}" /></td>
-                    <td><c:out value="${mark.studentName()}" /></td>
-                    <td><c:out value="${mark.value}" /></td>
-                </tr>
-            </c:forEach>
-        </table>
-
-        <form:form action="${pageContext.request.contextPath}/teacher/${pageContext.request.userPrincipal.name}/${Subject.id}/add-mark" method="get" >
+        <form:form action="${pageContext.request.contextPath}/teacher/${pageContext.request.userPrincipal.name}/${subject.id}/edit-mark/${mark.id}" method="post" >
 
             <table>
                 <tbody>
                 <tr>
-                    <td><input type="date" name="date" /></td>
+                    <td><input type="date" name="date" value="${date}" /></td>
                 </tr>
                 <tr>
                     <td>
                         <select name="studentName">
-                        <c:forEach items="${allYearStudents}" var="student">
-                            <option  value="${student.name}" >${student.name} </option>
-                        </c:forEach>
-                    </select>
+                            <option value="${student.name}"selected>${student.name}</option>
+
+                            <c:forEach items="${allYearStudents}" var="st">
+                                <c:if test = "${st.id !=student.id}">
+                                    <option  value="${st.name}" >${st.name} </option>
+                                </c:if>
+                            </c:forEach>
+
+                        </select>
                     </td>
                 </tr>
                 <tr>
                     <td> <select name="mark">
-                        <option  value="2" >2 </option>
-                        <option  value="3" >3 </option>
-                        <option  value="4" >4 </option>
-                        <option  value="5" >5 </option>
+
+                        <option value="${mark.value}"selected>${mark.value}</option>
+
+                        <c:if test = "${mark.value !=2}">
+                            <option  value="2"  >2 </option>
+                        </c:if>
+
+                        <c:if test = "${mark.value !=3}">
+                            <option  value="3"  >3 </option>
+                        </c:if>
+
+                        <c:if test = "${mark.value !=4}">
+                            <option  value="4"  >4 </option>
+                        </c:if>
+
+                        <c:if test = "${mark.value !=5}">
+                            <option  value="5"  >5 </option>
+                        </c:if>
                     </select>
                     </td>
                 </tr>
                 <tr>
-                    <td><input type="submit" value="Добавить" /></td>
+                    <td><input type="submit" value="Подтвердить" /></td>
                     <td></td>
                 </tr>
                 </tbody>

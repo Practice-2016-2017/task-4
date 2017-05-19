@@ -16,4 +16,7 @@ public interface MarkRepository extends JpaRepository<Mark, Integer> {
 
     @Transactional
     void  removeBySubject(Subject subject);
+
+    @Transactional
+    void  removeById(Integer id);
 }

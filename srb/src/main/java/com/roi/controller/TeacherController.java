@@ -42,6 +42,7 @@ public class TeacherController {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private java.util.Date dateUtil;
 
+    //Страница учителя с ссылками на предметы, которые он ведет
     @RequestMapping(value = {"/{login}"})
     public ModelAndView teacherPage(@PathVariable String login, Principal principal) {
         if (login.equals(principal.getName())) {
@@ -49,6 +50,7 @@ public class TeacherController {
             ModelAndView model = new ModelAndView();
             String name = principal.getName();
             Teacher teacher = userService.findByLoginTeacher(name);
+
             List<Subject> subjects = userService.getTeacherSubjects(teacher);
             Map<String, Object> allObjectSubject = new HashMap<String, Object>();
             allObjectSubject.put("allSubjects", subjects);
@@ -58,7 +60,7 @@ public class TeacherController {
             String userName = userService.findByLoginTeacher(name).getName();
             model.addObject("fullName", userName);
 
-            model.setViewName("teacher");
+            model.setViewName("teacher-page/teacher");
             return model;
         } else {
             throw new ForbiddenException();
@@ -66,6 +68,7 @@ public class TeacherController {
 
     }
 
+    //Страница предмета с оценками по нему
     @RequestMapping(value = {"/{login}/{subjectId}"})
     public ModelAndView markPage(Principal principal,
                                  @PathVariable String login,
@@ -87,13 +90,14 @@ public class TeacherController {
             Map<String, Object> allSubjectMark = new HashMap<String, Object>();
             allSubjectMark.put("allMarks", markList);
             model.addAllObjects(allSubjectMark);
-            model.setViewName("marks");
+            model.setViewName("teacher-page/teachers-marks");
             return model;
         } else {
             throw new ForbiddenException();
         }
     }
 
+    //Добавление оценки по определенному предмету
     @RequestMapping(value = {"/{login}/{subjectId}/add-mark"}, method = RequestMethod.GET)
     public String addMark(Principal principal,
                           @PathVariable String login,
@@ -116,6 +120,84 @@ public class TeacherController {
             } catch (java.text.ParseException e) {
                 e.printStackTrace();
             }
+            return "redirect:/teacher/{login}/{subjectId}";
+        } else {
+            throw new ForbiddenException();
+        }
+    }
+
+    //Удаление оценки
+    @RequestMapping(value = {"/{login}/{subjectId}/delete-mark/{id}"}, method = RequestMethod.GET)
+    public String deleteMark(Principal principal,
+                          @PathVariable String login,
+                          @PathVariable Integer subjectId,
+                          @PathVariable Integer id) {
+        if (login.equals(principal.getName())) {
+            markRepository.removeById(id);
+            return "redirect:/teacher/{login}/{subjectId}";
+        } else {
+            throw new ForbiddenException();
+        }
+    }
+
+    //Редактирование определенной оценки
+    @RequestMapping(value = {"/{login}/{subjectId}/edit-mark/{id}"}, method = RequestMethod.GET)
+    public ModelAndView editMark(Principal principal,
+                          @PathVariable String login,
+                          @PathVariable Integer subjectId,
+                          @PathVariable Integer id) {
+        if (login.equals(principal.getName())) {
+            ModelAndView model = new ModelAndView();
+            Mark mark=markRepository.findOne(id);
+            Subject subject=subjectRepository.findOne(subjectId);
+            Student student=mark.getStudent();
+            Date date=mark.getDate();
+
+            model.addObject("date", date);
+            model.addObject("subject", subject);
+            model.addObject("student", student);
+            model.addObject("mark", mark);
+
+            Year year = subject.getYear();
+            List<Student> studentList = userService.getYearStudents(year);
+            Map<String, Object> allStudents = new HashMap<String, Object>();
+            allStudents.put("allYearStudents", studentList);
+            model.addAllObjects(allStudents);
+
+            model.setViewName("teacher-page/edit-mark");
+            return model;
+        } else {
+            throw new ForbiddenException();
+        }
+    }
+
+    @RequestMapping(value = {"/{login}/{subjectId}/edit-mark/{id}"}, method = RequestMethod.POST)
+    public String editSubject(Principal principal,
+                              @PathVariable String login,
+                              @PathVariable Integer subjectId,
+                              @PathVariable Integer id,
+                              @RequestParam("date") String dateStr,
+                              @RequestParam("studentName") String studentName,
+                              @RequestParam("mark") String markValueStr) {
+        if (login.equals(principal.getName())) {
+            try {
+                Mark mark = markRepository.findOne(id);
+
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                dateUtil = format.parse(dateStr);
+                Date dateSQL = new Date(dateUtil.getTime());
+                Integer markValue = Integer.parseInt(markValueStr);
+                Student student = studentRepository.findByName(studentName);
+
+                mark.setDate(dateSQL);
+                mark.setStudent(student);
+                mark.setValue(markValue);
+
+                markRepository.save(mark);
+            } catch (java.text.ParseException e) {
+                e.printStackTrace();
+            }
+
             return "redirect:/teacher/{login}/{subjectId}";
         } else {
             throw new ForbiddenException();

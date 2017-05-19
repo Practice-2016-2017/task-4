@@ -4,8 +4,6 @@ import com.roi.entity.Mark;
 import com.roi.entity.Student;
 import com.roi.entity.Subject;
 import com.roi.entity.Year;
-import com.roi.repository.SubjectRepository;
-import com.roi.repository.YearRepository;
 import com.roi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,21 +24,21 @@ public class StudentController {
     @Autowired
     private UserService userService;
 
-
+    //Страница студента с ссылками на оценки по курсам, на которых учился студент (<= текущего курса)
     @RequestMapping(value = {"/student"}, method = RequestMethod.GET)
     public ModelAndView studentPage(Principal principal) {
         ModelAndView model = new ModelAndView();
         String name = principal.getName();
         Student student= userService.findByLoginStudent(name);
         Year year=student.getYear();
-        String userName = userService.findByLoginStudent(name).getName();
+        String userName =student.getName();
         model.addObject("fullName", userName);
         model.addObject("year", year.getName());
-        model.setViewName("student");
+        model.setViewName("student-page/student");
         return model;
     }
 
-
+    //Оценки, полученные на курсе
     @RequestMapping(value = {"/student/marks/{year}"}, method = RequestMethod.GET)
     public ModelAndView studentMarksPage(Principal principal, @PathVariable Integer year) {
         ModelAndView model = new ModelAndView();
@@ -50,7 +48,7 @@ public class StudentController {
 
         for(Mark mark:marks){
          Subject subject=mark.getSubject();
-         if (subject.getYear().getName().toString().equals(year.toString())){
+         if (subject.getYear().getName().equals(year)){
              marksYear.add(mark);
          }
         }
@@ -61,7 +59,7 @@ public class StudentController {
         model.addAllObjects(allObjectMark);
         String userName=userService.findByLoginStudent(name).getName();
         model.addObject("fullName", userName);
-        model.setViewName("students-marks");
+        model.setViewName("student-page/students-marks");
         return model;
     }
 }
