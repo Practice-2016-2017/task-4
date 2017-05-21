@@ -28,7 +28,7 @@
 <div class="container">
     <div class="jumbotron" style="margin-top: 20px;">
         <h2>Список преподавателей</h2>
-        <table >
+        <table class="table table-bordered">
             <tr>
                 <th>Преподаватель</th>
             </tr>
