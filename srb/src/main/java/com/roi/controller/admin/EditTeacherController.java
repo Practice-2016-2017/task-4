@@ -4,6 +4,7 @@ package com.roi.controller.admin;
 import com.roi.entity.Subject;
 import com.roi.entity.Teacher;
 import com.roi.repository.*;
+import com.roi.service.SessionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +20,9 @@ import java.util.Map;
 @Controller
 @RequestMapping("/admin/teachersList")
 public class EditTeacherController {
+    @Autowired
+    private SessionUtils sessionUtils;
+
 
     @Autowired
     private TeacherRepository teacherRepository;
@@ -108,6 +112,7 @@ public class EditTeacherController {
     @RequestMapping(value = {"/delete/{id}"}, method = RequestMethod.POST)
     public String deleteTeacher(@PathVariable Integer id){
         Teacher teacher=teacherRepository.findById(id);
+        sessionUtils.expireUserSessions("te"+teacher.getLogin());
         List<Subject> subjectList=subjectRepository.findByTeacher(teacher);
 
         for(Subject s: subjectList){
