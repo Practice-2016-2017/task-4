@@ -3,6 +3,7 @@
          pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <html>
 <head>
     <meta charset="utf-8">
@@ -44,8 +45,8 @@
         </table>
 
         <p>Ваш логин: <sec:authentication property="principal.username" /></p>
-        <p><a href="<c:url value="/student" />" class="btn btn-primary btn-lg active" role="button">Назад</a>
-        <p><a class="btn btn-lg btn-danger" href="<c:url value="/logout" />" role="button">Выйти</a></p>
+        <p><a href="<spring:url value="/student" />" class="btn btn-primary btn-lg active" role="button">Назад</a>
+           <a class="btn btn-lg btn-danger" href="<c:url value="/logout" />" role="button">Выйти</a></p>
 
     </div>
 </div>

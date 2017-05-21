@@ -48,7 +48,7 @@
 
                     <td><c:out value="${subject.year.name}" /></td>
 
-                    <td>  <a href="<spring:url value="${pageContext.request.userPrincipal.name}/${subject.id}" />">Оценки</a> </td>
+                    <td>  <a href="<spring:url value="/teacher/${subject.id}" />">Оценки</a> </td>
                 </tr>
             </c:forEach>
         </table>

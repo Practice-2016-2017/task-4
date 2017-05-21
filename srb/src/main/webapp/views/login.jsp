@@ -30,13 +30,30 @@
 
 <div class="container" style="width: 300px;">
     <c:url value="/login" var="loginUrl" />
-    <form action="${loginUrl}" method="post">
-        <h2 class="form-signin-heading">Пожалуйста, войдите</h2>
+
+    <form action="${loginUrl}" method="post" class="form-signin">
+
+        <div class="form-group ${error != null ? 'has-error' : ''}">
+
+            <c:if test = "${message !=null}">
+                <div class="alert alert-success" style="width: 285px; margin: 0px auto;" role="alert">
+                    <p>${message}</p>
+                </div>
+            </c:if>
+
+            <c:if test = "${error !=null}">
+                <div class="alert alert-danger" style="width: 285px; margin: 0px auto;" role="alert">
+                    <p>${error}</p>
+                </div>
+            </c:if>
+         <p></p>
         <input type="text" class="form-control" name="username" placeholder="Логин" >
         <input type="password" class="form-control" name="password" placeholder="Пароль" >
         <button class="btn btn-lg btn-primary btn-block" type="submit">Войти</button>
+
+
+      </div>
     </form>
 </div>
-
 </body>
 </html>

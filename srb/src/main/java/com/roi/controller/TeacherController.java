@@ -21,7 +21,6 @@ import java.util.Map;
 
 
 @Controller
-@RequestMapping(value = {"/teacher"})
 public class TeacherController {
 
     @Autowired
@@ -43,9 +42,8 @@ public class TeacherController {
     private java.util.Date dateUtil;
 
     //Страница учителя с ссылками на предметы, которые он ведет
-    @RequestMapping(value = {"/{login}"})
-    public ModelAndView teacherPage(@PathVariable String login, Principal principal) {
-        if (login.equals(principal.getName())) {
+    @RequestMapping(value = {"/teacher"})
+    public ModelAndView teacherPage(Principal principal) {
 
             ModelAndView model = new ModelAndView();
             String name = principal.getName();
@@ -62,18 +60,13 @@ public class TeacherController {
 
             model.setViewName("teacher-page/teacher");
             return model;
-        } else {
-            throw new ForbiddenException();
-        }
-
     }
 
     //Страница предмета с оценками по нему
-    @RequestMapping(value = {"/{login}/{subjectId}"})
+    @RequestMapping(value = {"/teacher/{subjectId}"})
     public ModelAndView markPage(Principal principal,
-                                 @PathVariable String login,
                                  @PathVariable Integer subjectId) {
-        if (login.equals(principal.getName())) {
+        if (userService.ifSubjectContainTeacher(subjectId,principal.getName())) {
             ModelAndView model = new ModelAndView();
             Subject subject = subjectRepository.findOne(subjectId);
             model.addObject("Subject", subject);
@@ -93,19 +86,18 @@ public class TeacherController {
             model.setViewName("teacher-page/teachers-marks");
             return model;
         } else {
-            throw new ForbiddenException();
+            throw new NotFoundException();
         }
     }
 
     //Добавление оценки по определенному предмету
-    @RequestMapping(value = {"/{login}/{subjectId}/add-mark"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/teacher/{subjectId}/add-mark"}, method = RequestMethod.GET)
     public String addMark(Principal principal,
-                          @PathVariable String login,
                           @PathVariable Integer subjectId,
                           @RequestParam("date") String dateStr,
                           @RequestParam("studentName") String studentName,
                           @RequestParam("mark") String markValueStr) {
-        if (login.equals(principal.getName())) {
+        if (userService.ifSubjectContainTeacher(subjectId,principal.getName())) {
             try {
                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
                 dateUtil = format.parse(dateStr);
@@ -122,31 +114,31 @@ public class TeacherController {
             }
             return "redirect:/teacher/{login}/{subjectId}";
         } else {
-            throw new ForbiddenException();
+            throw new NotFoundException();
         }
     }
 
     //Удаление оценки
-    @RequestMapping(value = {"/{login}/{subjectId}/delete-mark/{id}"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/teacher/{subjectId}/delete-mark/{id}"}, method = RequestMethod.GET)
     public String deleteMark(Principal principal,
-                          @PathVariable String login,
-                          @PathVariable Integer subjectId,
-                          @PathVariable Integer id) {
-        if (login.equals(principal.getName())) {
+                             @PathVariable Integer subjectId,
+                             @PathVariable Integer id) {
+        if (userService.ifSubjectContainTeacher(subjectId,principal.getName())&&
+            userService.ifMarkOfSubject(id,subjectId)) {
             markRepository.removeById(id);
-            return "redirect:/teacher/{login}/{subjectId}";
+            return "redirect:/teacher/{subjectId}";
         } else {
-            throw new ForbiddenException();
+            throw new NotFoundException();
         }
     }
 
     //Редактирование определенной оценки
-    @RequestMapping(value = {"/{login}/{subjectId}/edit-mark/{id}"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/teacher/{subjectId}/edit-mark/{id}"}, method = RequestMethod.GET)
     public ModelAndView editMark(Principal principal,
-                          @PathVariable String login,
-                          @PathVariable Integer subjectId,
-                          @PathVariable Integer id) {
-        if (login.equals(principal.getName())) {
+                                 @PathVariable Integer subjectId,
+                                 @PathVariable Integer id) {
+        if (userService.ifSubjectContainTeacher(subjectId,principal.getName())&&
+                userService.ifMarkOfSubject(id,subjectId)) {
             ModelAndView model = new ModelAndView();
             Mark mark=markRepository.findOne(id);
             Subject subject=subjectRepository.findOne(subjectId);
@@ -166,12 +158,12 @@ public class TeacherController {
 
             model.setViewName("teacher-page/edit-mark");
             return model;
-        } else {
-            throw new ForbiddenException();
-        }
+           } else {
+               throw new NotFoundException();
+           }
     }
 
-    @RequestMapping(value = {"/{login}/{subjectId}/edit-mark/{id}"}, method = RequestMethod.POST)
+    @RequestMapping(value = {"/teacher/{subjectId}/edit-mark/{id}"}, method = RequestMethod.POST)
     public String editSubject(Principal principal,
                               @PathVariable String login,
                               @PathVariable Integer subjectId,
@@ -179,7 +171,8 @@ public class TeacherController {
                               @RequestParam("date") String dateStr,
                               @RequestParam("studentName") String studentName,
                               @RequestParam("mark") String markValueStr) {
-        if (login.equals(principal.getName())) {
+        if (userService.ifSubjectContainTeacher(subjectId,principal.getName())&&
+            userService.ifMarkOfSubject(id,subjectId)) {
             try {
                 Mark mark = markRepository.findOne(id);
 
@@ -198,9 +191,9 @@ public class TeacherController {
                 e.printStackTrace();
             }
 
-            return "redirect:/teacher/{login}/{subjectId}";
+            return "redirect:/teacher/{subjectId}";
         } else {
-            throw new ForbiddenException();
+            throw new NotFoundException();
         }
     }
 }

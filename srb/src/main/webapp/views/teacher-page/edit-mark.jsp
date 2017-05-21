@@ -36,7 +36,7 @@
     <div class="jumbotron" style="margin-top: 20px;">
         <h3>Изменение оценки: ${subject.name}, курс ${subject.year.name}</h3>
 
-        <form:form action="${pageContext.request.contextPath}/teacher/${pageContext.request.userPrincipal.name}/${subject.id}/edit-mark/${mark.id}" method="post" >
+        <form:form action="${pageContext.request.contextPath}/teacher/${subject.id}/edit-mark/${mark.id}" method="post" >
 
             <table>
                 <tbody>
@@ -89,7 +89,7 @@
         </form:form>
 
         <p>Ваш логин: <sec:authentication property="principal.username" /></p>
-        <p><a href="<c:url value="/teacher/${pageContext.request.userPrincipal.name}/${subject.id}" />" class="btn btn-primary btn-lg active" role="button">Назад</a>
+        <p><a href="<c:url value="/teacher/${subject.id}" />" class="btn btn-primary btn-lg active" role="button">Назад</a>
         <a class="btn btn-lg btn-danger" href="<c:url value="/logout" />" role="button">Выйти</a></p>
 
     </div>

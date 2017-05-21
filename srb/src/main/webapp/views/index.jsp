@@ -43,7 +43,7 @@
                 <div> <h2> Вы вошли как  <a href="<spring:url value="admin" />">администратор</a> </h2> </div>
             </c:if>
             <c:if test="${pageContext.request.isUserInRole('ROLE_TEACHER')}">
-                <div> <h2> Вы вошли как  <a href="<spring:url value="teacher/${pageContext.request.userPrincipal.name}" />">преподаватель</a> </h2> </div>
+                <div> <h2> Вы вошли как  <a href="<spring:url value="teacher" />">преподаватель</a> </h2> </div>
             </c:if>
 
             <c:if test="${pageContext.request.isUserInRole('ROLE_STUDENT')}">

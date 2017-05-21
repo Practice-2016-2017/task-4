@@ -48,13 +48,13 @@
                     <td><c:out value="${mark.date}" /></td>
                     <td><c:out value="${mark.studentName()}" /></td>
                     <td><c:out value="${mark.value}" /></td>
-                    <td>  <a href="<spring:url value="/teacher/${pageContext.request.userPrincipal.name}/${Subject.id}/edit-mark/${mark.id}" />">Редактировать</a> </td>
-                    <td>  <a href="<spring:url value="/teacher/${pageContext.request.userPrincipal.name}/${Subject.id}/delete-mark/${mark.id}" />">Удалить</a> </td>
+                    <td>  <a href="<spring:url value="/teacher/${Subject.id}/edit-mark/${mark.id}" />">Редактировать</a> </td>
+                    <td>  <a href="<spring:url value="/teacher/${Subject.id}/delete-mark/${mark.id}" />">Удалить</a> </td>
                 </tr>
             </c:forEach>
         </table>
 
-        <form:form action="${pageContext.request.contextPath}/teacher/${pageContext.request.userPrincipal.name}/${Subject.id}/add-mark" method="get" >
+        <form:form action="${pageContext.request.contextPath}/teacher/${Subject.id}/add-mark" method="get" >
 
             <table>
                 <tbody>
@@ -88,7 +88,7 @@
         </form:form>
 
         <p>Ваш логин: <sec:authentication property="principal.username" /></p>
-        <p><a href="<c:url value="/teacher/${pageContext.request.userPrincipal.name}" />" class="btn btn-primary btn-lg active" role="button">Назад</a>
+        <p><a href="<c:url value="/teacher" />" class="btn btn-primary btn-lg active" role="button">Назад</a>
         <a class="btn btn-lg btn-danger" href="<c:url value="/logout" />" role="button">Выйти</a></p>
 
     </div>

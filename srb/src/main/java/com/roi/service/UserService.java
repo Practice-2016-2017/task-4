@@ -30,6 +30,16 @@ public class UserService {
 
    public List<Subject> getTeacherSubjects (Teacher teacher) {return subjectRepository.findByTeacher(teacher);}
 
+   public boolean ifSubjectContainTeacher(Integer id, String name){
+       Integer login =Integer.parseInt(name.replaceAll("te",""));
+       Subject subject=subjectRepository.findOne(id);
+       return subject.getTeacher().getLogin().equals(login);
+   }
+
+    public boolean ifMarkOfSubject(Integer idMark, Integer idSubject){
+        Mark mark=markRepository.findOne(idMark);
+        return mark.getSubject().getId().equals(idSubject);
+    }
    public Student findByLoginStudent(String name) {
       Integer login=Integer.parseInt(name.replaceAll("st",""));
       return studentRepository.findByLogin(login);}

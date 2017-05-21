@@ -49,7 +49,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
         http.authorizeRequests()
-                .antMatchers("/studentName/**").access("hasRole('ROLE_STUDENT')")
+                .antMatchers("/student/**").access("hasRole('ROLE_STUDENT')")
                 .antMatchers("/teacher/**").access("hasRole('ROLE_TEACHER')")
                 .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
                 .anyRequest().authenticated();
@@ -74,14 +74,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .maxSessionsPreventsLogin(true)
                 .sessionRegistry(sessionRegistry());
 
-
         http.logout()
                 .permitAll()
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/login?logout")
                 .invalidateHttpSession(true);
-
-
     }
 
     @Bean
