@@ -35,7 +35,7 @@
 <div class="container">
     <div class="jumbotron" style="margin-top: 20px;">
         <h2>Здравствуйте, ${fullName}!</h2>
-        <table >
+        <table class="table table-bordered">
             <tr>
                 <th>Предмет</th>
                 <th>Курс</th>
@@ -48,7 +48,7 @@
 
                     <td><c:out value="${subject.year.name}" /></td>
 
-                    <td>  <a href="<spring:url value="${pageContext.request.userPrincipal.name}/${subject.id}" />">оценки</a> </td>
+                    <td>  <a href="<spring:url value="${pageContext.request.userPrincipal.name}/${subject.id}" />">Оценки</a> </td>
                 </tr>
             </c:forEach>
         </table>

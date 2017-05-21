@@ -27,7 +27,7 @@
 <div class="container">
     <div class="jumbotron" style="margin-top: 20px;">
         <h2>Оценки курс ${year}</h2>
-        <table >
+        <table class="table table-bordered">
             <tr>
                 <th>Дата</th>
                 <th>Предмет</th>
@@ -44,6 +44,7 @@
         </table>
 
         <p>Ваш логин: <sec:authentication property="principal.username" /></p>
+        <p><a href="<c:url value="/student" />" class="btn btn-primary btn-lg active" role="button">Назад</a>
         <p><a class="btn btn-lg btn-danger" href="<c:url value="/logout" />" role="button">Выйти</a></p>
 
     </div>

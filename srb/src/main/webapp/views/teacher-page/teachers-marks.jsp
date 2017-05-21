@@ -35,7 +35,7 @@
 <div class="container">
     <div class="jumbotron" style="margin-top: 20px;">
         <h2> ${Subject.name}, курс ${Subject.year.name}</h2>
-        <table >
+        <table class="table table-bordered">
             <tr>
                 <th>Дата</th>
                 <th>Студент</th>
@@ -88,7 +88,8 @@
         </form:form>
 
         <p>Ваш логин: <sec:authentication property="principal.username" /></p>
-        <p><a class="btn btn-lg btn-danger" href="<c:url value="/logout" />" role="button">Выйти</a></p>
+        <p><a href="<c:url value="/teacher/${pageContext.request.userPrincipal.name}" />" class="btn btn-primary btn-lg active" role="button">Назад</a>
+        <a class="btn btn-lg btn-danger" href="<c:url value="/logout" />" role="button">Выйти</a></p>
 
     </div>
 </div>

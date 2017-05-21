@@ -50,7 +50,8 @@
         <a href="<spring:url value="/admin/studentsList/addStudent" />">Добавить студента</a>
 
         <p>Ваш логин: <sec:authentication property="principal.username" /></p>
-        <p><a class="btn btn-lg btn-danger" href="<c:url value="/logout" />" role="button">Выйти</a></p>
+        <p><a href="<c:url value="/admin" />" class="btn btn-primary btn-lg active" role="button">Назад</a>
+        <a class="btn btn-lg btn-danger" href="<c:url value="/logout" />" role="button">Выйти</a></p>
 
     </div>
 </div>

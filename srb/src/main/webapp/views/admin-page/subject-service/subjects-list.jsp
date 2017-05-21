@@ -28,7 +28,7 @@
 <div class="container">
     <div class="jumbotron" style="margin-top: 20px;">
         <h2>Список предметов</h2>
-        <table >
+        <table class="table table-bordered">
             <tr>
                 <th>Предмет</th>
                 <th>Курс</th>
@@ -59,7 +59,8 @@
         <a href="<spring:url value="/admin/subjectsList/addSubject" />">Добавить предмет</a>
 
         <p>Ваш логин: <sec:authentication property="principal.username" /></p>
-        <p><a class="btn btn-lg btn-danger" href="<c:url value="/logout" />" role="button">Выйти</a></p>
+        <p><a href="<c:url value="/admin" />" class="btn btn-primary btn-lg active" role="button">Назад</a>
+        <a class="btn btn-lg btn-danger" href="<c:url value="/logout" />" role="button">Выйти</a></p>
 
     </div>
 </div>
