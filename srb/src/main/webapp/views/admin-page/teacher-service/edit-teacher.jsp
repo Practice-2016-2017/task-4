@@ -30,6 +30,11 @@
     <div class="jumbotron" style="margin-top: 20px;">
 
         <form:form action="${pageContext.request.contextPath}/admin/teachersList/edit/${teacher.id}" method="post" >
+            <c:if test = "${error !=null}">
+                <div class="alert alert-danger" style="width: 285px; margin: 0px auto;" role="alert">
+                    <p>${error}</p>
+                </div>
+            </c:if>
 
             <table>
                 <tbody>
@@ -50,7 +55,7 @@
         </form:form>
 
         <p>Ваш логин: <sec:authentication property="principal.username" /></p>
-        <p><a href="<c:url value="/admin/teachersList" />" class="btn btn-primary btn-lg active" role="button">Назад</a>
+        <p><a href="<c:url value="/admin/teachersList" />" class="btn btn-primary btn-lg" role="button">Назад</a>
         <a class="btn btn-lg btn-danger" href="<c:url value="/logout" />" role="button">Выйти</a></p>
 
     </div>

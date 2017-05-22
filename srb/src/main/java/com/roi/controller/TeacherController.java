@@ -22,6 +22,8 @@ import java.util.Map;
 
 @Controller
 public class TeacherController {
+    @Autowired
+    private MainController mainController;
 
     @Autowired
     private UserService userService;
@@ -66,7 +68,8 @@ public class TeacherController {
     @RequestMapping(value = {"/teacher/{subjectId}"})
     public ModelAndView markPage(Principal principal,
                                  @PathVariable Integer subjectId) {
-        if (userService.ifSubjectContainTeacher(subjectId,principal.getName())) {
+        if (subjectRepository.exists(subjectId)&&
+            userService.ifSubjectContainTeacher(subjectId,principal.getName())) {
             ModelAndView model = new ModelAndView();
             Subject subject = subjectRepository.findOne(subjectId);
             model.addObject("Subject", subject);
@@ -86,7 +89,7 @@ public class TeacherController {
             model.setViewName("teacher-page/teachers-marks");
             return model;
         } else {
-            throw new NotFoundException();
+            return mainController.errorPage();
         }
     }
 
@@ -97,7 +100,9 @@ public class TeacherController {
                           @RequestParam("date") String dateStr,
                           @RequestParam("studentId") Integer studentId,
                           @RequestParam("mark") String markValueStr) {
-        if (userService.ifSubjectContainTeacher(subjectId,principal.getName())) {
+        if (subjectRepository.exists(subjectId)&&
+            userService.ifSubjectContainTeacher(subjectId,principal.getName())&&
+            studentRepository.exists(studentId)) {
             try {
                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
                 dateUtil = format.parse(dateStr);
@@ -114,7 +119,7 @@ public class TeacherController {
             }
             return "redirect:/teacher/{subjectId}";
         } else {
-            throw new NotFoundException();
+            return "error";
         }
     }
 
@@ -123,12 +128,13 @@ public class TeacherController {
     public String deleteMark(Principal principal,
                              @PathVariable Integer subjectId,
                              @PathVariable Integer id) {
-        if (userService.ifSubjectContainTeacher(subjectId,principal.getName())&&
+        if (markRepository.exists(id)&&
+            userService.ifSubjectContainTeacher(subjectId,principal.getName())&&
             userService.ifMarkOfSubject(id,subjectId)) {
             markRepository.removeById(id);
             return "redirect:/teacher/{subjectId}";
         } else {
-            throw new NotFoundException();
+            return "error";
         }
     }
 
@@ -137,8 +143,10 @@ public class TeacherController {
     public ModelAndView editMark(Principal principal,
                                  @PathVariable Integer subjectId,
                                  @PathVariable Integer id) {
-      if (userService.ifSubjectContainTeacher(subjectId,principal.getName())&&
-                userService.ifMarkOfSubject(id,subjectId)) {
+        if (markRepository.exists(id)&&
+            userService.ifSubjectContainTeacher(subjectId,principal.getName())&&
+            userService.ifMarkOfSubject(id,subjectId)) {
+
             ModelAndView model = new ModelAndView();
             Mark mark=markRepository.findOne(id);
             Subject subject=subjectRepository.findOne(subjectId);
@@ -158,8 +166,9 @@ public class TeacherController {
 
             model.setViewName("teacher-page/edit-mark");
             return model;
+
            } else {
-               throw new NotFoundException();
+             return mainController.errorPage();
            }
     }
 
@@ -170,8 +179,9 @@ public class TeacherController {
                               @RequestParam("date") String dateStr,
                               @RequestParam("studentId") Integer studentId,
                               @RequestParam("mark") String markValueStr) {
-      if (userService.ifSubjectContainTeacher(subjectId,principal.getName())&&
-            userService.ifMarkOfSubject(id,subjectId)) {
+      if (markRepository.exists(id)&&
+          userService.ifSubjectContainTeacher(subjectId,principal.getName())&&
+          userService.ifMarkOfSubject(id,subjectId)) {
             try {
                 Mark mark = markRepository.findOne(id);
 
@@ -192,7 +202,7 @@ public class TeacherController {
 
             return "redirect:/teacher/{subjectId}";
       } else {
-            throw new NotFoundException();
+            return "error";
         }
     }
 }

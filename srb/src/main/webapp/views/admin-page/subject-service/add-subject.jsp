@@ -42,7 +42,7 @@
         </c:if>
 
         <form:form action="${pageContext.request.contextPath}/admin/subjectsList/addSubject" method="post" >
-            <h2>${message}</h2>
+
 
             <table>
                 <tbody>
@@ -78,7 +78,7 @@
         </form:form>
 
         <p>Ваш логин: <sec:authentication property="principal.username" /></p>
-        <p><a href="<c:url value="/admin/subjectsList" />" class="btn btn-primary btn-lg active" role="button">Назад</a>
+        <p><a href="<c:url value="/admin/subjectsList" />" class="btn btn-primary btn-lg" role="button">Назад</a>
         <a class="btn btn-lg btn-danger" href="<c:url value="/logout" />" role="button">Выйти</a></p>
 
     </div>

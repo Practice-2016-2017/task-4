@@ -1,5 +1,6 @@
 package com.roi.controller.admin;
 
+import com.roi.controller.MainController;
 import com.roi.entity.Subject;
 import com.roi.entity.Teacher;
 import com.roi.entity.Year;
@@ -22,6 +23,9 @@ import java.util.Map;
 @Controller
 @RequestMapping("/admin/subjectsList")
 public class EditSubjectController {
+
+    @Autowired
+    private MainController mainController;
 
     @Autowired
     private TeacherRepository teacherRepository;
@@ -53,22 +57,24 @@ public class EditSubjectController {
 
     @RequestMapping(value = {"/edit/{id}"}, method = RequestMethod.GET)
     public ModelAndView editSubjectPage(@PathVariable Integer id) {
-        ModelAndView model = new ModelAndView();
-        Subject subject=subjectRepository.findOne(id);
+        if(subjectRepository.exists(id)) {
+            ModelAndView model = new ModelAndView();
+            Subject subject = subjectRepository.findOne(id);
 
-        model.addObject("id",id);
-        model.addObject("subjectName",subject.getName());
-        model.addObject("year",subject.getYear().getName());
-        model.addObject("teacher",subject.getTeacher());
+            model.addObject("id", id);
+            model.addObject("subjectName", subject.getName());
+            model.addObject("year", subject.getYear().getName());
+            model.addObject("teacher", subject.getTeacher());
 
-        List<Teacher> teachers =teacherRepository.findAll();
-        Map<String, Object> allObjectTeacher = new HashMap<String, Object>();
-        allObjectTeacher.put("allTeachers", teachers);
-        model.addAllObjects(allObjectTeacher);
-        model.addObject("error",ERROR_MESSAGE);
-        ERROR_MESSAGE=null;
-        model.setViewName("admin-page/subject-service/edit-subject");
-        return model;
+            List<Teacher> teachers = teacherRepository.findAll();
+            Map<String, Object> allObjectTeacher = new HashMap<String, Object>();
+            allObjectTeacher.put("allTeachers", teachers);
+            model.addAllObjects(allObjectTeacher);
+            model.addObject("error", ERROR_MESSAGE);
+            ERROR_MESSAGE = null;
+            model.setViewName("admin-page/subject-service/edit-subject");
+            return model;
+        }else return mainController.errorPage();
     }
 
     @RequestMapping(value = {"/edit/{id}"}, method = RequestMethod.POST)
@@ -76,27 +82,28 @@ public class EditSubjectController {
                               @RequestParam("subjectName") String name,
                               @RequestParam("year") String yearName,
                               @RequestParam("teacher") String idStr){
-
-        Subject subject=subjectRepository.findOne(id);
-        Year year=yearRepository.findByName(Integer.parseInt(yearName));
-        Integer idTeacher=Integer.parseInt(idStr);
-        Teacher teacher = teacherRepository.findById(idTeacher);
-        if(subjectRepository.findByNameAndYearAndTeacher(name,year,teacher)!=null&&
-           subjectRepository.findByNameAndYearAndTeacher(name,year,teacher).getId().equals(id)
-           ||subjectRepository.findByNameAndYear(name,year)==null) {
-           if(idTeacher!=-1) {
-                subject.setTeacher(teacher);
+        if(subjectRepository.exists(id)) {
+            Subject subject = subjectRepository.findOne(id);
+            Year year = yearRepository.findByName(Integer.parseInt(yearName));
+            Integer idTeacher = Integer.parseInt(idStr);
+            Teacher teacher = teacherRepository.findById(idTeacher);
+            if (subjectRepository.findByNameAndYearAndTeacher(name, year, teacher) != null &&
+                    subjectRepository.findByNameAndYearAndTeacher(name, year, teacher).getId().equals(id)
+                    || subjectRepository.findByNameAndYear(name, year) == null) {
+                if (idTeacher != -1) {
+                    subject.setTeacher(teacher);
+                } else {
+                    subject.setTeacher(null);
+                }
+                subject.setName(name);
+                subject.setYear(year);
+                subjectRepository.save(subject);
+                return "redirect:/admin/subjectsList";
+            } else {
+                ERROR_MESSAGE = "Такой предмет уже существует!";
+                return "redirect:/admin/subjectsList/edit/{id}";
             }
-            else {
-                subject.setTeacher(null);
-            }
-            subject.setName(name);
-            subject.setYear(year);
-            subjectRepository.save(subject);
-            return "redirect:/admin/subjectsList";
-        }else {
-            ERROR_MESSAGE = "Такой предмет уже существует!";
-            return "redirect:/admin/subjectsList/edit/{id}";}
+        } else return "error";
     }
 
     //Добавление предмета
@@ -125,7 +132,13 @@ public class EditSubjectController {
         Teacher teacher=null;
 
         if(idTeacher!=-1){
-            teacher=teacherRepository.findById(idTeacher);
+            if(teacherRepository.exists(idTeacher)) {
+                teacher = teacherRepository.findById(idTeacher);
+            }else {
+                ERROR_MESSAGE="Этот учитель удален! Обновите страницу!";
+                CONFIRM_MESSAGE=null;
+                return "redirect:/admin/subjectsList/addSubject";
+            }
         }
 
         if(subjectRepository.findByNameAndYear(name,year)==null){
@@ -144,23 +157,27 @@ public class EditSubjectController {
 
     @RequestMapping(value = {"/delete/{id}"}, method = RequestMethod.GET)
     public ModelAndView deleteSubjectPage(@PathVariable Integer id) {
-        ModelAndView model = new ModelAndView();
-        Subject subject=subjectRepository.findOne(id);
+        if(subjectRepository.exists(id)) {
+            ModelAndView model = new ModelAndView();
+            Subject subject = subjectRepository.findOne(id);
 
-        model.addObject("id",id);
-        model.addObject("subjectName",subject.getName());
-        model.addObject("year", subject.getYear());
-        model.addObject("teacher", subject.getTeacher());
+            model.addObject("id", id);
+            model.addObject("subjectName", subject.getName());
+            model.addObject("year", subject.getYear());
+            model.addObject("teacher", subject.getTeacher());
 
-        model.setViewName("admin-page/subject-service/delete-subject");
-        return model;
+            model.setViewName("admin-page/subject-service/delete-subject");
+            return model;
+        }else return mainController.errorPage();
     }
 
     @RequestMapping(value = {"/delete/{id}"}, method = RequestMethod.POST)
     public String deleteSubject(@PathVariable Integer id){
-        Subject subject=subjectRepository.findOne(id);
-        markRepository.removeBySubject(subject);
-        subjectRepository.removeById(id);
-        return "redirect:/admin/subjectsList";
+        if(subjectRepository.exists(id)) {
+            Subject subject = subjectRepository.findOne(id);
+            markRepository.removeBySubject(subject);
+            subjectRepository.removeById(id);
+            return "redirect:/admin/subjectsList";
+        } else return "error";
     }
 }

@@ -11,7 +11,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Список студентов</title>
+    <title>Список предметов</title>
     <!-- Bootstrap core CSS -->
     <link href="<c:url value="/views/css/bootstrap.css" />" rel="stylesheet">
 
@@ -59,7 +59,7 @@
         <a href="<spring:url value="/admin/subjectsList/addSubject" />">Добавить предмет</a>
 
         <p>Ваш логин: <sec:authentication property="principal.username" /></p>
-        <p><a href="<c:url value="/admin" />" class="btn btn-primary btn-lg active" role="button">Назад</a>
+        <p><a href="<c:url value="/admin" />" class="btn btn-primary btn-lg" role="button">Назад</a>
         <a class="btn btn-lg btn-danger" href="<c:url value="/logout" />" role="button">Выйти</a></p>
 
     </div>
