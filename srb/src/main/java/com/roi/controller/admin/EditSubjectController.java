@@ -72,14 +72,13 @@ public class EditSubjectController {
                               @RequestParam("subjectName") String name,
                               @RequestParam("year") String yearName,
                               @RequestParam("teacher") String idStr){
-        if(subjectRepository.exists(id)&&!teacherRepository.exists(Integer.parseInt(idStr))) {
+        Integer idTeacher = Integer.parseInt(idStr);
+        if(subjectRepository.exists(id)&&(teacherRepository.exists(idTeacher)||idTeacher.equals(-1))) {
             Subject subject = subjectRepository.findOne(id);
             Year year = yearRepository.findByName(Integer.parseInt(yearName));
-            Integer idTeacher = Integer.parseInt(idStr);
             Teacher teacher = teacherRepository.findById(idTeacher);
-            if (subjectRepository.findByNameAndYearAndTeacher(name, year, teacher) != null &&
-                subjectRepository.findByNameAndYearAndTeacher(name, year, teacher).getId().equals(id)||
-                subjectRepository.findByNameAndYear(name, year) == null) {
+            Subject subject2=subjectRepository.findByNameAndYear(name, year);
+            if (subject2!=null&&subject2.getId().equals(id)||subject2 == null) {
                 if (idTeacher != -1) {
                     subject.setTeacher(teacher);
                 } else {

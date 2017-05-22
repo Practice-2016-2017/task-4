@@ -10,7 +10,6 @@ import java.util.List;
 public interface SubjectRepository extends JpaRepository<Subject, Integer>{
     List<Subject> findByTeacher(Teacher teacher);
     Subject findByNameAndYear(String name, Year year);
-    Subject findByNameAndYearAndTeacher(String name, Year year,Teacher teacher);
     @Transactional
     void removeById(Integer id);
 }

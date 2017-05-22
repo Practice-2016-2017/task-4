@@ -58,15 +58,20 @@
                     <td> <select name="teacher" >
 
                         <c:if test = "${subject.teacher !=null}">
-                        <option value="${subject.teacher.id}" selected>${subject.teacher.name}</option>                       </c:if>
+                            <option value="${subject.teacher.id}" selected>${subject.teacher.name}</option>
+                            <option  value="-1"  > Отсутствует </option>
+                        </c:if>
+
+                        <c:if test = "${subject.teacher==null}">
+                            <option  value="-1" selected > Отсутствует </option>
+                        </c:if>
 
                         <c:forEach var="t" items="${allTeachers}">
-                        <c:if test = "${t.id !=subject.teacher.id}">
-                            <option  value="${t.id}"  > ${t.name} </option>
-                        </c:if>
+                          <c:if test = "${t.id!=subject.teacher.id}">
+                              <%-- snip --%>
+                              <option  value="${t.id}"  > ${t.name} </option>
+                           </c:if>
                         </c:forEach>
-
-                        <option  value="-1"  > Отсутствует </option>
 
                     </select></td>
                 </tr>
