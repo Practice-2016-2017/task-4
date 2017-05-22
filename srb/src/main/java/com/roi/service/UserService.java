@@ -5,7 +5,10 @@ import com.roi.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Transactional
@@ -47,7 +50,5 @@ public class UserService {
     public Teacher findByLoginTeacher(String name) {
         Integer login=Integer.parseInt(name.replaceAll("te",""));
         return teacherRepository.findByLogin(login);}
-
-
 
 }

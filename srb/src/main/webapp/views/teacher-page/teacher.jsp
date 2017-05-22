@@ -34,7 +34,7 @@
 <body>
 <div class="container">
     <div class="jumbotron" style="margin-top: 20px;">
-        <h2>Здравствуйте, ${fullName}!</h2>
+        <h2>Здравствуйте, ${teacher.name}!</h2>
         <table class="table table-bordered">
             <tr>
                 <th>Предмет</th>

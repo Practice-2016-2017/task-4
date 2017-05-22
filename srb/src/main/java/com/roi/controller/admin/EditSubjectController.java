@@ -46,9 +46,7 @@ public class EditSubjectController {
     public ModelAndView subjectsListPage() {
         ModelAndView model = new ModelAndView();
         List<Subject> subjects =subjectRepository.findAll();
-        Map<String, Object> allObjectSubjects = new HashMap<String, Object>();
-        allObjectSubjects.put("allSubjects", subjects);
-        model.addAllObjects(allObjectSubjects);
+        model.addObject("allSubjects", subjects);
         model.setViewName("admin-page/subject-service/subjects-list");
         return model;
     }
@@ -59,17 +57,9 @@ public class EditSubjectController {
     public ModelAndView editSubjectPage(@PathVariable Integer id) {
         if(subjectRepository.exists(id)) {
             ModelAndView model = new ModelAndView();
-            Subject subject = subjectRepository.findOne(id);
-
-            model.addObject("id", id);
-            model.addObject("subjectName", subject.getName());
-            model.addObject("year", subject.getYear().getName());
-            model.addObject("teacher", subject.getTeacher());
-
             List<Teacher> teachers = teacherRepository.findAll();
-            Map<String, Object> allObjectTeacher = new HashMap<String, Object>();
-            allObjectTeacher.put("allTeachers", teachers);
-            model.addAllObjects(allObjectTeacher);
+            model.addObject("subject", subjectRepository.findOne(id));
+            model.addObject("allTeachers", teachers);
             model.addObject("error", ERROR_MESSAGE);
             ERROR_MESSAGE = null;
             model.setViewName("admin-page/subject-service/edit-subject");
@@ -82,19 +72,14 @@ public class EditSubjectController {
                               @RequestParam("subjectName") String name,
                               @RequestParam("year") String yearName,
                               @RequestParam("teacher") String idStr){
-        if(subjectRepository.exists(id)) {
+        if(subjectRepository.exists(id)&&!teacherRepository.exists(Integer.parseInt(idStr))) {
             Subject subject = subjectRepository.findOne(id);
             Year year = yearRepository.findByName(Integer.parseInt(yearName));
             Integer idTeacher = Integer.parseInt(idStr);
-            if(!teacherRepository.exists(idTeacher)) {
-                ERROR_MESSAGE="Этот учитель удален! Обновите страницу!";
-                CONFIRM_MESSAGE=null;
-                return "redirect:/admin/subjectsList/edit/{id}";
-            }
             Teacher teacher = teacherRepository.findById(idTeacher);
             if (subjectRepository.findByNameAndYearAndTeacher(name, year, teacher) != null &&
-                    subjectRepository.findByNameAndYearAndTeacher(name, year, teacher).getId().equals(id)
-                    || subjectRepository.findByNameAndYear(name, year) == null) {
+                subjectRepository.findByNameAndYearAndTeacher(name, year, teacher).getId().equals(id)||
+                subjectRepository.findByNameAndYear(name, year) == null) {
                 if (idTeacher != -1) {
                     subject.setTeacher(teacher);
                 } else {
@@ -108,6 +93,7 @@ public class EditSubjectController {
                 ERROR_MESSAGE = "Такой предмет уже существует!";
                 return "redirect:/admin/subjectsList/edit/{id}";
             }
+
         } else return "error";
     }
 
@@ -117,9 +103,7 @@ public class EditSubjectController {
     public ModelAndView addSubjectPage() {
         ModelAndView model = new ModelAndView();
         List<Teacher> teachers =teacherRepository.findAll();
-        Map<String, Object> allObjectTeacher = new HashMap<String, Object>();
-        allObjectTeacher.put("allTeachers", teachers);
-        model.addAllObjects(allObjectTeacher);
+        model.addObject("allTeachers", teachers);
         model.addObject("message", CONFIRM_MESSAGE);
         model.addObject("error", ERROR_MESSAGE);
         ERROR_MESSAGE=null;
@@ -135,7 +119,6 @@ public class EditSubjectController {
         Year year=yearRepository.findByName(Integer.parseInt(yearName));
         Integer idTeacher=Integer.parseInt(idTeacherStr);
         Teacher teacher=null;
-
         if(idTeacher!=-1){
             if(teacherRepository.exists(idTeacher)) {
                 teacher = teacherRepository.findById(idTeacher);
@@ -145,15 +128,14 @@ public class EditSubjectController {
                 return "redirect:/admin/subjectsList/addSubject";
             }
         }
-
         if(subjectRepository.findByNameAndYear(name,year)==null){
-        Subject subject=new Subject(name,teacher,year);
-        subjectRepository.save(subject);
-        CONFIRM_MESSAGE = "Предмет добавлен.";
-        ERROR_MESSAGE=null;
+           Subject subject=new Subject(name,teacher,year);
+           subjectRepository.save(subject);
+           CONFIRM_MESSAGE = "Предмет добавлен.";
+           ERROR_MESSAGE=null;
         } else {
-        ERROR_MESSAGE="Такой предмет уже существует!";
-        CONFIRM_MESSAGE=null;
+           ERROR_MESSAGE="Такой предмет уже существует!";
+           CONFIRM_MESSAGE=null;
         }
         return "redirect:/admin/subjectsList/addSubject";
     }
@@ -164,13 +146,7 @@ public class EditSubjectController {
     public ModelAndView deleteSubjectPage(@PathVariable Integer id) {
         if(subjectRepository.exists(id)) {
             ModelAndView model = new ModelAndView();
-            Subject subject = subjectRepository.findOne(id);
-
-            model.addObject("id", id);
-            model.addObject("subjectName", subject.getName());
-            model.addObject("year", subject.getYear());
-            model.addObject("teacher", subject.getTeacher());
-
+            model.addObject("subject", subjectRepository.findOne(id));
             model.setViewName("admin-page/subject-service/delete-subject");
             return model;
         }else return mainController.errorPage();

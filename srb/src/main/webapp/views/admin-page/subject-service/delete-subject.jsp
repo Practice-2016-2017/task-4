@@ -30,18 +30,18 @@
     <div class="jumbotron" style="margin-top: 20px;">
         <h2 >Вы уверены?</h2>
 
-        <p>Предмет: ${subjectName}</p>
-        <p>Курс: ${year.name} </p>
+        <p>Предмет: ${subject.name}</p>
+        <p>Курс: ${subject.year.name} </p>
 
-        <c:if test = "${teacher !=null}">
-            <p>Преподаватель: ${teacher.name} </p>
+        <c:if test = "${subject.teacher !=null}">
+            <p>Преподаватель: ${subject.teacher.name} </p>
         </c:if>
 
-        <c:if test = "${teacher ==null}">
+        <c:if test = "${subject.teacher ==null}">
             <p>Преподаватель: Отсутствует </p>
         </c:if>
 
-        <form:form action="${pageContext.request.contextPath}/admin/subjectsList/delete/${id}" method="post" >
+        <form:form action="${pageContext.request.contextPath}/admin/subjectsList/delete/${subject.id}" method="post" >
             <input type="submit" value="Удалить предмет" />
         </form:form>
         <p>Ваш логин: <sec:authentication property="principal.username" /></p>

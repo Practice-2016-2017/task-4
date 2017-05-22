@@ -42,9 +42,7 @@ public class EditTeacherController {
     public ModelAndView teachersListPage() {
         ModelAndView model = new ModelAndView();
         List<Teacher> teachers =teacherRepository.findAll();
-        Map<String, Object> allObjectTeacher = new HashMap<String, Object>();
-        allObjectTeacher.put("allTeachers", teachers);
-        model.addAllObjects(allObjectTeacher);
+        model.addObject("allTeachers", teachers);
         model.setViewName("admin-page/teacher-service/teachers-list");
         return model;
     }
@@ -66,15 +64,13 @@ public class EditTeacherController {
         String message=null;
         String error=null;
         Integer login=Integer.parseInt(loginStr);
-
         if(teacherRepository.findByLogin(login)==null){
-        Teacher teacher=new Teacher(login,password,name);
-        teacherRepository.save(teacher);
-        message = "Преподаватель добавлен";
+            Teacher teacher=new Teacher(login,password,name);
+            teacherRepository.save(teacher);
+            message = "Преподаватель добавлен";
         } else{
-        error="Такой логин уже существует!";
+            error="Такой логин уже существует!";
         }
-
         model.addObject("message", message);
         model.addObject("error", error);
         return model;
@@ -104,7 +100,6 @@ public class EditTeacherController {
             Integer login = Integer.parseInt(loginStr);
             Teacher teacher = teacherRepository.findOne(id);
             boolean enable = teacher.getLogin().equals(login) || teacherRepository.findByLogin(login) == null;
-
             if (enable) {
                 teacher.setLogin(login);
                 teacher.setName(name);
@@ -137,12 +132,10 @@ public class EditTeacherController {
             Teacher teacher = teacherRepository.findById(id);
             sessionUtils.expireUserSessions("te" + teacher.getLogin());
             List<Subject> subjectList = subjectRepository.findByTeacher(teacher);
-
             for (Subject s : subjectList) {
                 s.setTeacher(null);
                 subjectRepository.save(s);
             }
-
             teacherRepository.removeById(id);
             return "redirect:/admin/teachersList";
         }else return "error";

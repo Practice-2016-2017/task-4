@@ -42,9 +42,7 @@ public class EditStudentController {
     public ModelAndView studentsListPage() {
         ModelAndView model = new ModelAndView();
         List<Student> students =studentRepository.findAll();
-        Map<String, Object> allObjectStudent = new HashMap<String, Object>();
-        allObjectStudent.put("allStudents", students);
-        model.addAllObjects(allObjectStudent);
+        model.addObject("allStudents", students);
         model.setViewName("admin-page/student-service/students-list");
         return model;
     }
@@ -57,7 +55,6 @@ public class EditStudentController {
         model.setViewName("admin-page/student-service/add-student");
         return model;
     }
-
 
     @RequestMapping(value = {"/addStudent"}, method = RequestMethod.POST)
     public ModelAndView addingStudent(@RequestParam("studentName") String name,

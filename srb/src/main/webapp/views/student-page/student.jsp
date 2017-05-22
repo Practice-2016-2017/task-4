@@ -27,10 +27,10 @@
 <body>
 <div class="container">
     <div class="jumbotron" style="margin-top: 20px;">
-        <h2>Здравствуйте, ${fullName}!</h2>
+        <h2>Здравствуйте, ${student.name}!</h2>
         <h2>Оценки</h2>
 
-        <c:forEach var="i" begin="1" end="${year}">
+        <c:forEach var="i" begin="1" end="${student.year.name}">
 
                <a href="<spring:url value="/student/marks/${i}" />">Курс ${i}</a>
 

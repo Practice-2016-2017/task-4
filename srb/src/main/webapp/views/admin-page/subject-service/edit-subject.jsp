@@ -39,19 +39,17 @@
             <table>
                 <tbody>
                 <tr>
-                    <td><input type="text" name="subjectName" value="${subjectName}" placeholder="Предмет" required /></td>
+                    <td><input type="text" name="subjectName" value="${subject.name}" placeholder="Предмет" required /></td>
                 </tr>
 
 
                 <tr>
                     <td> <select name="year" >
-                        <option value="${year}"selected>${year}</option>
-
+                        <option value="${subject.year.name}"selected>${subject.year.name}</option>
                         <c:forEach var="value" begin="1" end="4">
-                            <c:if test = "${year !=value}">
+                            <c:if test = "${subject.year.name !=value}">
                                 <option  value="${value}" >${value} </option>
                             </c:if>
-
                         </c:forEach>
                     </select></td>
                 </tr>
@@ -59,12 +57,11 @@
                 <tr>
                     <td> <select name="teacher" >
 
-                        <c:if test = "${teacher !=null}">
-                        <option value="${teacher.id}" selected>${teacher.name}</option>
-                        </c:if>
+                        <c:if test = "${subject.teacher !=null}">
+                        <option value="${subject.teacher.id}" selected>${subject.teacher.name}</option>                       </c:if>
 
                         <c:forEach var="t" items="${allTeachers}">
-                        <c:if test = "${t.id !=teacher.id}">
+                        <c:if test = "${t.id !=subject.teacher.id}">
                             <option  value="${t.id}"  > ${t.name} </option>
                         </c:if>
                         </c:forEach>

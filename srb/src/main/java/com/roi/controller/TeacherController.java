@@ -32,9 +32,6 @@ public class TeacherController {
     private SubjectRepository subjectRepository;
 
     @Autowired
-    private YearRepository yearRepository;
-
-    @Autowired
     private StudentRepository studentRepository;
 
     @Autowired
@@ -46,23 +43,15 @@ public class TeacherController {
     //Страница учителя с ссылками на предметы, которые он ведет
     @RequestMapping(value = {"/teacher"})
     public ModelAndView teacherPage(Principal principal) {
-
             ModelAndView model = new ModelAndView();
-            String name = principal.getName();
-            Teacher teacher = userService.findByLoginTeacher(name);
-
+            Teacher teacher = userService.findByLoginTeacher(principal.getName());
             List<Subject> subjects = userService.getTeacherSubjects(teacher);
-            Map<String, Object> allObjectSubject = new HashMap<String, Object>();
-            allObjectSubject.put("allSubjects", subjects);
-            model.addAllObjects(allObjectSubject);
-
-            model.addObject("user", principal.getName());
-            String userName = userService.findByLoginTeacher(name).getName();
-            model.addObject("fullName", userName);
-
+            model.addObject("allSubjects",subjects );
+            model.addObject("teacher",teacher);
             model.setViewName("teacher-page/teacher");
             return model;
     }
+
 
     //Страница предмета с оценками по нему
     @RequestMapping(value = {"/teacher/{subjectId}"})
@@ -72,20 +61,11 @@ public class TeacherController {
             userService.ifSubjectContainTeacher(subjectId,principal.getName())) {
             ModelAndView model = new ModelAndView();
             Subject subject = subjectRepository.findOne(subjectId);
-            model.addObject("Subject", subject);
-            String yearOfSubject = subject.getYear().getName().toString();
-
-            Year year = yearRepository.findByName(Integer.parseInt(yearOfSubject));
-            List<Student> studentList = userService.getYearStudents(year);
-            Map<String, Object> allStudents = new HashMap<String, Object>();
-            allStudents.put("allYearStudents", studentList);
-            model.addAllObjects(allStudents);
-
-
             List<Mark> markList = userService.getSubjectMarks(subject);
-            Map<String, Object> allSubjectMark = new HashMap<String, Object>();
-            allSubjectMark.put("allMarks", markList);
-            model.addAllObjects(allSubjectMark);
+            List<Student> studentList = userService.getYearStudents(subject.getYear());
+            model.addObject("allYearStudents", studentList);
+            model.addObject("allMarks", markList);
+            model.addObject("Subject", subject);
             model.setViewName("teacher-page/teachers-marks");
             return model;
         } else {
@@ -107,12 +87,7 @@ public class TeacherController {
                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
                 dateUtil = format.parse(dateStr);
                 Date dateSQL = new Date(dateUtil.getTime());
-                Subject subject = subjectRepository.findOne(subjectId);
-
-                Integer markValue = Integer.parseInt(markValueStr);
-                Student student = studentRepository.findOne(studentId);
-
-                Mark mark = new Mark(markValue, dateSQL, student, subject);
+                Mark mark = new Mark(Integer.parseInt(markValueStr), dateSQL,  studentRepository.findOne(studentId), subjectRepository.findOne(subjectId));
                 markRepository.save(mark);
             } catch (java.text.ParseException e) {
                 e.printStackTrace();
@@ -146,24 +121,12 @@ public class TeacherController {
         if (markRepository.exists(id)&&
             userService.ifSubjectContainTeacher(subjectId,principal.getName())&&
             userService.ifMarkOfSubject(id,subjectId)) {
-
             ModelAndView model = new ModelAndView();
             Mark mark=markRepository.findOne(id);
             Subject subject=subjectRepository.findOne(subjectId);
-            Student student=mark.getStudent();
-            Date date=mark.getDate();
-            Year year = subject.getYear();
-
-            model.addObject("date", date);
-            model.addObject("subject", subject);
-            model.addObject("student", student);
+            List<Student> studentList = studentRepository.findByYear(subject.getYear());
+            model.addObject("allYearStudents", studentList);
             model.addObject("mark", mark);
-
-            List<Student> studentList = userService.getYearStudents(year);
-            Map<String, Object> allStudents = new HashMap<String, Object>();
-            allStudents.put("allYearStudents", studentList);
-            model.addAllObjects(allStudents);
-
             model.setViewName("teacher-page/edit-mark");
             return model;
 
@@ -184,22 +147,16 @@ public class TeacherController {
           userService.ifMarkOfSubject(id,subjectId)) {
             try {
                 Mark mark = markRepository.findOne(id);
-
                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
                 dateUtil = format.parse(dateStr);
                 Date dateSQL = new Date(dateUtil.getTime());
-                Integer markValue = Integer.parseInt(markValueStr);
-                Student student = studentRepository.findOne(studentId);
-
                 mark.setDate(dateSQL);
-                mark.setStudent(student);
-                mark.setValue(markValue);
-
+                mark.setStudent(studentRepository.findOne(studentId));
+                mark.setValue(Integer.parseInt(markValueStr));
                 markRepository.save(mark);
             } catch (java.text.ParseException e) {
                 e.printStackTrace();
             }
-
             return "redirect:/teacher/{subjectId}";
       } else {
             return "error";

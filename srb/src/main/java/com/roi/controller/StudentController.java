@@ -28,12 +28,8 @@ public class StudentController {
     @RequestMapping(value = {"/student"}, method = RequestMethod.GET)
     public ModelAndView studentPage(Principal principal) {
         ModelAndView model = new ModelAndView();
-        String name = principal.getName();
-        Student student= userService.findByLoginStudent(name);
-        Year year=student.getYear();
-        String userName =student.getName();
-        model.addObject("fullName", userName);
-        model.addObject("year", year.getName());
+        Student student= userService.findByLoginStudent(principal.getName());
+        model.addObject("student", student);
         model.setViewName("student-page/student");
         return model;
     }
@@ -42,7 +38,7 @@ public class StudentController {
     @RequestMapping(value = {"/student/marks/{year}"}, method = RequestMethod.GET)
     public ModelAndView studentMarksPage(Principal principal, @PathVariable Integer year) {
         ModelAndView model = new ModelAndView();
-        String name = principal.getName();
+        String name=principal.getName();
         List<Mark> marks=userService.getStudentMarks(userService.findByLoginStudent(name));
         List<Mark> marksYear=new ArrayList<Mark>();
 
@@ -52,13 +48,9 @@ public class StudentController {
              marksYear.add(mark);
          }
         }
-
+        model.addObject("allMarks", marksYear);
         model.addObject("year", year);
-        Map<String,Object> allObjectMark = new HashMap<String,Object>();
-        allObjectMark.put("allMarks", marksYear);
-        model.addAllObjects(allObjectMark);
-        String userName=userService.findByLoginStudent(name).getName();
-        model.addObject("fullName", userName);
+        model.addObject("fullName", name);
         model.setViewName("student-page/students-marks");
         return model;
     }

@@ -34,22 +34,22 @@
 <body>
 <div class="container">
     <div class="jumbotron" style="margin-top: 20px;">
-        <h3>Изменение оценки: ${subject.name}, курс ${subject.year.name}</h3>
+        <h3>Изменение оценки: ${mark.subject.name}, курс ${mark.subject.year.name}</h3>
 
-        <form:form action="${pageContext.request.contextPath}/teacher/${subject.id}/edit-mark/${mark.id}" method="post" >
+        <form:form action="${pageContext.request.contextPath}/teacher/${mark.subject.id}/edit-mark/${mark.id}" method="post" >
 
             <table>
                 <tbody>
                 <tr>
-                    <td><input type="date" name="date" value="${date}" re/></td>
+                    <td><input type="date" name="date" value="${mark.date}" required/></td>
                 </tr>
                 <tr>
                     <td>
                         <select name="studentId">
-                            <option value="${student.id}"selected>${student.name}</option>
+                            <option value="${mark.student.id}"selected>${mark.student.name}</option>
 
                             <c:forEach items="${allYearStudents}" var="st">
-                                <c:if test = "${st.id !=student.id}">
+                                <c:if test = "${st.id !=mark.student.id}">
                                     <option  value="${st.id}" >${st.name} </option>
                                 </c:if>
                             </c:forEach>
@@ -88,7 +88,7 @@
         </form:form>
 
         <p>Ваш логин: <sec:authentication property="principal.username" /></p>
-        <p><a href="<c:url value="/teacher/${subject.id}" />" class="btn btn-primary btn-lg" role="button">Назад</a>
+        <p><a href="<c:url value="/teacher/${mark.subject.id}" />" class="btn btn-primary btn-lg" role="button">Назад</a>
         <a class="btn btn-lg btn-danger" href="<c:url value="/logout" />" role="button">Выйти</a></p>
 
     </div>
