@@ -86,9 +86,9 @@ public class EditStudentController {
         ModelAndView model = new ModelAndView();
         Student student=studentRepository.findOne(id);
         model.addObject("student",student);
-        model.setViewName("admin-page/student-service/edit-student");
         model.addObject("error",ERROR_MESSAGE);
         ERROR_MESSAGE=null;
+        model.setViewName("admin-page/student-service/edit-student");
         return model;
     }
 

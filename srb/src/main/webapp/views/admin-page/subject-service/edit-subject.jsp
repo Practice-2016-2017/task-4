@@ -28,8 +28,13 @@
 <body>
 <div class="container">
     <div class="jumbotron" style="margin-top: 20px;">
-
         <form:form action="${pageContext.request.contextPath}/admin/subjectsList/edit/${id}" method="post" >
+
+            <c:if test = "${error !=null}">
+                <div class="alert alert-danger" style="width: 285px; margin: 0px auto;" role="alert">
+                    <p>${error}</p>
+                </div>
+            </c:if>
 
             <table>
                 <tbody>

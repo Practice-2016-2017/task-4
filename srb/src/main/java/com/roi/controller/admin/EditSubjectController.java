@@ -35,6 +35,8 @@ public class EditSubjectController {
     @Autowired
     private SubjectRepository subjectRepository;
 
+    private String ERROR_MESSAGE=null;
+    private String CONFIRM_MESSAGE=null;
     //Список предметов
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView subjectsListPage() {
@@ -63,7 +65,8 @@ public class EditSubjectController {
         Map<String, Object> allObjectTeacher = new HashMap<String, Object>();
         allObjectTeacher.put("allTeachers", teachers);
         model.addAllObjects(allObjectTeacher);
-
+        model.addObject("error",ERROR_MESSAGE);
+        ERROR_MESSAGE=null;
         model.setViewName("admin-page/subject-service/edit-subject");
         return model;
     }
@@ -76,21 +79,24 @@ public class EditSubjectController {
 
         Subject subject=subjectRepository.findOne(id);
         Year year=yearRepository.findByName(Integer.parseInt(yearName));
-
         Integer idTeacher=Integer.parseInt(idStr);
-        if(idTeacher!=-1) {
-            Teacher teacher = teacherRepository.findById(idTeacher);
-            subject.setTeacher(teacher);
-        }
-        else {
-            subject.setTeacher(null);
-        }
-
-        subject.setName(name);
-        subject.setYear(year);
-
-        subjectRepository.save(subject);
-        return "redirect:/admin/subjectsList";
+        Teacher teacher = teacherRepository.findById(idTeacher);
+        if(subjectRepository.findByNameAndYearAndTeacher(name,year,teacher)!=null&&
+           subjectRepository.findByNameAndYearAndTeacher(name,year,teacher).getId().equals(id)
+           ||subjectRepository.findByNameAndYear(name,year)==null) {
+           if(idTeacher!=-1) {
+                subject.setTeacher(teacher);
+            }
+            else {
+                subject.setTeacher(null);
+            }
+            subject.setName(name);
+            subject.setYear(year);
+            subjectRepository.save(subject);
+            return "redirect:/admin/subjectsList";
+        }else {
+            ERROR_MESSAGE = "Такой предмет уже существует!";
+            return "redirect:/admin/subjectsList/edit/{id}";}
     }
 
     //Добавление предмета
@@ -98,21 +104,22 @@ public class EditSubjectController {
     @RequestMapping(value = {"/addSubject"}, method = RequestMethod.GET)
     public ModelAndView addSubjectPage() {
         ModelAndView model = new ModelAndView();
-
         List<Teacher> teachers =teacherRepository.findAll();
         Map<String, Object> allObjectTeacher = new HashMap<String, Object>();
         allObjectTeacher.put("allTeachers", teachers);
         model.addAllObjects(allObjectTeacher);
-
+        model.addObject("message", CONFIRM_MESSAGE);
+        model.addObject("error", ERROR_MESSAGE);
+        ERROR_MESSAGE=null;
+        CONFIRM_MESSAGE=null;
         model.setViewName("admin-page/subject-service/add-subject");
         return model;
     }
 
     @RequestMapping(value = {"/addSubject"}, method = RequestMethod.POST)
-    public ModelAndView addingSubject(@RequestParam("subjectName") String name,
+    public String addingSubject(@RequestParam("subjectName") String name,
                                       @RequestParam("year") String yearName,
                                       @RequestParam("teacher") String idTeacherStr ) {
-        ModelAndView model = new ModelAndView("admin-page/subject-service/add-subject");
         Year year=yearRepository.findByName(Integer.parseInt(yearName));
         Integer idTeacher=Integer.parseInt(idTeacherStr);
         Teacher teacher=null;
@@ -121,11 +128,16 @@ public class EditSubjectController {
             teacher=teacherRepository.findById(idTeacher);
         }
 
+        if(subjectRepository.findByNameAndYear(name,year)==null){
         Subject subject=new Subject(name,teacher,year);
         subjectRepository.save(subject);
-        String message = "Предмет добавлен";
-        model.addObject("message", message);
-        return model;
+        CONFIRM_MESSAGE = "Предмет добавлен.";
+        ERROR_MESSAGE=null;
+        } else {
+        ERROR_MESSAGE="Такой предмет уже существует!";
+        CONFIRM_MESSAGE=null;
+        }
+        return "redirect:/admin/subjectsList/addSubject";
     }
 
     //Удаление предмета

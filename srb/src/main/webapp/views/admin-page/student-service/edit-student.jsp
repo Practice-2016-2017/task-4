@@ -29,7 +29,6 @@
 <div class="container">
     <div class="jumbotron" style="margin-top: 20px;">
 
-
         <form:form action="${pageContext.request.contextPath}/admin/studentsList/edit/${student.id}" method="post" >
             <c:if test = "${error !=null}">
                 <div class="alert alert-danger" style="width: 285px; margin: 0px auto;" role="alert">
