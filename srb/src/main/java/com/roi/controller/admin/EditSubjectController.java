@@ -86,6 +86,11 @@ public class EditSubjectController {
             Subject subject = subjectRepository.findOne(id);
             Year year = yearRepository.findByName(Integer.parseInt(yearName));
             Integer idTeacher = Integer.parseInt(idStr);
+            if(!teacherRepository.exists(idTeacher)) {
+                ERROR_MESSAGE="Этот учитель удален! Обновите страницу!";
+                CONFIRM_MESSAGE=null;
+                return "redirect:/admin/subjectsList/edit/{id}";
+            }
             Teacher teacher = teacherRepository.findById(idTeacher);
             if (subjectRepository.findByNameAndYearAndTeacher(name, year, teacher) != null &&
                     subjectRepository.findByNameAndYearAndTeacher(name, year, teacher).getId().equals(id)
