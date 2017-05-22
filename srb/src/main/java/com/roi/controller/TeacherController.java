@@ -95,7 +95,7 @@ public class TeacherController {
     public String addMark(Principal principal,
                           @PathVariable Integer subjectId,
                           @RequestParam("date") String dateStr,
-                          @RequestParam("studentName") String studentName,
+                          @RequestParam("studentId") Integer studentId,
                           @RequestParam("mark") String markValueStr) {
         if (userService.ifSubjectContainTeacher(subjectId,principal.getName())) {
             try {
@@ -105,14 +105,14 @@ public class TeacherController {
                 Subject subject = subjectRepository.findOne(subjectId);
 
                 Integer markValue = Integer.parseInt(markValueStr);
-                Student student = studentRepository.findByName(studentName);
+                Student student = studentRepository.findOne(studentId);
 
                 Mark mark = new Mark(markValue, dateSQL, student, subject);
                 markRepository.save(mark);
             } catch (java.text.ParseException e) {
                 e.printStackTrace();
             }
-            return "redirect:/teacher/{login}/{subjectId}";
+            return "redirect:/teacher/{subjectId}";
         } else {
             throw new NotFoundException();
         }
@@ -137,20 +137,20 @@ public class TeacherController {
     public ModelAndView editMark(Principal principal,
                                  @PathVariable Integer subjectId,
                                  @PathVariable Integer id) {
-        if (userService.ifSubjectContainTeacher(subjectId,principal.getName())&&
+      if (userService.ifSubjectContainTeacher(subjectId,principal.getName())&&
                 userService.ifMarkOfSubject(id,subjectId)) {
             ModelAndView model = new ModelAndView();
             Mark mark=markRepository.findOne(id);
             Subject subject=subjectRepository.findOne(subjectId);
             Student student=mark.getStudent();
             Date date=mark.getDate();
+            Year year = subject.getYear();
 
             model.addObject("date", date);
             model.addObject("subject", subject);
             model.addObject("student", student);
             model.addObject("mark", mark);
 
-            Year year = subject.getYear();
             List<Student> studentList = userService.getYearStudents(year);
             Map<String, Object> allStudents = new HashMap<String, Object>();
             allStudents.put("allYearStudents", studentList);
@@ -164,14 +164,13 @@ public class TeacherController {
     }
 
     @RequestMapping(value = {"/teacher/{subjectId}/edit-mark/{id}"}, method = RequestMethod.POST)
-    public String editSubject(Principal principal,
-                              @PathVariable String login,
+    public String editMARK(Principal principal,
                               @PathVariable Integer subjectId,
                               @PathVariable Integer id,
                               @RequestParam("date") String dateStr,
-                              @RequestParam("studentName") String studentName,
+                              @RequestParam("studentId") Integer studentId,
                               @RequestParam("mark") String markValueStr) {
-        if (userService.ifSubjectContainTeacher(subjectId,principal.getName())&&
+      if (userService.ifSubjectContainTeacher(subjectId,principal.getName())&&
             userService.ifMarkOfSubject(id,subjectId)) {
             try {
                 Mark mark = markRepository.findOne(id);
@@ -180,7 +179,7 @@ public class TeacherController {
                 dateUtil = format.parse(dateStr);
                 Date dateSQL = new Date(dateUtil.getTime());
                 Integer markValue = Integer.parseInt(markValueStr);
-                Student student = studentRepository.findByName(studentName);
+                Student student = studentRepository.findOne(studentId);
 
                 mark.setDate(dateSQL);
                 mark.setStudent(student);
@@ -192,7 +191,7 @@ public class TeacherController {
             }
 
             return "redirect:/teacher/{subjectId}";
-        } else {
+      } else {
             throw new NotFoundException();
         }
     }

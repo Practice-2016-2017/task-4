@@ -18,7 +18,7 @@ public class Subject {
     @JoinColumn(name = "Teacher_idTeacher", nullable = true)
     private Teacher teacher;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "Years_idYears", nullable = false)
     private Year year;
 

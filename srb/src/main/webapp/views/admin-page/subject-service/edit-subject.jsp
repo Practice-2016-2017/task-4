@@ -42,21 +42,12 @@
                     <td> <select name="year" >
                         <option value="${year}"selected>${year}</option>
 
-                        <c:if test = "${year !=1}">
-                            <option  value="1"  >1 </option>
-                        </c:if>
+                        <c:forEach var="value" begin="1" end="4">
+                            <c:if test = "${year !=value}">
+                                <option  value="${value}" >${value} </option>
+                            </c:if>
 
-                        <c:if test = "${year !=2}">
-                            <option  value="2"  >2 </option>
-                        </c:if>
-
-                        <c:if test = "${year !=3}">
-                            <option  value="3"  >3 </option>
-                        </c:if>
-
-                        <c:if test = "${year !=4}">
-                            <option  value="4"  >4 </option>
-                        </c:if>
+                        </c:forEach>
                     </select></td>
                 </tr>
 

@@ -34,15 +34,15 @@
             <table>
                 <tbody>
                 <tr>
-                    <td><input type="text" name="teacherName" placeholder="Имя" /></td>
+                    <td><input type="text" name="teacherName" placeholder="Имя" required/></td>
                 </tr>
 
                 <tr>
-                    <td><input type="number" name="login" placeholder="Login" /></td>
+                    <td><input type="text" name="login" placeholder="Login" pattern="[1-9]{1}[0-9]{5}" required/></td>
                 </tr>
 
                 <tr>
-                    <td><input type="text" name="password" placeholder="Password" /></td>
+                    <td><input type="text" name="password" placeholder="Password" minlength="5" maxlength="10"  required/></td>
                 </tr>
 
                 </tbody>

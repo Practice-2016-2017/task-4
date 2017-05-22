@@ -41,16 +41,16 @@
             <table>
                 <tbody>
                 <tr>
-                    <td><input type="date" name="date" value="${date}" /></td>
+                    <td><input type="date" name="date" value="${date}" re/></td>
                 </tr>
                 <tr>
                     <td>
-                        <select name="studentName">
-                            <option value="${student.name}"selected>${student.name}</option>
+                        <select name="studentId">
+                            <option value="${student.id}"selected>${student.name}</option>
 
                             <c:forEach items="${allYearStudents}" var="st">
                                 <c:if test = "${st.id !=student.id}">
-                                    <option  value="${st.name}" >${st.name} </option>
+                                    <option  value="${st.id}" >${st.name} </option>
                                 </c:if>
                             </c:forEach>
 
@@ -82,7 +82,6 @@
                 </tr>
                 <tr>
                     <td><input type="submit" value="Подтвердить" /></td>
-                    <td></td>
                 </tr>
                 </tbody>
             </table>

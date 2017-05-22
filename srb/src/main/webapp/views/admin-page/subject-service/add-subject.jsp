@@ -35,7 +35,7 @@
             <table>
                 <tbody>
                 <tr>
-                    <td><input type="text" name="subjectName" placeholder="Предмет" /></td>
+                    <td><input type="text" name="subjectName" placeholder="Предмет" required /></td>
                 </tr>
 
                 <tr>

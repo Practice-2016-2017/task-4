@@ -53,6 +53,7 @@ public class EditSubjectController {
     public ModelAndView editSubjectPage(@PathVariable Integer id) {
         ModelAndView model = new ModelAndView();
         Subject subject=subjectRepository.findOne(id);
+
         model.addObject("id",id);
         model.addObject("subjectName",subject.getName());
         model.addObject("year",subject.getYear().getName());
@@ -133,10 +134,12 @@ public class EditSubjectController {
     public ModelAndView deleteSubjectPage(@PathVariable Integer id) {
         ModelAndView model = new ModelAndView();
         Subject subject=subjectRepository.findOne(id);
+
         model.addObject("id",id);
         model.addObject("subjectName",subject.getName());
         model.addObject("year", subject.getYear());
         model.addObject("teacher", subject.getTeacher());
+
         model.setViewName("admin-page/subject-service/delete-subject");
         return model;
     }

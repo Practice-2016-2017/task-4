@@ -29,20 +29,20 @@
 <div class="container">
     <div class="jumbotron" style="margin-top: 20px;">
 
-        <form:form action="${pageContext.request.contextPath}/admin/teachersList/edit/${id}" method="post" >
+        <form:form action="${pageContext.request.contextPath}/admin/teachersList/edit/${teacher.id}" method="post" >
 
             <table>
                 <tbody>
                 <tr>
-                    <td><input type="text" name="teacherName" value="${teacherName}" placeholder="Имя" required/></td>
+                    <td><input type="text" name="teacherName" value="${teacher.name}" placeholder="Имя" required/></td>
                 </tr>
 
                 <tr>
-                    <td><input type="number" name="login" value="${login}" placeholder="Login" required/></td>
+                    <td><input type="text" name="login" value="${teacher.login}" placeholder="Login" pattern="[1-9]{1}[0-9]{5}" required/></td>
                 </tr>
 
                 <tr>
-                    <td><input type="text" name="password" value="${password}" placeholder="Password" required/></td>
+                    <td><input type="text" name="password" value="${teacher.password}" placeholder="Password" minlength="5" maxlength="10" required/></td>
                 </tr>
                 </tbody>
             </table>

@@ -30,13 +30,13 @@
     <div class="jumbotron" style="margin-top: 20px;">
         <h2 >Вы уверены?</h2>
 
-        <p>Имя: ${studentName}</p>
-        <p>Логин: ${login} </p>
-        <p>Пароль: ${password} </p>
-        <p>Курс: ${year.name} </p>
+        <p>Имя: ${student.name}</p>
+        <p>Логин: ${student.login} </p>
+        <p>Пароль: ${student.password} </p>
+        <p>Курс: ${student.year.name} </p>
 
 
-        <form:form action="${pageContext.request.contextPath}/admin/studentsList/delete/${id}" method="post" >
+        <form:form action="${pageContext.request.contextPath}/admin/studentsList/delete/${student.id}" method="post" >
             <input type="submit" value="Удалить студента" />
         </form:form>
         <p>Ваш логин: <sec:authentication property="principal.username" /></p>

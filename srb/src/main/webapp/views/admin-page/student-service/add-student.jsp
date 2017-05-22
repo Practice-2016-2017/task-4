@@ -28,21 +28,30 @@
 <body>
 <div class="container">
     <div class="jumbotron" style="margin-top: 20px;">
+        <c:if test = "${message !=null}">
+            <div class="alert alert-success" style="width: 285px; margin: 0px auto;" role="alert">
+                <p>${message}</p>
+            </div>
+        </c:if>
 
+        <c:if test = "${error !=null}">
+            <div class="alert alert-danger" style="width: 285px; margin: 0px auto;" role="alert">
+                <p>${error}</p>
+            </div>
+        </c:if>
         <form:form action="${pageContext.request.contextPath}/admin/studentsList/addStudent" method="post" >
-            <h2>${message}</h2>
             <table>
                 <tbody>
                 <tr>
-                    <td><input type="text" name="studentName" placeholder="Имя" /></td>
+                    <td><input type="text" name="studentName" placeholder="Имя" required/></td>
                 </tr>
 
                 <tr>
-                    <td><input type="number" name="login" placeholder="Login" /></td>
+                    <td><input  type="text" pattern="[1-9]{1}[0-9]{5}" name="login" placeholder="Login" required/></td>
                 </tr>
 
                 <tr>
-                    <td><input type="text" name="password" placeholder="Password" /></td>
+                    <td><input type="text" name="password" minlength="5" maxlength="10" placeholder="Password" required /></td>
                 </tr>
                 <tr>
                     <td> <select name="year">

@@ -30,11 +30,11 @@
     <div class="jumbotron" style="margin-top: 20px;">
         <h2 >Вы уверены?</h2>
 
-        <p>Имя: ${teacherName} </p>
-        <p>Логин: ${login} </p>
-        <p>Пароль: ${password} </p>
+        <p>Имя: ${teacher.name} </p>
+        <p>Логин: ${teacher.login} </p>
+        <p>Пароль: ${teacher.password} </p>
 
-        <form:form action="${pageContext.request.contextPath}/admin/teachersList/delete/${id}" method="post" >
+        <form:form action="${pageContext.request.contextPath}/admin/teachersList/delete/${teacher.id}" method="post" >
             <input type="submit" value="Удалить преподавателя" />
         </form:form>
 

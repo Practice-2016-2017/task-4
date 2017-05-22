@@ -11,7 +11,6 @@ import java.util.List;
 
 public interface StudentRepository extends JpaRepository<Student, Integer> {
     Student findByLogin(Integer login);
-    Student findByName(String name);
     @Transactional
     void removeById(Integer id);
     List<Student> findByYear (Year year);

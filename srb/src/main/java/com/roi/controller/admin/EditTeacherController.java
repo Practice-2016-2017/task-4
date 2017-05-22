@@ -20,6 +20,8 @@ import java.util.Map;
 @Controller
 @RequestMapping("/admin/teachersList")
 public class EditTeacherController {
+
+
     @Autowired
     private SessionUtils sessionUtils;
 
@@ -30,6 +32,7 @@ public class EditTeacherController {
     @Autowired
     private SubjectRepository subjectRepository;
 
+    private String ERROR_MESSAGE=null;
 
     //Список преподавателей
     @RequestMapping(method = RequestMethod.GET)
@@ -48,7 +51,6 @@ public class EditTeacherController {
     @RequestMapping(value = {"/addTeacher"}, method = RequestMethod.GET)
     public ModelAndView addTeacherPage() {
         ModelAndView model = new ModelAndView();
-
         model.setViewName("admin-page/teacher-service/add-teacher");
         return model;
     }
@@ -56,14 +58,22 @@ public class EditTeacherController {
     @RequestMapping(value = {"/addTeacher"}, method = RequestMethod.POST)
     public ModelAndView addingTeacher(@RequestParam("teacherName") String name,
                                       @RequestParam("login") String loginStr,
-                                      @RequestParam("password") String password
-    ){
+                                      @RequestParam("password") String password){
         ModelAndView model = new ModelAndView("admin-page/teacher-service/add-teacher");
+        String message=null;
+        String error=null;
         Integer login=Integer.parseInt(loginStr);
+
+        if(teacherRepository.findByLogin(login)==null){
         Teacher teacher=new Teacher(login,password,name);
         teacherRepository.save(teacher);
-        String message = "Преподаватель добавлен";
+        message = "Преподаватель добавлен";
+        } else{
+        error="Такой логин уже существует!";
+        }
+
         model.addObject("message", message);
+        model.addObject("error", error);
         return model;
     }
 
@@ -73,10 +83,9 @@ public class EditTeacherController {
     public ModelAndView editTeacherPage(@PathVariable Integer id) {
         ModelAndView model = new ModelAndView();
         Teacher teacher=teacherRepository.findOne(id);
-        model.addObject("id",id);
-        model.addObject("teacherName",teacher.getName());
-        model.addObject("login",teacher.getLogin());
-        model.addObject("password", teacher.getPassword());
+        model.addObject("teacher",teacher);
+        model.addObject("error",ERROR_MESSAGE);
+        ERROR_MESSAGE=null;
         model.setViewName("admin-page/teacher-service/edit-teacher");
         return model;
     }
@@ -88,11 +97,18 @@ public class EditTeacherController {
                               @RequestParam("password") String password) {
         Integer login=Integer.parseInt(loginStr);
         Teacher teacher=teacherRepository.findOne(id);
+        boolean  enable=teacher.getLogin().equals(login)||teacherRepository.findByLogin(login)==null;
+
+        if(enable) {
         teacher.setLogin(login);
         teacher.setName(name);
         teacher.setPassword(password);
         teacherRepository.save(teacher);
         return "redirect:/admin/teachersList";
+        } else {
+            ERROR_MESSAGE = "Такой логин уже существует!";
+            return "redirect:/admin/teachersList/edit/{id}";
+        }
     }
 
     //Удаление преподавателя
@@ -101,10 +117,7 @@ public class EditTeacherController {
     public ModelAndView deleteTeacherPage(@PathVariable Integer id) {
         ModelAndView model = new ModelAndView();
         Teacher teacher=teacherRepository.findOne(id);
-        model.addObject("id",id);
-        model.addObject("teacherName",teacher.getName());
-        model.addObject("login",teacher.getLogin());
-        model.addObject("password", teacher.getPassword());
+        model.addObject("teacher",teacher);
         model.setViewName("admin-page/teacher-service/delete-teacher");
         return model;
     }
@@ -119,6 +132,7 @@ public class EditTeacherController {
             s.setTeacher(null);
             subjectRepository.save(s);
         }
+
         teacherRepository.removeById(id);
         return "redirect:/admin/teachersList";
     }

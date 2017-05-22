@@ -35,6 +35,36 @@
 <div class="container">
     <div class="jumbotron" style="margin-top: 20px;">
         <h2> ${Subject.name}, курс ${Subject.year.name}</h2>
+
+        <form:form action="${pageContext.request.contextPath}/teacher/${Subject.id}/add-mark" method="get" >
+
+            <table class="table table-bordered">
+                <tbody>
+                <tr>
+                    <td><input type="date" name="date" required/></td>
+
+                    <td>
+                        <select name="studentId">
+                            <c:forEach items="${allYearStudents}" var="student">
+                                <option  value="${student.id}" >${student.name} </option>
+                            </c:forEach>
+                        </select>
+                    </td>
+
+                    <td> <select name="mark">
+                        <option  value="2" >2 </option>
+                        <option  value="3" >3 </option>
+                        <option  value="4" >4 </option>
+                        <option  value="5" >5 </option>
+                    </select>
+                    </td>
+
+                    <td><input type="submit" value="Добавить" /></td>
+                </tr>
+                </tbody>
+            </table>
+        </form:form>
+
         <table class="table table-bordered">
             <tr>
                 <th>Дата</th>
@@ -54,38 +84,7 @@
             </c:forEach>
         </table>
 
-        <form:form action="${pageContext.request.contextPath}/teacher/${Subject.id}/add-mark" method="get" >
 
-            <table>
-                <tbody>
-                <tr>
-                    <td><input type="date" name="date" /></td>
-                </tr>
-                <tr>
-                    <td>
-                        <select name="studentName">
-                        <c:forEach items="${allYearStudents}" var="student">
-                            <option  value="${student.name}" >${student.name} </option>
-                        </c:forEach>
-                    </select>
-                    </td>
-                </tr>
-                <tr>
-                    <td> <select name="mark">
-                        <option  value="2" >2 </option>
-                        <option  value="3" >3 </option>
-                        <option  value="4" >4 </option>
-                        <option  value="5" >5 </option>
-                    </select>
-                    </td>
-                </tr>
-                <tr>
-                    <td><input type="submit" value="Добавить" /></td>
-                    <td></td>
-                </tr>
-                </tbody>
-            </table>
-        </form:form>
 
         <p>Ваш логин: <sec:authentication property="principal.username" /></p>
         <p><a href="<c:url value="/teacher" />" class="btn btn-primary btn-lg active" role="button">Назад</a>

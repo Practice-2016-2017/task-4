@@ -32,6 +32,8 @@ public class EditStudentController {
     @Autowired
     private SessionUtils sessionUtils;
 
+    private String ERROR_MESSAGE=null;
+
     //Список студентов
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView studentsListPage() {
@@ -59,14 +61,20 @@ public class EditStudentController {
                                       @RequestParam("login") String loginStr,
                                       @RequestParam("password") String password,
                                       @RequestParam("year") String yearName ) {
+        String message=null;
+        String error=null;
         ModelAndView model = new ModelAndView("admin-page/student-service/add-student");
         Integer login=Integer.parseInt(loginStr);
         Year year=yearRepository.findByName(Integer.parseInt(yearName));
-        Student student=new Student(login,password,name,year);
-        studentRepository.save(student);
-
-        String message = "Студент добавлен";
+        if(studentRepository.findByLogin(login)==null){
+            Student student=new Student(login,password,name,year);
+            studentRepository.save(student);
+            message = "Студент добавлен";
+        } else{
+            error="Такой логин уже существует!";
+        }
         model.addObject("message", message);
+        model.addObject("error", error);
         return model;
     }
 
@@ -74,14 +82,13 @@ public class EditStudentController {
 
     @RequestMapping(value = {"/edit/{id}"}, method = RequestMethod.GET)
     public ModelAndView editStudentPage(@PathVariable Integer id) {
+
         ModelAndView model = new ModelAndView();
         Student student=studentRepository.findOne(id);
-        model.addObject("id",id);
-        model.addObject("studentName",student.getName());
-        model.addObject("login",student.getLogin());
-        model.addObject("password", student.getPassword());
-        model.addObject("year",student.getYear().getName());
+        model.addObject("student",student);
         model.setViewName("admin-page/student-service/edit-student");
+        model.addObject("error",ERROR_MESSAGE);
+        ERROR_MESSAGE=null;
         return model;
     }
 
@@ -94,12 +101,17 @@ public class EditStudentController {
         Integer login=Integer.parseInt(loginStr);
         Year year=yearRepository.findByName(Integer.parseInt(yearName));
         Student student=studentRepository.findOne(id);
-        student.setLogin(login);
-        student.setName(name);
-        student.setPassword(password);
-        student.setYear(year);
-        studentRepository.save(student);
-        return "redirect:/admin/studentsList";
+        boolean  enable=student.getLogin().equals(login)||studentRepository.findByLogin(login)==null;
+        if(enable) {
+           student.setName(name);
+           student.setYear(year);
+           student.setPassword(password);
+           studentRepository.save(student);
+           return "redirect:/admin/studentsList";
+       } else {
+           ERROR_MESSAGE = "Такой логин уже существует!";
+           return "redirect:/admin/studentsList/edit/{id}";
+       }
     }
 
 
@@ -109,16 +121,10 @@ public class EditStudentController {
     public ModelAndView deleteStudentPage(@PathVariable Integer id) {
         ModelAndView model = new ModelAndView();
         Student student=studentRepository.findOne(id);
-        model.addObject("id",id);
-        model.addObject("studentName",student.getName());
-        model.addObject("login",student.getLogin());
-        model.addObject("password", student.getPassword());
-        model.addObject("year",student.getYear());
+        model.addObject("student",student);
         model.setViewName("admin-page/student-service/delete-student");
         return model;
     }
-
-
 
     @RequestMapping(value = {"/delete/{id}"}, method = RequestMethod.POST)
     public String deleteStudent(@PathVariable Integer id){

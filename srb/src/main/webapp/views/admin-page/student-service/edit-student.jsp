@@ -29,40 +29,37 @@
 <div class="container">
     <div class="jumbotron" style="margin-top: 20px;">
 
-        <form:form action="${pageContext.request.contextPath}/admin/studentsList/edit/${id}" method="post" >
+
+        <form:form action="${pageContext.request.contextPath}/admin/studentsList/edit/${student.id}" method="post" >
+            <c:if test = "${error !=null}">
+                <div class="alert alert-danger" style="width: 285px; margin: 0px auto;" role="alert">
+                    <p>${error}</p>
+                </div>
+            </c:if>
 
             <table>
                 <tbody>
                 <tr>
-                    <td><input type="text" name="studentName" value="${studentName}" placeholder="Имя" required /></td>
+                    <td><input type="text" name="studentName" value="${student.name}" placeholder="Имя" required /></td>
                 </tr>
 
                 <tr>
-                    <td><input type="number" name="login" value="${login}" placeholder="Login" required/></td>
+                    <td><input type="text" pattern="[1-9]{1}[0-9]{5}" name="login" value="${student.login}" placeholder="Login" required/></td>
                 </tr>
 
                 <tr>
-                    <td><input type="text" name="password" value="${password}" placeholder="Password" required/></td>
+                    <td><input type="text" name="password" minlength="5" maxlength="10" value="${student.password}" placeholder="Password" required/></td>
                 </tr>
                 <tr>
                     <td> <select name="year" >
-                        <option value="${year}"selected>${year}</option>
+                        <option value="${student.year.name}"selected>${student.year.name}</option>
 
-                        <c:if test = "${year !=1}">
-                        <option  value="1"  >1 </option>
-                        </c:if>
+                        <c:forEach var="value" begin="1" end="4">
+                            <c:if test = "${student.year.name !=value}">
+                                <option  value="${value}">${value} </option>
+                            </c:if>
+                        </c:forEach>
 
-                        <c:if test = "${year !=2}">
-                            <option  value="2"  >2 </option>
-                        </c:if>
-
-                        <c:if test = "${year !=3}">
-                            <option  value="3"  >3 </option>
-                        </c:if>
-
-                        <c:if test = "${year !=4}">
-                            <option  value="4"  >4 </option>
-                        </c:if>
                     </select></td>
                 </tr>
                 </tbody>
