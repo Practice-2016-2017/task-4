@@ -37,6 +37,8 @@ public class TeacherController {
     @Autowired
     private MarkRepository markRepository;
 
+    private String ERROR_MESSAGE=null;
+
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private java.util.Date dateUtil;
 
@@ -57,8 +59,10 @@ public class TeacherController {
     @RequestMapping(value = {"/teacher/{subjectId}"})
     public ModelAndView markPage(Principal principal,
                                  @PathVariable Integer subjectId) {
-        if (subjectRepository.exists(subjectId)&&
-            userService.ifSubjectContainTeacher(subjectId,principal.getName())) {
+        if (!(subjectRepository.exists(subjectId)&&
+            userService.ifSubjectContainTeacher(subjectId,principal.getName())))
+               return mainController.errorPage();
+
             ModelAndView model = new ModelAndView();
             Subject subject = subjectRepository.findOne(subjectId);
             List<Mark> markList = userService.getSubjectMarks(subject);
@@ -66,11 +70,10 @@ public class TeacherController {
             model.addObject("allYearStudents", studentList);
             model.addObject("allMarks", markList);
             model.addObject("Subject", subject);
+            model.addObject("error", ERROR_MESSAGE);
+            ERROR_MESSAGE = null;
             model.setViewName("teacher-page/teachers-marks");
             return model;
-        } else {
-            return mainController.errorPage();
-        }
     }
 
     //Добавление оценки по определенному предмету
@@ -80,22 +83,24 @@ public class TeacherController {
                           @RequestParam("date") String dateStr,
                           @RequestParam("studentId") Integer studentId,
                           @RequestParam("mark") String markValueStr) {
-        if (subjectRepository.exists(subjectId)&&
-            userService.ifSubjectContainTeacher(subjectId,principal.getName())&&
-            studentRepository.exists(studentId)) {
-            try {
-                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-                dateUtil = format.parse(dateStr);
-                Date dateSQL = new Date(dateUtil.getTime());
-                Mark mark = new Mark(Integer.parseInt(markValueStr), dateSQL,  studentRepository.findOne(studentId), subjectRepository.findOne(subjectId));
-                markRepository.save(mark);
-            } catch (java.text.ParseException e) {
-                e.printStackTrace();
-            }
+        if (!(subjectRepository.exists(subjectId)&&
+            userService.ifSubjectContainTeacher(subjectId,principal.getName())))
+              return "error";
+        if (!studentRepository.exists(studentId)) {
+            ERROR_MESSAGE = "Этот студент удален! Перезагрузите страницу!";
             return "redirect:/teacher/{subjectId}";
-        } else {
-            return "error";
         }
+        try {
+             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+             dateUtil = format.parse(dateStr);
+             Date dateSQL = new Date(dateUtil.getTime());
+             Mark mark = new Mark(Integer.parseInt(markValueStr), dateSQL,  studentRepository.findOne(studentId), subjectRepository.findOne(subjectId));
+             markRepository.save(mark);
+
+        } catch (java.text.ParseException e) {
+                e.printStackTrace();
+        }
+             return "redirect:/teacher/{subjectId}";
     }
 
     //Удаление оценки
@@ -103,14 +108,12 @@ public class TeacherController {
     public String deleteMark(Principal principal,
                              @PathVariable Integer subjectId,
                              @PathVariable Integer id) {
-        if (markRepository.exists(id)&&
+        if (!(markRepository.exists(id)&&
             userService.ifSubjectContainTeacher(subjectId,principal.getName())&&
-            userService.ifMarkOfSubject(id,subjectId)) {
+            userService.ifMarkOfSubject(id,subjectId)))
+            return "error";
             markRepository.removeById(id);
             return "redirect:/teacher/{subjectId}";
-        } else {
-            return "error";
-        }
     }
 
     //Редактирование определенной оценки
@@ -118,21 +121,21 @@ public class TeacherController {
     public ModelAndView editMark(Principal principal,
                                  @PathVariable Integer subjectId,
                                  @PathVariable Integer id) {
-        if (markRepository.exists(id)&&
+        if (!(markRepository.exists(id)&&
             userService.ifSubjectContainTeacher(subjectId,principal.getName())&&
-            userService.ifMarkOfSubject(id,subjectId)) {
+            userService.ifMarkOfSubject(id,subjectId)))
+            return mainController.errorPage();
+
             ModelAndView model = new ModelAndView();
             Mark mark=markRepository.findOne(id);
-            Subject subject=subjectRepository.findOne(subjectId);
+            Subject subject=mark.getSubject();
             List<Student> studentList = studentRepository.findByYear(subject.getYear());
             model.addObject("allYearStudents", studentList);
             model.addObject("mark", mark);
+            model.addObject("error", ERROR_MESSAGE);
+            ERROR_MESSAGE = null;
             model.setViewName("teacher-page/edit-mark");
             return model;
-
-           } else {
-             return mainController.errorPage();
-           }
     }
 
     @RequestMapping(value = {"/teacher/{subjectId}/edit-mark/{id}"}, method = RequestMethod.POST)
@@ -142,24 +145,26 @@ public class TeacherController {
                               @RequestParam("date") String dateStr,
                               @RequestParam("studentId") Integer studentId,
                               @RequestParam("mark") String markValueStr) {
-      if (markRepository.exists(id)&&
+      if (!(markRepository.exists(id)&&
           userService.ifSubjectContainTeacher(subjectId,principal.getName())&&
-          userService.ifMarkOfSubject(id,subjectId)) {
-            try {
-                Mark mark = markRepository.findOne(id);
-                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-                dateUtil = format.parse(dateStr);
-                Date dateSQL = new Date(dateUtil.getTime());
-                mark.setDate(dateSQL);
-                mark.setStudent(studentRepository.findOne(studentId));
-                mark.setValue(Integer.parseInt(markValueStr));
-                markRepository.save(mark);
+          userService.ifMarkOfSubject(id,subjectId)))
+          return "error";
+      if (!studentRepository.exists(studentId)) {
+          ERROR_MESSAGE = "Этот студент удален! Перезагрузите страницу!";
+          return "redirect:/teacher/{subjectId}";
+      }
+       try {
+           Mark mark = markRepository.findOne(id);
+           SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+           dateUtil = format.parse(dateStr);
+           Date dateSQL = new Date(dateUtil.getTime());
+           mark.setDate(dateSQL);
+           mark.setStudent(studentRepository.findOne(studentId));
+           mark.setValue(Integer.parseInt(markValueStr));
+           markRepository.save(mark);
             } catch (java.text.ParseException e) {
-                e.printStackTrace();
+           e.printStackTrace();
             }
-            return "redirect:/teacher/{subjectId}";
-      } else {
-            return "error";
-        }
+        return "redirect:/teacher/{subjectId}";
     }
 }

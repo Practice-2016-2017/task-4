@@ -35,7 +35,11 @@
 <div class="container">
     <div class="jumbotron" style="margin-top: 20px;">
         <h3>Изменение оценки: ${mark.subject.name}, курс ${mark.subject.year.name}</h3>
-
+        <c:if test = "${error !=null}">
+            <div class="alert alert-danger" style="width: 285px; margin: 0px auto;" role="alert">
+                <p>${error}</p>
+            </div>
+        </c:if>
         <form:form action="${pageContext.request.contextPath}/teacher/${mark.subject.id}/edit-mark/${mark.id}" method="post" >
 
             <table>

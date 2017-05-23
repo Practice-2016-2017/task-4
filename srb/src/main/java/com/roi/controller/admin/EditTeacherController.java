@@ -80,15 +80,16 @@ public class EditTeacherController {
 
     @RequestMapping(value = {"/edit/{id}"}, method = RequestMethod.GET)
     public ModelAndView editTeacherPage(@PathVariable Integer id) {
-        if(teacherRepository.exists(id)) {
-            ModelAndView model = new ModelAndView();
-            Teacher teacher = teacherRepository.findOne(id);
-            model.addObject("teacher", teacher);
-            model.addObject("error", ERROR_MESSAGE);
-            ERROR_MESSAGE = null;
-            model.setViewName("admin-page/teacher-service/edit-teacher");
-            return model;
-        }else return mainController.errorPage();
+        if(!teacherRepository.exists(id))
+            return mainController.errorPage();
+        ModelAndView model = new ModelAndView();
+        Teacher teacher = teacherRepository.findOne(id);
+        model.addObject("teacher", teacher);
+        model.addObject("error", ERROR_MESSAGE);
+        ERROR_MESSAGE = null;
+        model.setViewName("admin-page/teacher-service/edit-teacher");
+        return model;
+
     }
 
     @RequestMapping(value = {"/edit/{id}"}, method = RequestMethod.POST)
@@ -96,48 +97,47 @@ public class EditTeacherController {
                               @RequestParam("teacherName") String name,
                               @RequestParam("login") String loginStr,
                               @RequestParam("password") String password) {
-        if(teacherRepository.exists(id)) {
-            Integer login = Integer.parseInt(loginStr);
-            Teacher teacher = teacherRepository.findOne(id);
-            boolean enable = teacher.getLogin().equals(login) || teacherRepository.findByLogin(login) == null;
-            if (enable) {
-                teacher.setLogin(login);
-                teacher.setName(name);
-                teacher.setPassword(password);
-                teacherRepository.save(teacher);
-                return "redirect:/admin/teachersList";
-            } else {
-                ERROR_MESSAGE = "Такой логин уже существует!";
-                return "redirect:/admin/teachersList/edit/{id}";
-            }
-        }else return "error";
+        if(!teacherRepository.exists(id))
+            return "error";
+        Integer login = Integer.parseInt(loginStr);
+        Teacher teacher = teacherRepository.findOne(id);
+        boolean enable = teacher.getLogin().equals(login) || teacherRepository.findByLogin(login) == null;
+        if (enable) {
+            teacher.setLogin(login);
+            teacher.setName(name);
+            teacher.setPassword(password);
+            teacherRepository.save(teacher);
+            return "redirect:/admin/teachersList";
+        } else {
+            ERROR_MESSAGE = "Такой логин уже существует!";
+            return "redirect:/admin/teachersList/edit/{id}";}
     }
 
     //Удаление преподавателя
 
     @RequestMapping(value = {"/delete/{id}"}, method = RequestMethod.GET)
     public ModelAndView deleteTeacherPage(@PathVariable Integer id) {
-        if(teacherRepository.exists(id)) {
-            ModelAndView model = new ModelAndView();
-            Teacher teacher = teacherRepository.findOne(id);
-            model.addObject("teacher", teacher);
-            model.setViewName("admin-page/teacher-service/delete-teacher");
-            return model;
-        }else return mainController.errorPage();
+        if(!teacherRepository.exists(id))
+            return mainController.errorPage();
+        ModelAndView model = new ModelAndView();
+        Teacher teacher = teacherRepository.findOne(id);
+        model.addObject("teacher", teacher);
+        model.setViewName("admin-page/teacher-service/delete-teacher");
+        return model;
     }
 
     @RequestMapping(value = {"/delete/{id}"}, method = RequestMethod.POST)
     public String deleteTeacher(@PathVariable Integer id) {
-        if (teacherRepository.exists(id)) {
-            Teacher teacher = teacherRepository.findById(id);
-            sessionUtils.expireUserSessions("te" + teacher.getLogin());
-            List<Subject> subjectList = subjectRepository.findByTeacher(teacher);
-            for (Subject s : subjectList) {
-                s.setTeacher(null);
-                subjectRepository.save(s);
-            }
-            teacherRepository.removeById(id);
-            return "redirect:/admin/teachersList";
-        }else return "error";
+        if (!teacherRepository.exists(id))
+            return "error";
+        Teacher teacher = teacherRepository.findById(id);
+        sessionUtils.expireUserSessions("te" + teacher.getLogin());
+        List<Subject> subjectList = subjectRepository.findByTeacher(teacher);
+        for (Subject s : subjectList) {
+            s.setTeacher(null);
+            subjectRepository.save(s);}
+        teacherRepository.removeById(id);
+        return "redirect:/admin/teachersList";
+
     }
 }

@@ -35,7 +35,11 @@
 <div class="container">
     <div class="jumbotron" style="margin-top: 20px;">
         <h2> ${Subject.name}, курс ${Subject.year.name}</h2>
-
+        <c:if test = "${error !=null}">
+            <div class="alert alert-danger" style="width: 285px; margin: 0px auto;" role="alert">
+                <p>${error}</p>
+            </div>
+        </c:if>
         <form:form action="${pageContext.request.contextPath}/teacher/${Subject.id}/add-mark" method="get" >
 
             <table class="table table-bordered">
