@@ -28,7 +28,7 @@
 <body>
 <div class="container">
     <div class="jumbotron" style="margin-top: 20px;">
-
+        <h2 >Добавление преподавателя</h2>
         <c:if test = "${message !=null}">
             <div class="alert alert-success" style="width: 285px; margin: 0px auto;" role="alert">
                 <p>${message}</p>
@@ -42,24 +42,20 @@
         </c:if>
 
         <form:form action="${pageContext.request.contextPath}/admin/teachersList/addTeacher" method="post" >
-            <table>
-                <tbody>
-                <tr>
-                    <td><input type="text" name="teacherName" placeholder="Имя" required/></td>
-                </tr>
-
-                <tr>
-                    <td><input type="text" name="login" placeholder="Login" pattern="[1-9]{1}[0-9]{5}" required/></td>
-                </tr>
-
-                <tr>
-                    <td><input type="text" name="password" placeholder="Password" minlength="5" maxlength="10"  required/></td>
-                </tr>
-
-                </tbody>
-            </table>
-
-            <input type="submit" value="Добавить" />
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <input class="form-control" type="text" name="teacherName"  placeholder="Имя" required/>
+                </div>
+                 <div class="form-group">
+                        <input class="form-control" type="text" name="login"  placeholder="Логин" pattern="[1-9]{1}[0-9]{5}" required/>
+                </div>
+                <div class="form-group">
+                        <input class="form-control" type="text" name="password"  placeholder="Пароль" pattern="[A-Za-z0-9]{5,10}" required/>
+                </div>
+                      <div class="form-group">
+                        <input class="btn btn-primary btn-info" type="submit" value="Добавить" />
+                </div>
+            </form>
         </form:form>
 
         <p>Ваш логин: <sec:authentication property="principal.username" /></p>

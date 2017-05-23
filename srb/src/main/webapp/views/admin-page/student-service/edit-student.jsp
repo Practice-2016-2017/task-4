@@ -28,7 +28,7 @@
 <body>
 <div class="container">
     <div class="jumbotron" style="margin-top: 20px;">
-
+        <h2 >Изменение данных</h2>
         <form:form action="${pageContext.request.contextPath}/admin/studentsList/edit/${student.id}" method="post" >
             <c:if test = "${error !=null}">
                 <div class="alert alert-danger" style="width: 285px; margin: 0px auto;" role="alert">
@@ -47,7 +47,7 @@
                 </tr>
 
                 <tr>
-                    <td><input type="text" name="password" minlength="5" maxlength="10" value="${student.password}" placeholder="Password" required/></td>
+                    <td><input type="text" name="password" pattern="[A-Za-z0-9]{5,10}" value="${student.password}" placeholder="Password" required/></td>
                 </tr>
                 <tr>
                     <td> <select name="year" >

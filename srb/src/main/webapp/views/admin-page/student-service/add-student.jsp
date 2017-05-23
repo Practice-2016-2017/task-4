@@ -28,7 +28,7 @@
 <body>
 <div class="container">
     <div class="jumbotron" style="margin-top: 20px;">
-
+        <h2 >Добавление студента</h2>
         <c:if test = "${message !=null}">
             <div class="alert alert-success" style="width: 285px; margin: 0px auto;" role="alert">
                 <p>${message}</p>
@@ -52,7 +52,7 @@
                 </tr>
 
                 <tr>
-                    <td><input type="text" name="password" minlength="5" maxlength="10" placeholder="Password" required /></td>
+                    <td><input type="text" name="password" pattern="[A-Za-z0-9]{5,10}" placeholder="Password" required /></td>
                 </tr>
                 <tr>
                     <td> <select name="year">

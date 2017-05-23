@@ -28,6 +28,7 @@
 <body>
 <div class="container">
     <div class="jumbotron" style="margin-top: 20px;">
+        <h2 >Изменение данных</h2>
 
         <form:form action="${pageContext.request.contextPath}/admin/teachersList/edit/${teacher.id}" method="post" >
             <c:if test = "${error !=null}">
@@ -36,22 +37,20 @@
                 </div>
             </c:if>
 
-            <table>
-                <tbody>
-                <tr>
-                    <td><input type="text" name="teacherName" value="${teacher.name}" placeholder="Имя" required/></td>
-                </tr>
-
-                <tr>
-                    <td><input type="text" name="login" value="${teacher.login}" placeholder="Login" pattern="[1-9]{1}[0-9]{5}" required/></td>
-                </tr>
-
-                <tr>
-                    <td><input type="text" name="password" value="${teacher.password}" placeholder="Password" minlength="5" maxlength="10" required/></td>
-                </tr>
-                </tbody>
-            </table>
-            <input type="submit" value="Подтвердить" />
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <input class="form-control"  type="text" name="teacherName" value="${teacher.name}" placeholder="Имя" required/>
+                </div>
+                <div class="form-group">
+                    <input class="form-control"  type="text" name="login" value="${teacher.login}" placeholder="Login" pattern="[1-9]{1}[0-9]{5}" required/>
+                </div>
+                 <div class="form-group">
+                    <input class="form-control" id="inputPassword" type="text" name="password" value="${teacher.password}" placeholder="Password" pattern="[A-Za-z0-9]{5,10}" required/>
+                 </div>
+                <div class="form-group">
+                    <input class="btn btn-primary btn-info" type="submit" value="Подтвердить" />
+                </div>
+            </form>
         </form:form>
 
         <p>Ваш логин: <sec:authentication property="principal.username" /></p>
