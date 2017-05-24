@@ -4,24 +4,22 @@ import com.roi.entity.*;
 import com.roi.repository.MarkRepository;
 import com.roi.repository.StudentRepository;
 import com.roi.repository.SubjectRepository;
-import com.roi.repository.YearRepository;
 import com.roi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-
 import java.security.Principal;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
 
 
 @Controller
 public class TeacherController {
+
     @Autowired
     private MainController mainController;
 
@@ -41,7 +39,6 @@ public class TeacherController {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private java.util.Date dateUtil;
-
     //Страница учителя с ссылками на предметы, которые он ведет
     @RequestMapping(value = {"/teacher"})
     public ModelAndView teacherPage(Principal principal) {
