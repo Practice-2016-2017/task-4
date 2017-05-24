@@ -32,7 +32,7 @@
         <p> <a href="<spring:url value="/admin/studentsList" />">Список студентов</a></p>
         <p> <a href="<spring:url value="/admin/teachersList" />">Список преподавателей</a></p>
         <p> <a href="<spring:url value="/admin/subjectsList" />">Список предметов</a></p>
-
+        <p> <a href="<spring:url value="/admin/download" />">Скачать лог</a></p>
         <p>Ваш логин: <sec:authentication property="principal.username" /></p>
         <p><a class="btn btn-lg btn-danger" href="<c:url value="/logout" />" role="button">Выйти</a></p>
 
