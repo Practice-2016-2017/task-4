@@ -36,51 +36,48 @@
                 </div>
             </c:if>
 
-            <table>
-                <tbody>
-                <tr>
-                    <td><input type="text" name="subjectName" value="${subject.name}" placeholder="Предмет" required /></td>
-                </tr>
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <input class="form-control" name="subjectName" value="${subject.name}" placeholder="Предмет" required />
+                </div>
 
+                <p><div><select name="year" >
+                <option value="${subject.year.name}"selected>${subject.year.name}</option>
 
-                <tr>
-                    <td> <select name="year" >
-                        <option value="${subject.year.name}"selected>${subject.year.name}</option>
-                        <c:forEach var="value" begin="1" end="4">
-                            <c:if test = "${subject.year.name !=value}">
-                                <option  value="${value}" >${value} </option>
-                            </c:if>
-                        </c:forEach>
-                    </select></td>
-                </tr>
+                <c:forEach var="value" begin="1" end="4">
+                    <c:if test = "${subject.year.name !=value}">
+                        <option  value="${value}">${value} </option>
+                    </c:if>
+                </c:forEach>
 
-                <tr>
-                    <td> <select name="teacher" >
+                </select></div><p>
+                <p><div><select name="teacher" >
 
-                        <c:if test = "${subject.teacher !=null}">
-                            <option value="${subject.teacher.id}" selected>${subject.teacher.name}</option>
-                            <option  value="-1"  > Отсутствует </option>
+                    <c:if test = "${subject.teacher !=null}">
+                        <option value="${subject.teacher.id}" selected>${subject.teacher.name}</option>
+                        <option  value="-1"  > Отсутствует </option>
+                    </c:if>
+
+                    <c:if test = "${subject.teacher==null}">
+                        <option  value="-1" selected > Отсутствует </option>
+                    </c:if>
+
+                    <c:forEach var="t" items="${allTeachers}">
+                        <c:if test = "${t.id!=subject.teacher.id}">
+                            <%-- snip --%>
+                            <option  value="${t.id}"  > ${t.name} </option>
                         </c:if>
+                    </c:forEach>
 
-                        <c:if test = "${subject.teacher==null}">
-                            <option  value="-1" selected > Отсутствует </option>
-                        </c:if>
+                </select></div></p>
 
-                        <c:forEach var="t" items="${allTeachers}">
-                          <c:if test = "${t.id!=subject.teacher.id}">
-                              <%-- snip --%>
-                              <option  value="${t.id}"  > ${t.name} </option>
-                           </c:if>
-                        </c:forEach>
 
-                    </select></td>
-                </tr>
-
-                </tbody>
-            </table>
-
-            <input type="submit" value="Подтвердить" />
+                <div class="form-group">
+                    <input class="btn btn-primary btn-info" type="submit" value="Подтвердить" />
+                </div>
+            </form>
         </form:form>
+
 
         <p>Ваш логин: <sec:authentication property="principal.username" /></p>
         <p><a href="<c:url value="/admin/subjectsList" />" class="btn btn-primary btn-lg" role="button">Назад</a>

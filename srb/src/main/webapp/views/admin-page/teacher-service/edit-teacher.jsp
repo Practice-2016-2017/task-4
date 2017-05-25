@@ -34,24 +34,24 @@
             <c:if test = "${error !=null}">
                 <div class="alert alert-danger" style="width: 285px; margin: 0px auto;" role="alert">
                     <p>${error}</p>
-                </div>
-            </c:if>
+    </div>
+    </c:if>
 
-            <form class="form-horizontal">
-                <div class="form-group">
-                    <input class="form-control"  type="text" name="teacherName" value="${teacher.name}" placeholder="Имя" required/>
-                </div>
-                <div class="form-group">
-                    <input class="form-control"  type="text" name="login" value="${teacher.login}" placeholder="Login" pattern="[1-9]{1}[0-9]{5}" required/>
-                </div>
-                 <div class="form-group">
-                    <input class="form-control" id="inputPassword" type="text" name="password" value="${teacher.password}" placeholder="Password" pattern="[A-Za-z0-9]{5,10}" required/>
-                 </div>
-                <div class="form-group">
-                    <input class="btn btn-primary btn-info" type="submit" value="Подтвердить" />
-                </div>
-            </form>
-        </form:form>
+    <form class="form-horizontal">
+        <div class="form-group">
+            <input class="form-control"  type="text" name="teacherName" value="${teacher.name}" placeholder="Имя" required/>
+        </div>
+        <div class="form-group">
+            <input class="form-control"  type="text" name="login" value="${teacher.login}" placeholder="Логин" pattern="[1-9]{1}[0-9]{5}" required/>
+        </div>
+        <div class="form-group">
+            <input class="form-control" id="inputPassword" type="text" name="password" value="${teacher.password}" placeholder="Пароль" pattern="[A-Za-z0-9]{5,10}" required/>
+        </div>
+        <div class="form-group">
+            <input class="btn btn-primary btn-info" type="submit" value="Подтвердить" />
+        </div>
+    </form>
+    </form:form>
 
         <p>Ваш логин: <sec:authentication property="principal.username" /></p>
         <p><a href="<c:url value="/admin/teachersList" />" class="btn btn-primary btn-lg" role="button">Назад</a>

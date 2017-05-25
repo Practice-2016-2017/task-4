@@ -42,40 +42,37 @@
         </c:if>
 
         <form:form action="${pageContext.request.contextPath}/admin/subjectsList/addSubject" method="post" >
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <input class="form-control" type="text" name="subjectName"  placeholder="Предмет" required/>
+                </div>
+                <p><div> <select name="year" >
+
+                <option disabled> Курс </option>
+                <option  value="1" >1 </option>
+                <option  value="2" >2 </option>
+                <option  value="3" >3 </option>
+                <option  value="4" >4 </option>
+            </select></div><p>
+
+                <p> <div><select name="teacher" >
+
+                    <c:forEach var="t" items="${allTeachers}">
+                        <option  value="${t.id}"  > ${t.name} </option>
+                    </c:forEach>
+
+                    <option  value="-1"  > Отсутствует </option>
+
+                </select></div><p>
 
 
-            <table>
-                <tbody>
-                <tr>
-                    <td><input type="text" name="subjectName" placeholder="Предмет" required /></td>
-                </tr>
 
-                <tr>
-                    <td> <select name="year">
-                        <option  value="1" >1 </option>
-                        <option  value="2" >2 </option>
-                        <option  value="3" >3 </option>
-                        <option  value="4" >4 </option>
-                    </select></td>
-                </tr>
-
-                <tr>
-                    <td> <select name="teacher" >
-
-                        <c:forEach var="t" items="${allTeachers}">
-                                <option  value="${t.id}"  > ${t.name} </option>
-                        </c:forEach>
-
-                        <option  value="-1"  > Отсутствует </option>
-
-                    </select></td>
-                </tr>
-
-                </tbody>
-            </table>
-
-            <input type="submit" value="Добавить" />
+                <div class="form-group">
+                    <input class="btn btn-primary btn-info" type="submit" value="Добавить" />
+                </div>
+            </form>
         </form:form>
+
 
         <p>Ваш логин: <sec:authentication property="principal.username" /></p>
         <p><a href="<c:url value="/admin/subjectsList" />" class="btn btn-primary btn-lg" role="button">Назад</a>

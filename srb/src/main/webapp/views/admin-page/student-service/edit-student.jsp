@@ -36,21 +36,20 @@
                 </div>
             </c:if>
 
-            <table>
-                <tbody>
-                <tr>
-                    <td><input type="text" name="studentName" value="${student.name}" placeholder="Имя" required /></td>
-                </tr>
 
-                <tr>
-                    <td><input type="text" pattern="[1-9]{1}[0-9]{5}" name="login" value="${student.login}" placeholder="Login" required/></td>
-                </tr>
+            <form class="form-horizontal">
+            <div class="form-group">
+            <input class="form-control" type="text" name="studentName" value="${student.name}" placeholder="Имя" required />
+            </div>
+            <div class="form-group">
 
-                <tr>
-                    <td><input type="text" name="password" pattern="[A-Za-z0-9]{5,10}" value="${student.password}" placeholder="Password" required/></td>
-                </tr>
-                <tr>
-                    <td> <select name="year" >
+            <input class="form-control" type="text" pattern="[1-9]{1}[0-9]{5}" name="login" value="${student.login}" placeholder="Login" required/>
+            </div>
+            <div class="form-group">
+            <input class="form-control" type="text" name="password" pattern="[A-Za-z0-9]{5,10}" value="${student.password}" placeholder="Password" required/>
+            </div>
+
+                     <p><div><select name="year" >
                         <option value="${student.year.name}"selected>${student.year.name}</option>
 
                         <c:forEach var="value" begin="1" end="4">
@@ -59,11 +58,13 @@
                             </c:if>
                         </c:forEach>
 
-                    </select></td>
-                </tr>
-                </tbody>
-            </table>
-               <input type="submit" value="Подтвердить" />
+                </select></div><p>
+
+
+            <div class="form-group">
+                <input class="btn btn-primary btn-info" type="submit" value="Подтвердить" />
+            </div>
+            </form>
         </form:form>
 
 

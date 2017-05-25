@@ -41,31 +41,36 @@
             </div>
         </c:if>
         <form:form action="${pageContext.request.contextPath}/admin/studentsList/addStudent" method="post" >
-            <table>
-                <tbody>
-                <tr>
-                    <td><input type="text" name="studentName" placeholder="Имя" required/></td>
-                </tr>
+            <form class="form-horizontal">
+            <div class="form-group">
+                <input class="form-control" type="text" name="studentName"  placeholder="Имя" required/>
+            </div>
+            <div class="form-group">
+                <input class="form-control" type="text" name="login"  placeholder="Логин" pattern="[1-9]{1}[0-9]{5}" required/>
+            </div>
+            <div class="form-group">
+                <input class="form-control" type="text" name="password"  placeholder="Пароль" pattern="[A-Za-z0-9]{5,10}" required/>
+            </div>
 
-                <tr>
-                    <td><input  type="text" pattern="[1-9]{1}[0-9]{5}" name="login" placeholder="Login" required/></td>
-                </tr>
 
-                <tr>
-                    <td><input type="text" name="password" pattern="[A-Za-z0-9]{5,10}" placeholder="Password" required /></td>
-                </tr>
-                <tr>
-                    <td> <select name="year">
+                   <p>
+                <div> <select name="year" >
+
+                        <option disabled> Курс </option>
                         <option  value="1" >1 </option>
                         <option  value="2" >2 </option>
                         <option  value="3" >3 </option>
                         <option  value="4" >4 </option>
-                    </select></td>
-                </tr>
+                    </select></div><p>
 
-                </tbody>
-            </table>
-            <input type="submit" value="Добавить" />
+
+
+
+
+            <div class="form-group">
+                <input class="btn btn-primary btn-info" type="submit" value="Добавить" />
+            </div>
+            </form>
         </form:form>
 
         <p>Ваш логин: <sec:authentication property="principal.username" /></p>
