@@ -22,7 +22,7 @@ import java.util.Properties;
 @PropertySource("classpath:app.properties")
 @EnableJpaRepositories("com.roi.repository")
 public class DataConfig {
-
+    private static final String PROP_DATABASE_DRIVER="db.driver";
     private static final String PROP_DATABASE_PASSWORD = "db.password";
     private static final String PROP_DATABASE_URL = "db.url";
     private static final String PROP_DATABASE_USERNAME = "db.username";
@@ -41,6 +41,7 @@ public class DataConfig {
             ds.setUrl(env.getRequiredProperty( PROP_DATABASE_URL));
             ds.setUsername(env.getRequiredProperty(PROP_DATABASE_USERNAME));
             ds.setPassword(env.getRequiredProperty(PROP_DATABASE_PASSWORD));
+            ds.setDriverClassName(env.getRequiredProperty(PROP_DATABASE_DRIVER));
             return  ds;
         } catch (Exception e) {
             throw new RuntimeException(e);
