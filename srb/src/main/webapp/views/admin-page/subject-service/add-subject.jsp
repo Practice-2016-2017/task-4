@@ -46,7 +46,7 @@
                 <div class="form-group">
                     <input class="form-control" type="text" name="subjectName"  placeholder="Предмет" required/>
                 </div>
-                <p><div> <select name="year" >
+                <p><div> <select name="year" class="form-control" >
 
                 <option disabled> Курс </option>
                 <option  value="1" >1 </option>
@@ -55,7 +55,7 @@
                 <option  value="4" >4 </option>
             </select></div><p>
 
-                <p> <div><select name="teacher" >
+                <p> <div><select name="teacher" class="form-control">
 
                     <c:forEach var="t" items="${allTeachers}">
                         <option  value="${t.id}"  > ${t.name} </option>

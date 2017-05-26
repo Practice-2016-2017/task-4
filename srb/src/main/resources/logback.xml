@@ -24,10 +24,14 @@
 
     </appender>
 
-    <logger name="com.roi" level="debug"
-            additivity="false">
+    <logger name="com.roi" level="debug">
         <appender-ref ref="FILE-AUDIT" />
     </logger>
+
+    <logger name="org.springframework" level="error">
+        <appender-ref ref="FILE-AUDIT" />
+    </logger>
+
 
     <root level="error">
         <appender-ref ref="FILE-AUDIT" />

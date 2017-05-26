@@ -42,14 +42,11 @@
         </c:if>
         <form:form action="${pageContext.request.contextPath}/teacher/${mark.subject.id}/edit-mark/${mark.id}" method="post" >
 
-            <table>
-                <tbody>
-                <tr>
-                    <td><input type="date" name="date" value="${mark.date}" required/></td>
-                </tr>
-                <tr>
-                    <td>
-                        <select name="studentId">
+        <form class="form-horizontal">
+            <div class="form-group">
+                    <input class="form-control" type="date" name="date" value="${mark.date}" required/>
+            </div>
+                        <select name="studentId" class="form-control">
                             <option value="${mark.student.id}"selected>${mark.student.name}</option>
 
                             <c:forEach items="${allYearStudents}" var="st">
@@ -59,10 +56,8 @@
                             </c:forEach>
 
                         </select>
-                    </td>
-                </tr>
-                <tr>
-                    <td> <select name="mark">
+
+            <p><div> <select name="mark" class="form-control">
 
                         <option value="${mark.value}"selected>${mark.value}</option>
 
@@ -81,14 +76,11 @@
                         <c:if test = "${mark.value !=5}">
                             <option  value="5"  >5 </option>
                         </c:if>
-                    </select>
-                    </td>
-                </tr>
-                <tr>
-                    <td><input type="submit" value="Подтвердить" /></td>
-                </tr>
-                </tbody>
-            </table>
+                    </select> </div><p>
+            <div class="form-group">
+               <input class="btn btn-primary btn-info"  type="submit" value="Подтвердить" />
+            </div>
+        </form>
         </form:form>
 
         <p>Ваш логин: <sec:authentication property="principal.username" /></p>

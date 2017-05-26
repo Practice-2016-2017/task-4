@@ -45,17 +45,17 @@
             <table class="table table-bordered">
                 <tbody>
                 <tr>
-                    <td><input type="date" name="date" required/></td>
+                    <td><input class="form-control" type="date" name="date" required/></td>
 
                     <td>
-                        <select name="studentId">
+                        <select name="studentId" class="form-control">
                             <c:forEach items="${allYearStudents}" var="student">
                                 <option  value="${student.id}" >${student.name} </option>
                             </c:forEach>
                         </select>
                     </td>
 
-                    <td> <select name="mark">
+                    <td> <select name="mark" class="form-control">
                         <option  value="2" >2 </option>
                         <option  value="3" >3 </option>
                         <option  value="4" >4 </option>
@@ -63,7 +63,7 @@
                     </select>
                     </td>
 
-                    <td><input type="submit" value="Добавить" /></td>
+                    <td><input  type="submit" value="Добавить" /></td>
                 </tr>
                 </tbody>
             </table>

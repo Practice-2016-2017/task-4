@@ -41,7 +41,7 @@
                     <input class="form-control" name="subjectName" value="${subject.name}" placeholder="Предмет" required />
                 </div>
 
-                <p><div><select name="year" >
+                <p><div><select name="year" class="form-control" >
                 <option value="${subject.year.name}"selected>${subject.year.name}</option>
 
                 <c:forEach var="value" begin="1" end="4">
@@ -51,7 +51,8 @@
                 </c:forEach>
 
                 </select></div><p>
-                <p><div><select name="teacher" >
+
+                <p><div><select name="teacher"  class="form-control">
 
                     <c:if test = "${subject.teacher !=null}">
                         <option value="${subject.teacher.id}" selected>${subject.teacher.name}</option>

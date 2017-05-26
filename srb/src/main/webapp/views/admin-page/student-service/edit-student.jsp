@@ -49,7 +49,7 @@
             <input class="form-control" type="text" name="password" pattern="[A-Za-z0-9]{5,10}" value="${student.password}" placeholder="Password" required/>
             </div>
 
-                     <p><div><select name="year" >
+                     <p><div><select name="year" class="form-control">
                         <option value="${student.year.name}"selected>${student.year.name}</option>
 
                         <c:forEach var="value" begin="1" end="4">

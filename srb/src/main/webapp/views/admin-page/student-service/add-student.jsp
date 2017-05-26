@@ -52,9 +52,8 @@
                 <input class="form-control" type="text" name="password"  placeholder="Пароль" pattern="[A-Za-z0-9]{5,10}" required/>
             </div>
 
-
                    <p>
-                <div> <select name="year" >
+                <div> <select name="year" class="form-control">
 
                         <option disabled> Курс </option>
                         <option  value="1" >1 </option>
@@ -62,10 +61,6 @@
                         <option  value="3" >3 </option>
                         <option  value="4" >4 </option>
                     </select></div><p>
-
-
-
-
 
             <div class="form-group">
                 <input class="btn btn-primary btn-info" type="submit" value="Добавить" />
